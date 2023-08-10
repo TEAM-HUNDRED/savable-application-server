@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>스프링부트 웹서비스</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<h1 class="pt-4">Savable 로그인 테스트</h1>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-6">
+            <div th:if="${userName != null}">
+                Logged in as: <span id="users" th:text="${userName}"></span>
+                <a href="/logout" class="btn btn-info active" role=""button>Logout</a>
+            </div>
+            <div th:if="${userName == null}">
+                <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+                <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+                <a href="/oauth2/authorization/kakao" class="btn btn-secondary active" role="button">Kakao Login</a>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</html>
