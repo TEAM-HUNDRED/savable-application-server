@@ -3,6 +3,7 @@ package net.app.savable.domain.challenge;
 import jakarta.persistence.*;
 import lombok.Getter;
 import net.app.savable.domain.member.Member;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -22,8 +23,10 @@ public class ParticipationChallenge {
     @Column(nullable = false)
     private Long verificationGoal; // 인증 목표 횟수
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Boolean isSuccess; // 챌린지 성공 여부
+    @ColumnDefault("'IN_PROGRESS'")
+    private ParticipationState participationStaet; // 챌린지 성공 여부
 
     @Column(nullable = false)
     private Long savings; // 챌린지 인증당 절약 금액

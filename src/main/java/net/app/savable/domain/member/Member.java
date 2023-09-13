@@ -3,6 +3,7 @@ package net.app.savable.domain.member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import net.app.savable.domain.challenge.ParticipationChallenge;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -21,9 +22,11 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     @Column(nullable = false)
+    @ColumnDefault("0")
     private Long reward;
 
     @Column(nullable = false)
+    @ColumnDefault("0")
     private Long savings;
     private String phoneNumber;
 
@@ -36,6 +39,7 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @ColumnDefault("'ACTIVE'")
     private AccountState accountState;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N ParticipationChallenge
