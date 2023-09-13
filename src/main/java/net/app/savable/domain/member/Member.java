@@ -27,9 +27,11 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String profileImage;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccountState accountState;
 }
