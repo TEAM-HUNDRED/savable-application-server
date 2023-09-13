@@ -38,7 +38,7 @@ public class Challenge {
     private LocalDate endDate; // 챌린지 모잡 마감일
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL) // Challenge 1 : N ChallengeVerificationGuide
-    private List<ChallengeVerificationGuide> challengeVerificationGuide;
+    private List<ChallengeVerificationGuide> challengeVerificationGuideList;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL) // Challenge 1 : N ParticipationChallenge
     private List<ParticipationChallenge> participationChallengeList;
