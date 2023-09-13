@@ -1,0 +1,26 @@
+package net.app.savable.domain.challenge;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.sql.Timestamp;
+
+@Entity
+@Getter
+public class Verification {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Timestamp timeStamp;
+
+    @Column(nullable = false)
+    private String image;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @ColumnDefault("'WAITING'")
+    private VerificationState state;
+}
