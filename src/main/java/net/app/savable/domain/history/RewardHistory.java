@@ -2,6 +2,7 @@ package net.app.savable.domain.history;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.Member;
 
 import java.sql.Timestamp;
 
@@ -27,4 +28,8 @@ public class RewardHistory {
 
     @Column(nullable = false)
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY) // RewardHistory N : 1 Member (지연로딩)
+    @JoinColumn(name = "member_id")
+    private Member member;
 }

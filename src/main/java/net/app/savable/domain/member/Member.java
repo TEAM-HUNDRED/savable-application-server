@@ -3,6 +3,7 @@ package net.app.savable.domain.member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import net.app.savable.domain.challenge.ParticipationChallenge;
+import net.app.savable.domain.challenge.Verification;
 import net.app.savable.domain.shop.GiftcardOrder;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -48,4 +49,7 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N GiftcardOrder
     private List<GiftcardOrder> giftcardOrderList;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N Verification
+    private List<Verification> verificationList;
 }
