@@ -17,4 +17,8 @@ public class ParticipationChallenge {
     private Long verificationGoal; // 인증 목표 횟수
     private Boolean isSuccess; // 챌린지 성공 여부
     private Long savings; // 챌린지 인증당 절약 금액
+
+    @ManyToOne(fetch = FetchType.LAZY) // ParticipationChallenge N : 1 Challenge (지연로딩)
+    @JoinColumn(name = "challenge_id")
+    private Challenge challenge;
 }
