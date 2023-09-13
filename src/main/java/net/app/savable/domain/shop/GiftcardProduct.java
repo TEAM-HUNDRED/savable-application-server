@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.repository.cdi.Eager;
 
+import java.util.List;
+
 @Entity
 @Getter
 public class GiftcardProduct {
@@ -25,4 +27,8 @@ public class GiftcardProduct {
 
     @Column(nullable = false)
     private Boolean inOnSale; // 판매 여부 (true: 판매중, false: 판매중지)
+
+    @OneToMany(mappedBy = "giftcardProduct") // GiftcardProduct 1 : N GiftcardOrder
+    @JoinColumn(name = "giftcard_product_id")
+    private List<GiftcardOrder> giftcardOrderList;
 }

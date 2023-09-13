@@ -28,4 +28,8 @@ public class GiftcardOrder {
     @Column(nullable = false)
     @ColumnDefault("'WAITING'")
     private SendState sendState;
+
+    @ManyToOne(fetch = FetchType.LAZY) // GiftcardOrder N : 1 GiftcardProduct (지연로딩)
+    @JoinColumn(name = "giftcard_product_id")
+    private GiftcardProduct giftcardProduct;
 }
