@@ -26,6 +26,7 @@ public class GiftcardOrder {
     @Column(nullable = false)
     private Timestamp date;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @ColumnDefault("'WAITING'")
     private SendState sendState;
