@@ -23,4 +23,8 @@ public class Verification {
     @Column(nullable = false)
     @ColumnDefault("'WAITING'")
     private VerificationState state;
+
+    @ManyToOne(fetch = FetchType.LAZY) // Verification N : 1 ParticipationChallenge (지연로딩)
+    @JoinColumn(name = "participation_challenge_id")
+    private ParticipationChallenge participationChallenge;
 }
