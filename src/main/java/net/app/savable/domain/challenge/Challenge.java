@@ -40,6 +40,6 @@ public class Challenge {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL) // Challenge 1 : N ChallengeVerificationGuide
     private List<ChallengeVerificationGuide> challengeVerificationGuideList;
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL) // Challenge 1 : N ParticipationChallenge
+    @OneToMany(mappedBy = "challenge") // Challenge 1 : N ParticipationChallenge
     private List<ParticipationChallenge> participationChallengeList;
 }
