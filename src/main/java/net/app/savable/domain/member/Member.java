@@ -2,6 +2,9 @@ package net.app.savable.domain.member;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.challenge.ParticipationChallenge;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,4 +37,7 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccountState accountState;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N ParticipationChallenge
+    private List<ParticipationChallenge> participationChallengeList;
 }

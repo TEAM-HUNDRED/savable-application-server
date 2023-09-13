@@ -2,6 +2,7 @@ package net.app.savable.domain.challenge;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.Member;
 
 import java.time.LocalDate;
 
@@ -21,4 +22,8 @@ public class ParticipationChallenge {
     @ManyToOne(fetch = FetchType.LAZY) // ParticipationChallenge N : 1 Challenge (지연로딩)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
+
+    @ManyToOne(fetch = FetchType.LAZY) // ParticipationChallenge N : 1 Member (지연로딩)
+    @JoinColumn(name = "member_id")
+    private Member member;
 }
