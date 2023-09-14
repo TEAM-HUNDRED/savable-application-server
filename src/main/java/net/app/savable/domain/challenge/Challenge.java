@@ -35,7 +35,7 @@ public class Challenge {
     private Boolean hasDeadline; // 마감 여부 (false: 상시모집, true: 기간모집)
 
     private LocalDate startDate; // 챌린지 모집 시작일
-    private LocalDate endDate; // 챌린지 모잡 마감일
+    private LocalDate endDate; // 챌린지 모집 마감일
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL) // Challenge 1 : N ChallengeVerificationGuide
     private List<ChallengeVerificationGuide> challengeVerificationGuideList;
