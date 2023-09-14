@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest #ubuntu-20.04
     steps:
-      # 기본 체크아웃
+      # 기본 체크아웃 = repository code 전체 가지고 옴
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -34,7 +34,7 @@ jobs:
 
       # Gradle Build (test 제외)
       - name: Build with Gradle
-        run: ./gradlew clean build --exclude-task test
+        run: ./gradlew clean build --exclude-task test # github cache의 jar를 clean 후 build
 
       # DockerHub 로그인
       - name: DockerHub Login
@@ -43,23 +43,26 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME}}
           password: ${{ secrets.DOCKERHUB_PASSWORD}}
 
-      # Docker 이미지 빌드
+      # Docker 이미지 빌드 # . = 현재 파일
       - name: Docker Image Build
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME}}/${{ secrets.PROJECT_NAME }} .
           docker images
+      # 로그 용도
 
       # DockerHub Push
       - name: DockerHub Push
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+      # secrets.PROJECT_NAME = 도커의 repository
+
 
       # EC2 인스턴스 접속 및 애플리케이션 실행
       - name: Application Run
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_KEY }}
+          host: ${{ secrets.EC2_HOST }} # IP
+          username: ${{ secrets.EC2_USERNAME }} # ubuntu
+          key: ${{ secrets.EC2_KEY }} # pem key
 
           script: |
             sudo docker kill ${{ secrets.PROJECT_NAME }}
@@ -67,17 +70,9 @@ jobs:
             sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
 
-            sudo docker run -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
+            sudo docker run -p 80:${{ secrets.PORT }} \
             --name ${{ secrets.PROJECT_NAME }} \
             -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
             -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Build with Gradle
-#       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-#       with:
-#         arguments: build
