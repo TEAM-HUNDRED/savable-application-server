@@ -15,13 +15,13 @@ public class GiftcardOrder {
     private Long id;
 
     @Column(nullable = false)
-    private String PositivePoint;
+    private String positivePoint;
 
     @Column(nullable = false)
     private String negativePoint;
 
     @Column(nullable = false)
-    private Long Quantity;
+    private Long quantity;
 
     @Column(nullable = false)
     private Timestamp date;
