@@ -27,7 +27,7 @@ public class ParticipationChallenge {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @ColumnDefault("'IN_PROGRESS'")
-    private ParticipationState participationStaet; // 챌린지 성공 여부
+    private ParticipationState participationState; // 챌린지 성공 여부
 
     @Column(nullable = false)
     private Long savings; // 챌린지 인증당 절약 금액
