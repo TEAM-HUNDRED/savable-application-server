@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import net.app.savable.domain.member.Member;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -20,7 +20,7 @@ public class SavingsHistory{
     private Long totalSavings; // 누적 적립금
 
     @Column(nullable = false)
-    private Timestamp date;
+    private Timestamp dateTime;
 
     @Column(nullable = false)
     private String description;

@@ -20,7 +20,7 @@ public class RewardHistory {
     private Long totalReward; // 누적 리워드
 
     @Column(nullable = false)
-    private Timestamp date;
+    private Timestamp dateTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
