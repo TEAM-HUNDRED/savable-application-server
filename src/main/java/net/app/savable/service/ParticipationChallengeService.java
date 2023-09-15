@@ -3,6 +3,7 @@ package net.app.savable.service;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.challenge.ParticipationChallenge;
 import net.app.savable.domain.challenge.ParticipationChallengeRepository;
+import net.app.savable.domain.challenge.dto.MyParticipationChallengeDetailDto;
 import net.app.savable.domain.challenge.dto.MyParticipationChallengeDto;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +17,9 @@ public class ParticipationChallengeService {
 
     public List<MyParticipationChallengeDto> findParticipationChallengeByMemberId(Long memberId) {
         return participationChallengeRepository.findMyParticipationChallengeByMemberId(memberId);
+    }
+
+    public MyParticipationChallengeDetailDto findParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId) {
+        return participationChallengeRepository.findMyParticipationChallengeDetailByParticipationChallengeId(participationChallengeId);
     }
 }
