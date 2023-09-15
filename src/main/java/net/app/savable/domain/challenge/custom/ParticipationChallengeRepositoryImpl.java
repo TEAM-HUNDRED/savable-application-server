@@ -20,13 +20,13 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
                 "cast(p.verificationGoal - sum(case when v.state = 'SUCCESS' then 1 else 0 end) as Long), " +
                 "cast((sum(case when v.state = 'SUCCESS' then 1 else 0 end) * 100 / p.verificationGoal) as Long), " +
                 "cast((c.reward * sum(case when v.state = 'SUCCESS' then 1 else 0 end)) as Long), " +
-                "cast((p.savings * sum(case when v.state = 'SUCCESS' then 1 else 0 end)) as Long)) " +
+                "cast((p.savings * sum(case when v.state = 'SUCCESS' then 1 else 0 end)) as Long), " +
+                "case when sum(case when v.state = 'SUCCESS' and DATE(v.dateTime) = CURRENT_DATE then 1 else 0 end) > 0 then true else false end) " +
                 "from ParticipationChallenge p " +
                 "join p.challenge c " +
                 "left join p.verificationList v " +
-                "where p.member.id = :memberId " +
+                "where p.member.id = :memberId and p.participationState = 'IN_PROGRESS' " +
                 "group by p.id, c.image, c.title, p.verificationGoal, c.reward, c.estimatedSavings";
-
 
         return em.createQuery(query, MyParticipationChallengeDto.class)
                 .setParameter("memberId", memberId)
