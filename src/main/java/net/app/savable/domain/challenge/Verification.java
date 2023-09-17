@@ -14,7 +14,7 @@ public class Verification {
     private Long id;
 
     @Column(nullable = false)
-    private Timestamp timeStamp;
+    private Timestamp dateTime;
 
     @Column(nullable = false)
     private String image;
