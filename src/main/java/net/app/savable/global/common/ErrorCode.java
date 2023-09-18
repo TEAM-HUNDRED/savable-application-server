@@ -29,11 +29,11 @@ public enum ErrorCode {
     private final HttpStatus httpStatus;
     private final String message;
 
-    public String getMessage(Throwable e){
+    public String getMessage(Throwable e) {
         return this.getMessage(this.getMessage() + " : " + e.getMessage());
     }
 
-    public String getMessage(String message){
+    public String getMessage(String message) {
         return Optional.ofNullable(message).orElse(this.getMessage());
     }
 
