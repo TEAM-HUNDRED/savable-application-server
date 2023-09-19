@@ -26,13 +26,13 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @GetMapping()
-    public List<ParticipatableChallengeDto> participatableChallengeList(){
-        List<ParticipatableChallengeDto> challengeWithoutDeadline=challengeService.findByHasDeadlineFalse();
-        List<ParticipatableChallengeDto> challengeWithDeadline=challengeService.findChallengeByDate();
-        List<ParticipatableChallengeDto> participatableChallengeList= new ArrayList<>(challengeWithoutDeadline);
+    public ApiResponse<List<ParticipatableChallengeDto>> participatableChallengeList() {
+        List<ParticipatableChallengeDto> challengeWithoutDeadline = challengeService.findByHasDeadlineFalse();
+        List<ParticipatableChallengeDto> challengeWithDeadline = challengeService.findChallengeByDate();
+        List<ParticipatableChallengeDto> participatableChallengeList = new ArrayList<>(challengeWithoutDeadline);
         participatableChallengeList.addAll(new ArrayList<>(challengeWithDeadline));
-        return participatableChallengeList;
-
+        return ApiResponse.success(participatableChallengeList);
+    }
     @GetMapping("/{challengeId}")
     public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Integer challengeId){
         ChallengeDetailDto challengeDetailDto = ChallengeDetailDto.builder().challenge(challengeService.findChallengeById(challengeId))
