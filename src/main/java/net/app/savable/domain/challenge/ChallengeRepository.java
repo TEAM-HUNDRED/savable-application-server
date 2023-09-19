@@ -11,4 +11,5 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     @Query("select c from Challenge c where c.hasDeadline=true and c.startDate<=current_date and current_date<=c.endDate")
     List<Challenge> findChallengeByDate();
+    Challenge findById(Integer challengeId);
 }

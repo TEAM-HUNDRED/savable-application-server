@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import net.app.savable.domain.challenge.dto.ChallengeDetailDto;
+import net.app.savable.global.common.ApiResponse;
+import net.app.savable.service.ChallengeService;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,5 +32,12 @@ public class ChallengeController {
         List<ParticipatableChallengeDto> participatableChallengeList= new ArrayList<>(challengeWithoutDeadline);
         participatableChallengeList.addAll(new ArrayList<>(challengeWithDeadline));
         return participatableChallengeList;
+
+    @GetMapping("/{challengeId}")
+    public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Integer challengeId){
+        ChallengeDetailDto challengeDetailDto = ChallengeDetailDto.builder().challenge(challengeService.findChallengeById(challengeId))
+                .verificationGuide(challengeService.findChallengeGuide(challengeId))
+                .build();
+        return ApiResponse.success(challengeDetailDto);
     }
 }
