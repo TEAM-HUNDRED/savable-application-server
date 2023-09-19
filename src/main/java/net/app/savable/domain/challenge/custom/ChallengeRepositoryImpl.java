@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.challenge.Challenge;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,5 +22,4 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom{
         List<Challenge> challengelist = em.createQuery(challengeListSql).getResultList();
         return challengelist;
     }
-
 }

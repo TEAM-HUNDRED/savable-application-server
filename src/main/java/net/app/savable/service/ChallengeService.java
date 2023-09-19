@@ -3,11 +3,11 @@ package net.app.savable.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.ChallengeRepository;
-import net.app.savable.domain.challenge.dto.ParticipatableChallengeDto;
 import net.app.savable.domain.challenge.Challenge;
 import net.app.savable.domain.challenge.ChallengeVerificationGuideRepository;
 import net.app.savable.domain.challenge.dto.ChallengeDto;
 import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
+import net.app.savable.domain.challenge.dto.HomeChallengeDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,18 +19,12 @@ import java.util.List;
 public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final ChallengeVerificationGuideRepository guideRepository;
-    public List<ParticipatableChallengeDto> findByHasDeadlineFalse(){
-        List<ParticipatableChallengeDto> challengeWithoutDeadline= challengeRepository.findByHasDeadlineFalse().stream()
-                .map(ParticipatableChallengeDto::new)
-                .toList();
-        return challengeWithoutDeadline;
-    }
 
-    public List<ParticipatableChallengeDto> findChallengeByDate(){
-        List<ParticipatableChallengeDto> challengeWithDeadline = challengeRepository.findChallengeByDate().stream()
-                .map(ParticipatableChallengeDto::new)
+    public List<HomeChallengeDto> findChallengeByDate(){
+        List<HomeChallengeDto> challengeList = challengeRepository.findChallengeByDate().stream()
+                .map(HomeChallengeDto::new)
                 .toList();
-        return challengeWithDeadline;
+        return challengeList;
     }
 
     public ChallengeDto findChallengeById(Integer challengeId){

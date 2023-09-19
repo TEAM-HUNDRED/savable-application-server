@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @ToString
 @Getter
-public class ParticipatableChallengeDto {
+public class HomeChallengeDto {
     private Long id;
     private String image;
     private String title;
@@ -16,7 +16,7 @@ public class ParticipatableChallengeDto {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public ParticipatableChallengeDto(Challenge challenge) {
+    public HomeChallengeDto(Challenge challenge) {
         this.id = challenge.getId();
         this.image = challenge.getImage();
         this.title = challenge.getTitle();
