@@ -13,5 +13,4 @@ public class GlobalExceptionHandlerSampleController {
     public void exception() { // RuntimeException을 발생시키는 메서드(GeneralException을 발생시키는 메서드와 동일)
         throw new RuntimeException("An unexpected error occurred!");
     }
-
 }
