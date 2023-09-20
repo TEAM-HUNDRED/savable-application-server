@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+<properties>
+    <entry key="challengeListSql">
+        select c from Challenge c
+        where c.hasDeadline=false or
+        (c.hasDeadline = true
+        and c.startDate &lt;=current_date
+        and current_date &lt;=c.endDate)
+        order by c.hasDeadline, c.endDate asc
+    </entry>
+</properties>

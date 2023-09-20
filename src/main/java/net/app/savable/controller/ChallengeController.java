@@ -2,6 +2,8 @@ package net.app.savable.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.app.savable.domain.challenge.dto.ChallengeDto;
+import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import net.app.savable.domain.challenge.dto.HomeChallengeDto;
 import net.app.savable.service.ChallengeService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,12 @@ public class ChallengeController {
 
     @GetMapping("/{challengeId}")
     public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Integer challengeId){
-        ChallengeDetailDto challengeDetailDto = ChallengeDetailDto.builder().challenge(challengeService.findChallengeById(challengeId))
-                .verificationGuide(challengeService.findChallengeGuide(challengeId))
+        ChallengeDto challengeGuideDtoList = challengeService.findChallengeById(challengeId);
+        List<ChallengeGuideDto> challengeDto = challengeService.findChallengeGuide(challengeId);
+
+        ChallengeDetailDto challengeDetailDto = ChallengeDetailDto.builder()
+                .challenge(challengeGuideDtoList)
+                .verificationGuide(challengeDto)
                 .build();
         return ApiResponse.success(challengeDetailDto);
     }

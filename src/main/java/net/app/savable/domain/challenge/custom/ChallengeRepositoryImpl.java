@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-@PropertySource("classpath:sql/ParticipationChallengeSql.xml") // "classpath:sql/ParticipationChallengeSql.xml
+@PropertySource("classpath:sql/ChallengeSql.xml") // "classpath:sql/ChallengeSql.xml
 public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom{
     private final EntityManager em;
 

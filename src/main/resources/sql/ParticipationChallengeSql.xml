@@ -36,12 +36,4 @@
         from Verification v
         where v.participationChallenge.id = :participationChallengeId
     </entry>
-    <entry key="challengeListSql">
-        select c from Challenge c
-        where c.hasDeadline=false or
-        (c.hasDeadline = true
-        and c.startDate &lt;=current_date
-        and current_date &lt;=c.endDate)
-        order by c.hasDeadline, c.endDate asc
-    </entry>
 </properties>
