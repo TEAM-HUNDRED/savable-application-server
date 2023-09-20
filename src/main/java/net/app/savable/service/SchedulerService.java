@@ -55,11 +55,11 @@ public class SchedulerService {
         }
     }
 
-    private boolean isParticipationSuccessful(ParticipationChallenge participation, Long successCount) {
+    private boolean isParticipationSuccessful(ParticipationChallenge participation, Long successCount) { // 챌린지 성공 여부 확인
         return successCount >= participation.getVerificationGoal();
     }
 
-    private void rewardSuccessfulParticipation(ParticipationChallenge participation, Long successCount) {
+    private void rewardSuccessfulParticipation(ParticipationChallenge participation, Long successCount) { // 챌린지 성공 시 보상 지급
         log.info("챌린지 성공!");
         participation.updateState(ParticipationState.SUCCESS);
 
@@ -69,7 +69,7 @@ public class SchedulerService {
                     return new IllegalArgumentException("Invalid member ID: " + participation.getMemberId());
                 });
 
-        member.updateSavings(participation.getSavings() * successCount);
+        member.updateSavings(participation.getSavings() * successCount); // 절약 금액 증가
 
         Challenge challenge = challengeRepository.findById(participation.getChallengeId())
                 .orElseThrow(() -> {
@@ -77,6 +77,6 @@ public class SchedulerService {
                     return new IllegalArgumentException("Invalid challenge ID: " + participation.getChallengeId());
                 });
 
-        member.updateReward(challenge.getReward() * successCount);
+        member.updateReward(challenge.getReward() * successCount); // 보상 지급
     }
 }
