@@ -26,13 +26,13 @@ public class ChallengeService {
                 .toList();
         return challengeList;
     }
-    public ChallengeDto findChallengeById(Integer challengeId){
+    public ChallengeDto findChallengeById(Long challengeId){
         Challenge challengeDetail = challengeRepository.findById(challengeId);
         ChallengeDto challengeDto = new ChallengeDto(challengeDetail);
         return challengeDto;
     }
 
-    public List<ChallengeGuideDto> findChallengeGuide(Integer challengeId){
+    public List<ChallengeGuideDto> findChallengeGuide(Long challengeId){
         List<ChallengeGuideDto> challengeGuideDtoList = guideRepository.findByChallengeIdOrderByIsPassDesc(challengeId).stream()
                 .map(ChallengeGuideDto::new)
                 .toList();
