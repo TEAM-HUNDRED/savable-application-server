@@ -10,6 +10,4 @@ import java.util.List;
 
 @Repository
 public interface ParticipationChallengeRepository extends JpaRepository<ParticipationChallenge, Long>, ParticipationChallengeRepositoryCustom {
-
-    ParticipationChallenge findParticipationChallengeById(Long participationChallengeId);
 }
