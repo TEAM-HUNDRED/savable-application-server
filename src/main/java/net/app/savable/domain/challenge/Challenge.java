@@ -2,13 +2,14 @@ package net.app.savable.domain.challenge;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
-public class Challenge {
+public class Challenge extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

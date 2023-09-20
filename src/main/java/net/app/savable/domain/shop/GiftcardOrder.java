@@ -2,6 +2,7 @@ package net.app.savable.domain.shop;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 import net.app.savable.domain.member.Member;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -9,7 +10,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Getter
-public class GiftcardOrder {
+public class GiftcardOrder extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,9 +23,6 @@ public class GiftcardOrder {
 
     @Column(nullable = false)
     private Long quantity;
-
-    @Column(nullable = false)
-    private Timestamp date;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

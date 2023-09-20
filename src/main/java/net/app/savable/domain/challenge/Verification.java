@@ -3,13 +3,14 @@ package net.app.savable.domain.challenge;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.sql.Timestamp;
 
 @Entity
 @Getter
-public class Verification {
+public class Verification extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

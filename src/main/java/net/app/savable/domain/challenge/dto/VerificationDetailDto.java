@@ -2,10 +2,11 @@ package net.app.savable.domain.challenge.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 public class VerificationDetailDto {
-    private final String image;
+    private String image;
     private final String title;
     private final Integer percentage;
     private final Long currentCount;
@@ -14,9 +15,7 @@ public class VerificationDetailDto {
     private final Long reward; // 1회 인증 시 보상
     private final Long savings; // 절약 금액
 
-    @Builder
-    public VerificationDetailDto(String image, String title, Integer percentage, Long currentCount, Long goalsCount, Long scheduledReward, Long reward, Long savings) {
-        this.image = image;
+    public VerificationDetailDto(String title, Integer percentage, Long currentCount, Long goalsCount, Long scheduledReward, Long reward, Long savings) {
         this.title = title;
         this.percentage = percentage;
         this.currentCount = currentCount;
@@ -24,5 +23,9 @@ public class VerificationDetailDto {
         this.scheduledReward = scheduledReward;
         this.reward = reward;
         this.savings = savings;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

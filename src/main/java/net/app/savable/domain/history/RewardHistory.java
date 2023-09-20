@@ -2,13 +2,14 @@ package net.app.savable.domain.history;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 import net.app.savable.domain.member.Member;
 
 import java.sql.Timestamp;
 
 @Entity
 @Getter
-public class RewardHistory {
+public class RewardHistory extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,9 +19,6 @@ public class RewardHistory {
 
     @Column(nullable = false)
     private Long totalReward; // 누적 리워드
-
-    @Column(nullable = false)
-    private Timestamp dateTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
