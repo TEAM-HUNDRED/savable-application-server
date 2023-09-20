@@ -29,7 +29,7 @@ public class ChallengeController {
     }
 
     @GetMapping("/{challengeId}")
-    public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Integer challengeId){
+    public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Long challengeId){
         ChallengeDto challengeGuideDtoList = challengeService.findChallengeById(challengeId);
         List<ChallengeGuideDto> challengeDto = challengeService.findChallengeGuide(challengeId);
 

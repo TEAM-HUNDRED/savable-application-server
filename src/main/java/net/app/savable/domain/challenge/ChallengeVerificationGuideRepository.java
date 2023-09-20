@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ChallengeVerificationGuideRepository extends JpaRepository<ChallengeVerificationGuide, Long> {
-    List<ChallengeVerificationGuide> findByChallengeIdOrderByIsPassDesc(Integer challengeId);
+    List<ChallengeVerificationGuide> findByChallengeIdOrderByIsPassDesc(Long challengeId);
 }
