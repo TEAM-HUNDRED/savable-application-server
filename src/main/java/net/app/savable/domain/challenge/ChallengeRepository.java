@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChallengeRepository extends JpaRepository<Challenge, Long>, ChallengeRepositoryCustom {
-    Challenge findById(Integer challengeId); //TODO : Integer -> Long
+    Challenge findChallengeById(Long challengeId);
 }

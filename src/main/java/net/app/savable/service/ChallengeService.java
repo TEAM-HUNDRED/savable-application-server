@@ -27,7 +27,7 @@ public class ChallengeService {
         return challengeList;
     }
     public ChallengeDto findChallengeById(Long challengeId){
-        Challenge challengeDetail = challengeRepository.findById(challengeId);
+        Challenge challengeDetail = challengeRepository.findChallengeById(challengeId);
         ChallengeDto challengeDto = new ChallengeDto(challengeDetail);
         return challengeDto;
     }
