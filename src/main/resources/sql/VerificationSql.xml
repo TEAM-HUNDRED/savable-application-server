@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+<properties>
+    <entry key="verificationDetailSql">
+        select
+        new net.app.savable.domain.challenge.dto.VerificationDetailDto(
+            c.title,
+            cast((sum(case when v.state = 'SUCCESS' then 1 else 0 end) * 100 / p.verificationGoal) as integer),
+            cast(count(v.id) as Long),
+            p.verificationGoal,
+            cast((c.reward * sum(case when v.state = 'SUCCESS' then 1 else 0 end)) as Long),
+            c.reward,
+            cast((p.savings * sum(case when v.state = 'SUCCESS' then 1 else 0 end)) as Long)
+        )
+        from ParticipationChallenge p
+        join p.challenge c
+        join p.verificationList v
+        where p.id = :participationId
+        group by p.id, c.title, p.verificationGoal, c.reward, p.savings
+    </entry>
+    <entry key="verificationDetailSubSql">
+        select v.image
+        from ParticipationChallenge p
+        join p.verificationList v
+        where p.id = :participationId
+        order by v.createdAt desc
+    </entry>
+</properties>
