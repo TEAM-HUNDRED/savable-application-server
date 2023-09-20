@@ -10,12 +10,12 @@ public class VerificationDto {
     private Long id;
     private String image;
     private VerificationState state;
-    private Timestamp dateTime;
+    private Timestamp createdAt;
 
-    public VerificationDto(Long id, String image, VerificationState state, Timestamp dateTime) {
+    public VerificationDto(Long id, String image, VerificationState state, Timestamp createdAt) {
         this.id = id;
         this.image = image;
         this.state = state;
-        this.dateTime = dateTime;
+        this.createdAt = createdAt;
     }
 }

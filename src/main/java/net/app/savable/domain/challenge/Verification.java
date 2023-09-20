@@ -16,9 +16,6 @@ public class Verification extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Timestamp dateTime;
-
-    @Column(nullable = false)
     private String image;
 
     @Enumerated(EnumType.STRING)
