@@ -17,10 +17,20 @@ public class VerificationRepositoryImpl implements VerificationRepositoryCustom{
     @Value("${verificationDetailSql}")
     String verificationDetailSql;
 
+    @Value("${verificationDetailSubSql}")
+    String verificationDetailSubSql;
+
     @Override
-    public VerificationDetailDto findVerificationDetailByParticipationChallengeId(Long participationChallengeId) {
-        return em.createQuery(verificationDetailSql, VerificationDetailDto.class)
-                .setParameter("participationChallengeId", participationChallengeId)
+    public VerificationDetailDto findVerificationDetailByParticipationId(Long participationId) {
+        VerificationDetailDto verificationDetailDto = em.createQuery(verificationDetailSql, VerificationDetailDto.class)
+                .setParameter("participationId", participationId)
                 .getSingleResult();
+
+        verificationDetailDto.setImage(em.createQuery(verificationDetailSubSql, String.class)
+                .setParameter("participationId", participationId)
+                .setMaxResults(1)
+                .getSingleResult());
+
+        return verificationDetailDto;
     }
 }
