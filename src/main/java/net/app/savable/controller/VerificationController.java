@@ -33,7 +33,7 @@ public class VerificationController {
     private final ParticipationChallengeService participationChallengeService;
     private final S3UploadService s3UploadService;
 
-    @PostMapping("/{participationId}/verifications")
+    @PostMapping("/{participationId}/verification")
     public ApiResponse<String> verificationAdd(@RequestParam("image")MultipartFile file, @PathVariable Long participationId){
 
         log.info("verificationService.verificationAdd");
