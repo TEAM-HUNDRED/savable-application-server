@@ -3,14 +3,13 @@ package net.app.savable.domain.challenge;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-import net.app.savable.domain.member.BaseTimeEntity;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.sql.Timestamp;
 
 @Entity
 @Getter
-public class Verification extends BaseTimeEntity {
+@NoArgsConstructor
+public class Verification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,5 +31,13 @@ public class Verification extends BaseTimeEntity {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;
+    }
+
+    public void updateState(VerificationState state) { // 인증 상태 변경
+        this.state = state;
+    }
+
+    public Long getParticipationChallengeId() { // 참여 챌린지 id 반환
+        return this.participationChallenge.getId();
     }
 }

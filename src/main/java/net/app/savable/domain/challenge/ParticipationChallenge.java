@@ -43,4 +43,16 @@ public class ParticipationChallenge extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "participationChallenge", cascade = CascadeType.ALL) // ParticipationChallenge 1 : N Verification
     private List<Verification> verificationList;
+
+    public void updateState(ParticipationState state) { // 챌린지 성공 여부 변경
+        this.participationState = ParticipationState.SUCCESS;
+    }
+
+    public Long getMemberId() { // 회원 id 반환
+        return this.member.getId();
+    }
+
+    public Long getChallengeId() { // 챌린지 id 반환
+        return this.challenge.getId();
+    }
 }
