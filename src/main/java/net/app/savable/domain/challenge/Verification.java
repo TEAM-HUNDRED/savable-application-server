@@ -28,8 +28,7 @@ public class Verification extends BaseTimeEntity {
     private ParticipationChallenge participationChallenge;
 
     @Builder
-    public Verification(Timestamp dateTime, String image, VerificationState state, ParticipationChallenge participationChallenge) {
-        this.dateTime = dateTime;
+    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge) {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;

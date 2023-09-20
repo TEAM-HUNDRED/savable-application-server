@@ -49,7 +49,6 @@ public class VerificationController {
 
         ParticipationChallenge participationChallenge = participationChallengeService.findParticipationChallengeById(participationId);
         VerificationRequestDto verificationRequestDto = VerificationRequestDto.builder()
-                .dateTime(new Timestamp(System.currentTimeMillis()))
                 .participationChallenge(participationChallenge)
                 .image(saveFileName)
                 .state(VerificationState.WAITING)
