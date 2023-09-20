@@ -8,10 +8,10 @@ import net.app.savable.domain.challenge.ChallengeVerificationGuideRepository;
 import net.app.savable.domain.challenge.dto.ChallengeDto;
 import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import net.app.savable.domain.challenge.dto.HomeChallengeDto;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +26,6 @@ public class ChallengeService {
                 .toList();
         return challengeList;
     }
-
     public ChallengeDto findChallengeById(Integer challengeId){
         Challenge challengeDetail = challengeRepository.findById(challengeId);
         ChallengeDto challengeDto = new ChallengeDto(challengeDetail);

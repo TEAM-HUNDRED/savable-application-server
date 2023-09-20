@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/challenges")
 public class ChallengeController {
-
     private final ChallengeService challengeService;
 
     @GetMapping()
@@ -26,6 +25,7 @@ public class ChallengeController {
         List<HomeChallengeDto> challengeList = challengeService.findChallengeByDate();
         return ApiResponse.success(challengeList);
     }
+
     @GetMapping("/{challengeId}")
     public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Integer challengeId){
         ChallengeDetailDto challengeDetailDto = ChallengeDetailDto.builder().challenge(challengeService.findChallengeById(challengeId))
