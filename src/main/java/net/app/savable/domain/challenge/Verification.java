@@ -1,6 +1,7 @@
 package net.app.savable.domain.challenge;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -27,4 +28,12 @@ public class Verification {
     @ManyToOne(fetch = FetchType.LAZY) // Verification N : 1 ParticipationChallenge (지연로딩)
     @JoinColumn(name = "participation_challenge_id")
     private ParticipationChallenge participationChallenge;
+
+    @Builder
+    public Verification(Timestamp dateTime, String image, VerificationState state, ParticipationChallenge participationChallenge) {
+        this.dateTime = dateTime;
+        this.image = image;
+        this.state = state;
+        this.participationChallenge = participationChallenge;
+    }
 }

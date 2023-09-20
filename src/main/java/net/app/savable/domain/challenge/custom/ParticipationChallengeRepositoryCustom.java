@@ -11,4 +11,3 @@ public interface ParticipationChallengeRepositoryCustom {
     List<MyParticipationChallengeDto> findMyParticipationChallengeByMemberId(Long memberId);
     MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long memberId);
 }
-
