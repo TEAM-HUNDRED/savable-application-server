@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -28,14 +29,13 @@ public class SchedulerService {
         log.info("SchedulerService.checkVerification() 실행");
         List<Verification> waitingVerifications = verificationRepository.findByStateIs(VerificationState.WAITING);
 
-        if (waitingVerifications.isEmpty()) {
-            log.warn("No verifications found with WAITING state.");
-            return;
+        if (!waitingVerifications.isEmpty()) {
+            for (Verification verification : waitingVerifications) {
+                processVerification(verification);
+            }
         }
 
-        for (Verification verification : waitingVerifications) {
-            processVerification(verification);
-        }
+        rewardUnsuccessfulParticipation();
     }
 
     private void processVerification(Verification verification) {
@@ -78,5 +78,42 @@ public class SchedulerService {
                 });
 
         member.updateReward(challenge.getReward() * successCount); // 보상 지급
+    }
+
+    private void rewardUnsuccessfulParticipation(){
+        log.info("실패한 챌린지 보상 지급");
+        List<ParticipationChallenge> participationChallenges = participationRepository.findByParticipationStateAndEndDateBefore(ParticipationState.IN_PROGRESS, LocalDate.now());
+        for (ParticipationChallenge participation :participationChallenges){
+            participation.updateState(ParticipationState.FAIL);
+
+            Member member = memberRepository.findById(participation.getMemberId())
+                    .orElseThrow(() -> {
+                        log.error("Invalid member ID: {}", participation.getMemberId());
+                        return new IllegalArgumentException("Invalid member ID: " + participation.getMemberId());
+                    });
+
+            Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participation.getId(), VerificationState.SUCCESS);
+            updateRewardAndSavings(participation, successCount);
+        }
+    }
+
+    private void updateRewardAndSavings(ParticipationChallenge participation, Long count) {
+        Member member = memberRepository.findById(participation.getMemberId())
+                .orElseThrow(() -> {
+                    log.error("Invalid member ID: {}", participation.getMemberId());
+                    return new IllegalArgumentException("Invalid member ID: " + participation.getMemberId());
+                });
+
+        member.updateSavings(participation.getSavings() * count); // 절약 금액 증가
+
+        Challenge challenge = challengeRepository.findById(participation.getChallengeId())
+                .orElseThrow(() -> {
+                    log.error("Invalid challenge ID: {}", participation.getChallengeId());
+                    return new IllegalArgumentException("Invalid challenge ID: " + participation.getChallengeId());
+                });
+
+        double percentage = (double) count/participation.getVerificationGoal();
+        Long reward = Math.round(challenge.getReward() * count * percentage);
+        member.updateReward(reward); // 보상 지급
     }
 }
