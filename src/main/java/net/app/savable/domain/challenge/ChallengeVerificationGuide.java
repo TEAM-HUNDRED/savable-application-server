@@ -2,10 +2,11 @@ package net.app.savable.domain.challenge;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 
 @Entity
 @Getter
-public class ChallengeVerificationGuide {
+public class ChallengeVerificationGuide extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

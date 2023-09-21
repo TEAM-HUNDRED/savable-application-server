@@ -2,6 +2,7 @@ package net.app.savable.domain.challenge;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 import net.app.savable.domain.member.Member;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
-public class ParticipationChallenge {
+public class ParticipationChallenge extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

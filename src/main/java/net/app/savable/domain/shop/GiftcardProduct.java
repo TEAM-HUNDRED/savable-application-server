@@ -2,13 +2,14 @@ package net.app.savable.domain.shop;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 import org.springframework.data.repository.cdi.Eager;
 
 import java.util.List;
 
 @Entity
 @Getter
-public class GiftcardProduct {
+public class GiftcardProduct extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

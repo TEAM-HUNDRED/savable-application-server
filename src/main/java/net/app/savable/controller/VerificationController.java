@@ -2,6 +2,7 @@ package net.app.savable.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import net.app.savable.domain.challenge.ParticipationChallenge;
 import net.app.savable.domain.challenge.VerificationState;
 import net.app.savable.domain.challenge.dto.VerificationRequestDto;
@@ -16,6 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import net.app.savable.domain.challenge.dto.VerificationDetailDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @Slf4j
 @RestController
 @RequestMapping("/participations")
@@ -26,7 +33,7 @@ public class VerificationController {
     private final ParticipationChallengeService participationChallengeService;
     private final S3UploadService s3UploadService;
 
-    @PostMapping("/{participationId}/verifications")
+    @PostMapping("/{participationId}/verification")
     public ApiResponse<String> verificationAdd(@RequestParam("image")MultipartFile file, @PathVariable Long participationId){
 
         log.info("verificationService.verificationAdd");
@@ -42,7 +49,6 @@ public class VerificationController {
 
         ParticipationChallenge participationChallenge = participationChallengeService.findParticipationChallengeById(participationId);
         VerificationRequestDto verificationRequestDto = VerificationRequestDto.builder()
-                .dateTime(new Timestamp(System.currentTimeMillis()))
                 .participationChallenge(participationChallenge)
                 .image(saveFileName)
                 .state(VerificationState.WAITING)
@@ -55,5 +61,12 @@ public class VerificationController {
     public static String generateFileName(Long memberId, Long participationId, Timestamp timestamp) {
         return String.format("verification/member_%d/participation_%d_%s.jpg",
                 memberId, participationId, timestamp.toString());
+    }
+
+    @GetMapping("/{participationId}/verification")
+    public ApiResponse<VerificationDetailDto> verificationDetails(@PathVariable Long participationId){
+        log.info("verificationDetails participationId : {}", participationId);
+        VerificationDetailDto verificationDetail = verificationService.findVerificationDetail(participationId);
+        return ApiResponse.success(verificationDetail);
     }
 }

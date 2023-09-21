@@ -3,19 +3,17 @@ package net.app.savable.domain.challenge;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import net.app.savable.domain.member.BaseTimeEntity;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.sql.Timestamp;
 
 @Entity
 @Getter
-public class Verification {
+public class Verification extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private Timestamp dateTime;
 
     @Column(nullable = false)
     private String image;
@@ -30,8 +28,7 @@ public class Verification {
     private ParticipationChallenge participationChallenge;
 
     @Builder
-    public Verification(Timestamp dateTime, String image, VerificationState state, ParticipationChallenge participationChallenge) {
-        this.dateTime = dateTime;
+    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge) {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;
