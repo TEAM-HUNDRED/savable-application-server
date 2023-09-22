@@ -3,7 +3,6 @@ package net.app.savable.domain.member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import net.app.savable.domain.challenge.ParticipationChallenge;
-import net.app.savable.domain.challenge.Verification;
 import net.app.savable.domain.history.RewardHistory;
 import net.app.savable.domain.history.SavingsHistory;
 import net.app.savable.domain.shop.GiftcardOrder;
