@@ -63,21 +63,7 @@ public class SchedulerService {
         log.info("챌린지 성공!");
         participation.updateState(ParticipationState.SUCCESS);
 
-        Member member = memberRepository.findById(participation.getMemberId())
-                .orElseThrow(() -> {
-                    log.error("Invalid member ID: {}", participation.getMemberId());
-                    return new IllegalArgumentException("Invalid member ID: " + participation.getMemberId());
-                });
-
-        member.updateSavings(participation.getSavings() * successCount); // 절약 금액 증가
-
-        Challenge challenge = challengeRepository.findById(participation.getChallengeId())
-                .orElseThrow(() -> {
-                    log.error("Invalid challenge ID: {}", participation.getChallengeId());
-                    return new IllegalArgumentException("Invalid challenge ID: " + participation.getChallengeId());
-                });
-
-        member.updateReward(challenge.getReward() * successCount); // 보상 지급
+        updateRewardAndSavings(participation, successCount, ParticipationState.SUCCESS);
     }
 
     private void rewardUnsuccessfulParticipation(){
@@ -93,11 +79,11 @@ public class SchedulerService {
                     });
 
             Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participation.getId(), VerificationState.SUCCESS);
-            updateRewardAndSavings(participation, successCount);
+            updateRewardAndSavings(participation, successCount, ParticipationState.FAIL);
         }
     }
 
-    private void updateRewardAndSavings(ParticipationChallenge participation, Long count) {
+    private void updateRewardAndSavings(ParticipationChallenge participation, Long count, ParticipationState participationState) { // 보상 및 절약 금액 증가
         Member member = memberRepository.findById(participation.getMemberId())
                 .orElseThrow(() -> {
                     log.error("Invalid member ID: {}", participation.getMemberId());
@@ -113,7 +99,13 @@ public class SchedulerService {
                 });
 
         double percentage = (double) count/participation.getVerificationGoal();
-        Long reward = Math.round(challenge.getReward() * count * percentage);
+        Long reward;
+        if (participationState == ParticipationState.SUCCESS) {
+            reward = challenge.getReward() * count;
+        } else {
+            reward = Math.round(challenge.getReward() * count * percentage);
+        }
         member.updateReward(reward); // 보상 지급
+        System.out.printf("챌린지 보상: %d원\n", reward);
     }
 }

@@ -24,6 +24,11 @@ public class GiftcardOrder extends BaseTimeEntity {
     @Column(nullable = false)
     private Long quantity;
 
+<<<<<<< HEAD
+=======
+    private Timestamp date;
+
+>>>>>>> fe7082b (feat: 챌린지 실패 시 인증 비율에 따라 지급하는 로직 구현)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @ColumnDefault("'WAITING'")
