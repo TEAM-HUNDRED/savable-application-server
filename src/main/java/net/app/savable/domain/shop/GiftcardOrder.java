@@ -6,8 +6,6 @@ import net.app.savable.domain.member.BaseTimeEntity;
 import net.app.savable.domain.member.Member;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.sql.Timestamp;
-
 @Entity
 @Getter
 public class GiftcardOrder extends BaseTimeEntity {
@@ -23,8 +21,6 @@ public class GiftcardOrder extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Long quantity;
-
-    private Timestamp date;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
