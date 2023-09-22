@@ -5,8 +5,6 @@ import lombok.Getter;
 import net.app.savable.domain.member.BaseTimeEntity;
 import net.app.savable.domain.member.Member;
 
-import java.sql.Timestamp;
-
 @Entity
 @Getter
 public class RewardHistory extends BaseTimeEntity {
