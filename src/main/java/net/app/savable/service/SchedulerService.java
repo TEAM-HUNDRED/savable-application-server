@@ -3,6 +3,11 @@ package net.app.savable.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.*;
+import net.app.savable.domain.history.RewardHistoryRepository;
+import net.app.savable.domain.history.SavingsHistory;
+import net.app.savable.domain.history.SavingsHistoryRepository;
+import net.app.savable.domain.history.dto.SavingsHistoryResponseDto;
+import net.app.savable.domain.history.dto.SavingsHistorySaveDto;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,6 +28,8 @@ public class SchedulerService {
     private final ParticipationChallengeRepository participationRepository;
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
+    private final RewardHistoryRepository rewardHistoryRepository;
+    private final SavingsHistoryRepository savingsHistoryRepository;
 
     @Transactional(readOnly = false)
     @Scheduled(cron = "1 0 0 * * *") // 매일 0시 0분 1초에 실행
@@ -90,22 +98,38 @@ public class SchedulerService {
                     return new IllegalArgumentException("Invalid member ID: " + participation.getMemberId());
                 });
 
-        member.updateSavings(participation.getSavings() * count); // 절약 금액 증가
-
         Challenge challenge = challengeRepository.findById(participation.getChallengeId())
                 .orElseThrow(() -> {
                     log.error("Invalid challenge ID: {}", participation.getChallengeId());
                     return new IllegalArgumentException("Invalid challenge ID: " + participation.getChallengeId());
                 });
 
-        double percentage = (double) count/participation.getVerificationGoal();
-        Long reward;
-        if (participationState == ParticipationState.SUCCESS) {
-            reward = challenge.getReward() * count;
-        } else {
-            reward = Math.round(challenge.getReward() * count * percentage);
+        // 절약 금액
+        Long additionalSavings = participation.getSavings() * count;
+        member.updateSavings(additionalSavings); // 절약 금액 증가
+        SavingsHistoryResponseDto savingsHistoryResponseDto = savingsHistoryRepository.findTopByMemberIdOrderByCreatedAtDesc(member.getId()); // 가장 최근 절약 내역 조회
+        if (savingsHistoryResponseDto == null) {
+            savingsHistoryResponseDto = SavingsHistoryResponseDto.builder()
+                    .totalSavings(0L)
+                    .build();
         }
-        member.updateReward(reward); // 보상 지급
-        System.out.printf("챌린지 보상: %d원\n", reward);
+        SavingsHistorySaveDto savingsHistorySaveDto = SavingsHistorySaveDto.builder()
+                .savings(additionalSavings)
+                .totalSavings(savingsHistoryResponseDto.getTotalSavings() + additionalSavings)
+                .description(challenge.getTitle())
+                .member(member)
+                .build();
+
+        savingsHistoryRepository.save(savingsHistorySaveDto.toEntity()); // 절약 내역 저장
+
+        double percentage = (double) count/participation.getVerificationGoal();
+        Long additionalReward;
+        if (participationState == ParticipationState.SUCCESS) {
+            additionalReward = challenge.getReward() * count;
+        } else {
+            additionalReward = Math.round(challenge.getReward() * count * percentage);
+        }
+        member.updateReward(additionalReward); // 보상 지급
+        System.out.printf("챌린지 보상: %d원\n", additionalReward);
     }
 }
