@@ -1,6 +1,7 @@
 package net.app.savable.domain.history;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import net.app.savable.domain.member.BaseTimeEntity;
 import net.app.savable.domain.member.Member;
@@ -28,4 +29,14 @@ public class RewardHistory extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY) // RewardHistory N : 1 Member (지연로딩)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public RewardHistory(Long id, Long reward, Long totalReward, RewardType rewardType, String description, Member member) {
+        this.id = id;
+        this.reward = reward;
+        this.totalReward = totalReward;
+        this.rewardType = rewardType;
+        this.description = description;
+        this.member = member;
+    }
 }

@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.*;
 import net.app.savable.domain.history.RewardHistoryRepository;
+import net.app.savable.domain.history.RewardType;
 import net.app.savable.domain.history.SavingsHistory;
 import net.app.savable.domain.history.SavingsHistoryRepository;
+import net.app.savable.domain.history.dto.RewardHistoryResponseDto;
+import net.app.savable.domain.history.dto.RewardHistorySaveDto;
 import net.app.savable.domain.history.dto.SavingsHistoryResponseDto;
 import net.app.savable.domain.history.dto.SavingsHistorySaveDto;
 import net.app.savable.domain.member.Member;
@@ -104,24 +107,25 @@ public class SchedulerService {
                     return new IllegalArgumentException("Invalid challenge ID: " + participation.getChallengeId());
                 });
 
-        // 절약 금액
+        // 절약 금액 지급
         Long additionalSavings = participation.getSavings() * count;
         member.updateSavings(additionalSavings); // 절약 금액 증가
-        SavingsHistoryResponseDto savingsHistoryResponseDto = savingsHistoryRepository.findTopByMemberIdOrderByCreatedAtDesc(member.getId()); // 가장 최근 절약 내역 조회
-        if (savingsHistoryResponseDto == null) {
-            savingsHistoryResponseDto = SavingsHistoryResponseDto.builder()
+        SavingsHistoryResponseDto recentSavingsHistory = savingsHistoryRepository.findTopByMemberIdOrderByCreatedAtDesc(member.getId()); // 가장 최근 절약 내역 조회
+        if (recentSavingsHistory == null) {
+            recentSavingsHistory = SavingsHistoryResponseDto.builder()
                     .totalSavings(0L)
                     .build();
         }
         SavingsHistorySaveDto savingsHistorySaveDto = SavingsHistorySaveDto.builder()
                 .savings(additionalSavings)
-                .totalSavings(savingsHistoryResponseDto.getTotalSavings() + additionalSavings)
+                .totalSavings(recentSavingsHistory.getTotalSavings() + additionalSavings)
                 .description(challenge.getTitle())
                 .member(member)
                 .build();
 
         savingsHistoryRepository.save(savingsHistorySaveDto.toEntity()); // 절약 내역 저장
 
+        // 리워드 지급
         double percentage = (double) count/participation.getVerificationGoal();
         Long additionalReward;
         if (participationState == ParticipationState.SUCCESS) {
@@ -130,6 +134,22 @@ public class SchedulerService {
             additionalReward = Math.round(challenge.getReward() * count * percentage);
         }
         member.updateReward(additionalReward); // 보상 지급
-        System.out.printf("챌린지 보상: %d원\n", additionalReward);
+
+        RewardHistoryResponseDto recentRewardHistory = rewardHistoryRepository.findTopByMemberIdOrderByCreatedAtDesc(member.getId()); // 가장 최근 리워드 내역 조회
+        if (recentRewardHistory == null) {
+            recentRewardHistory = RewardHistoryResponseDto.builder()
+                    .totalReward(0L)
+                    .build();
+        }
+
+        RewardHistorySaveDto rewardHistorySaveDto = RewardHistorySaveDto.builder()
+                .reward(additionalReward)
+                .totalReward(recentRewardHistory.getTotalReward() + additionalReward)
+                .rewardType(RewardType.CHALLENGE)
+                .description(challenge.getTitle())
+                .member(member)
+                .build();
+
+        rewardHistoryRepository.save(rewardHistorySaveDto.toEntity()); // 리워드 내역 저장
     }
 }
