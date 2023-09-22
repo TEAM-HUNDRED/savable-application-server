@@ -1,16 +1,20 @@
 package net.app.savable.domain.challenge;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import net.app.savable.domain.member.BaseTimeEntity;
+import lombok.NoArgsConstructor;
 import net.app.savable.domain.member.Member;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class ParticipationChallenge extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +37,12 @@ public class ParticipationChallenge extends BaseTimeEntity {
     @Column(nullable = false)
     private Long savings; // 챌린지 인증당 절약 금액
 
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime lastModifiedAt;
+
     @ManyToOne(fetch = FetchType.LAZY) // ParticipationChallenge N : 1 Challenge (지연로딩)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
@@ -43,4 +53,19 @@ public class ParticipationChallenge extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "participationChallenge", cascade = CascadeType.ALL) // ParticipationChallenge 1 : N Verification
     private List<Verification> verificationList;
+
+    @Builder
+    public ParticipationChallenge(Long id, LocalDate startDate, LocalDate endDate, Long verificationGoal, ParticipationState participationState, Long savings, LocalDateTime createdAt, LocalDateTime lastModifiedAt, Challenge challenge, Member member, List<Verification> verificationList) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.verificationGoal = verificationGoal;
+        this.participationState = participationState;
+        this.savings = savings;
+        this.createdAt = createdAt;
+        this.lastModifiedAt = lastModifiedAt;
+        this.challenge = challenge;
+        this.member = member;
+        this.verificationList = verificationList;
+    }
 }

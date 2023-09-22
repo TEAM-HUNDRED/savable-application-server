@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import net.app.savable.domain.member.BaseTimeEntity;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.sql.Timestamp;
 
 @Entity
 @Getter
+@NoArgsConstructor //TODO : 왜 넣어야 되는지 모르겠음
 public class Verification extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +17,14 @@ public class Verification extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String image;
+
+    @Builder
+    public Verification(Long id, String image, VerificationState state, ParticipationChallenge participationChallenge) {
+        this.id = id;
+        this.image = image;
+        this.state = state;
+        this.participationChallenge = participationChallenge;
+    }
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
