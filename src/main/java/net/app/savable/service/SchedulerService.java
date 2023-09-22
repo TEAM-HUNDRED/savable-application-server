@@ -42,7 +42,7 @@ public class SchedulerService {
         verification.updateState(VerificationState.SUCCESS);
 
         Long participationId = verification.getParticipationChallengeId();
-        Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participationId, VerificationState.SUCCESS);
+        Long successCount = verificationRepository.countByParticipationChallengeIdAndState(participationId, VerificationState.SUCCESS);
 
         ParticipationChallenge participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> {
@@ -78,7 +78,7 @@ public class SchedulerService {
                         return new IllegalArgumentException("Invalid member ID: " + participation.getMemberId());
                     });
 
-            Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participation.getId(), VerificationState.SUCCESS);
+            Long successCount = verificationRepository.countByParticipationChallengeIdAndState(participation.getId(), VerificationState.SUCCESS);
             updateRewardAndSavings(participation, successCount, ParticipationState.FAIL);
         }
     }
