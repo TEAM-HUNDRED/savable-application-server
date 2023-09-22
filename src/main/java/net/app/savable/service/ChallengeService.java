@@ -13,6 +13,7 @@ import net.app.savable.domain.member.MemberRepository;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,8 +60,6 @@ public class ChallengeService {
             .verificationGoal(participationRequestDto.getVerificationGoal())
             .participationState(ParticipationState.IN_PROGRESS)
             .savings(challengeRepository.findChallengeById(participationRequestDto.getChallengeId()).getEstimatedSavings())
-            .createdAt(LocalDateTime.now())
-            .lastModifiedAt(LocalDateTime.now())
             .challenge(challengeRepository.findChallengeById(participationRequestDto.getChallengeId()))
             .member(memberRepository.findMemberById(participationRequestDto.getMemberId()))
             .verificationList(List.of()) // 빈 리스트

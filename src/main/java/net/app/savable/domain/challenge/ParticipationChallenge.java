@@ -37,12 +37,6 @@ public class ParticipationChallenge extends BaseTimeEntity {
     @Column(nullable = false)
     private Long savings; // 챌린지 인증당 절약 금액
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime lastModifiedAt;
-
     @ManyToOne(fetch = FetchType.LAZY) // ParticipationChallenge N : 1 Challenge (지연로딩)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
@@ -62,8 +56,6 @@ public class ParticipationChallenge extends BaseTimeEntity {
         this.verificationGoal = verificationGoal;
         this.participationState = participationState;
         this.savings = savings;
-        this.createdAt = createdAt;
-        this.lastModifiedAt = lastModifiedAt;
         this.challenge = challenge;
         this.member = member;
         this.verificationList = verificationList;
