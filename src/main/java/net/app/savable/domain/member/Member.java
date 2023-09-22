@@ -58,4 +58,11 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N SavingHistory
     private List<SavingsHistory> savingHistoryList;
 
+    public void updateSavings(Long savings) { // 회원의 절약 금액을 증가시킴
+        this.savings += savings;
+    }
+
+    public void updateReward(Long reward) { // 회원의 리워드를 증가시킴
+        this.reward += reward;
+    }
 }
