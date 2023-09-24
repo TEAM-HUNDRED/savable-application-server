@@ -1,5 +1,6 @@
-package net.app.savable.global.common;
+package net.app.savable.global.error;
 
+import net.app.savable.global.error.exception.ErrorCode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

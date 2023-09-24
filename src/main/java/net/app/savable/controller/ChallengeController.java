@@ -6,13 +6,13 @@ import net.app.savable.domain.challenge.dto.ChallengeDto;
 import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import net.app.savable.domain.challenge.dto.HomeChallengeDto;
 import net.app.savable.domain.challenge.dto.request.ParticipationRequestDto;
-import net.app.savable.global.common.ErrorCode;
+import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.ChallengeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import net.app.savable.domain.challenge.dto.ChallengeDetailDto;
-import net.app.savable.global.common.ApiResponse;
+import net.app.savable.global.error.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

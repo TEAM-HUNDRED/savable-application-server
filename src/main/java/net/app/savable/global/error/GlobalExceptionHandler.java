@@ -1,5 +1,7 @@
-package net.app.savable.global.common;
+package net.app.savable.global.error;
 
+import net.app.savable.global.error.exception.ErrorCode;
+import net.app.savable.global.error.exception.GeneralException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

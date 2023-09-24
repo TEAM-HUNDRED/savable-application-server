@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.dto.MyParticipationChallengeDetailDto;
 import net.app.savable.domain.challenge.dto.MyParticipationChallengeDto;
-import net.app.savable.global.common.ApiResponse;
+import net.app.savable.global.error.ApiResponse;
 import net.app.savable.service.ParticipationChallengeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
