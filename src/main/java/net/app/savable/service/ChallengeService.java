@@ -10,13 +10,12 @@ import net.app.savable.domain.challenge.dto.HomeChallengeDto;
 import net.app.savable.domain.challenge.dto.request.ParticipationRequestDto;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+
+import static net.app.savable.domain.challenge.ParticipationState.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ public class ChallengeService {
     private final ChallengeVerificationGuideRepository guideRepository;
     private final MemberRepository memberRepository;
     private final ParticipationChallengeRepository participationChallengeRepository;
-    private final VerificationRepository verificationRepository;
 
     public List<HomeChallengeDto> findChallengeByDate(){
         List<HomeChallengeDto> challengeList = challengeRepository.findChallengeByDate().stream()
@@ -34,8 +32,10 @@ public class ChallengeService {
                 .toList();
         return challengeList;
     }
-    public ChallengeDto findChallengeDtoById(Long challengeId){
-        Challenge challengeDetail = challengeRepository.findChallengeById(challengeId);
+    public ChallengeDto findChallengeDetailById(Long challengeId){
+        Challenge challengeDetail = challengeRepository.findChallengeById(challengeId).orElseThrow(
+                () -> new IllegalArgumentException("Invalid Challenge Id: {}"+challengeId)
+        );
         ChallengeDto challengeDto = new ChallengeDto(challengeDetail);
         return challengeDto;
     }
@@ -48,22 +48,29 @@ public class ChallengeService {
     }
 
     public Challenge findChallengeById(Long challengeId){
-        return challengeRepository.findChallengeById(challengeId);
+        return challengeRepository.findChallengeById(challengeId).orElseThrow(() ->
+            new IllegalArgumentException("Invalid challengeId"+challengeId)
+        );
     }
 
     public void addParticipation(ParticipationRequestDto participationRequestDto){
+        Challenge requestedChallenge = challengeRepository.findChallengeById(participationRequestDto.getChallengeId())
+                .orElseThrow(() -> new IllegalArgumentException("INVALID_CHALLENGE" + participationRequestDto.getChallengeId()));
+        Member requestedMember = memberRepository.findMemberById(participationRequestDto.getMemberId())
+                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER"+participationRequestDto.getMemberId()));
+        LocalDate today = LocalDate.now();
 
-        participationChallengeRepository.save(ParticipationChallenge.builder()
-            .startDate(LocalDate.now())
-            .endDate(LocalDate.now().plusDays(participationRequestDto.getDuration()))
-            .verificationGoal(participationRequestDto.getVerificationGoal())
-            .participationState(ParticipationState.IN_PROGRESS)
-            .savings(challengeRepository.findChallengeById(participationRequestDto.getChallengeId()).getEstimatedSavings())
-            .createdAt(LocalDateTime.now())
-            .lastModifiedAt(LocalDateTime.now())
-            .challenge(challengeRepository.findChallengeById(participationRequestDto.getChallengeId()))
-            .member(memberRepository.findMemberById(participationRequestDto.getMemberId()))
-            .verificationList(List.of()) // 빈 리스트
-            .build());
+        ParticipationChallenge participationChallenge = ParticipationChallenge.builder()
+                .startDate(today)
+                .endDate(today.plusDays(participationRequestDto.getDuration()))
+                .verificationGoal(participationRequestDto.getVerificationGoal())
+                .participationState(IN_PROGRESS)
+                .savings(requestedChallenge.getEstimatedSavings())
+                .challenge(requestedChallenge)
+                .member(requestedMember)
+                .verificationList(List.of()) // 빈 리스트
+                .build();
+
+        participationChallengeRepository.save(participationChallenge);
     }
 }

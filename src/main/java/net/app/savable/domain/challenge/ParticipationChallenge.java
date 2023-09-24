@@ -9,7 +9,6 @@ import net.app.savable.domain.member.Member;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -61,7 +60,7 @@ public class ParticipationChallenge extends BaseTimeEntity {
     }
 
     @Builder
-    public ParticipationChallenge(Long id, LocalDate startDate, LocalDate endDate, Long verificationGoal, ParticipationState participationState, Long savings, LocalDateTime createdAt, LocalDateTime lastModifiedAt, Challenge challenge, Member member, List<Verification> verificationList) {
+    public ParticipationChallenge(Long id, LocalDate startDate, LocalDate endDate, Long verificationGoal, ParticipationState participationState, Long savings, Challenge challenge, Member member, List<Verification> verificationList) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;

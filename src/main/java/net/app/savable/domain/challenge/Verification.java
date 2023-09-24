@@ -18,14 +18,6 @@ public class Verification extends BaseTimeEntity{
     @Column(nullable = false)
     private String image;
 
-    @Builder
-    public Verification(Long id, String image, VerificationState state, ParticipationChallenge participationChallenge) {
-        this.id = id;
-        this.image = image;
-        this.state = state;
-        this.participationChallenge = participationChallenge;
-    }
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @ColumnDefault("'WAITING'")
