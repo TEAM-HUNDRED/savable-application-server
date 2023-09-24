@@ -11,6 +11,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Member findMemberById(Long memberId){
-        return memberRepository.findMemberById(memberId);
+        return memberRepository.findMemberById(memberId)
+                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER"+memberId));
     }
 }

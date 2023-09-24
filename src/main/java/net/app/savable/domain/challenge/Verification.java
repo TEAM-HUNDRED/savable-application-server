@@ -10,21 +10,13 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @NoArgsConstructor //TODO : 왜 넣어야 되는지 모르겠음
-public class Verification extends BaseTimeEntity {
+public class Verification extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String image;
-
-    @Builder
-    public Verification(Long id, String image, VerificationState state, ParticipationChallenge participationChallenge) {
-        this.id = id;
-        this.image = image;
-        this.state = state;
-        this.participationChallenge = participationChallenge;
-    }
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

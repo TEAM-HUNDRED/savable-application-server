@@ -6,7 +6,7 @@ import lombok.Getter;
 public class ParticipationRequestDto {
     private Long memberId;
     private Long challengeId;
-    private Long duration;
+    private Long duration; // 1주 : 7, 2주: 14
     private Long verificationGoal;
 
 }
