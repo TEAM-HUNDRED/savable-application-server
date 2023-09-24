@@ -1,4 +1,4 @@
-package net.app.savable.global.common;
+package net.app.savable.global.error;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.web.bind.annotation.GetMapping;

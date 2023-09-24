@@ -1,7 +1,8 @@
-package net.app.savable.global.common;
+package net.app.savable.global.error;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.app.savable.global.error.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 @Slf4j
