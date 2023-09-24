@@ -41,4 +41,12 @@ public class Verification extends BaseTimeEntity {
         this.state = state;
         this.participationChallenge = participationChallenge;
     }
+
+    public void updateState(VerificationState state) { // 인증 상태 변경
+        this.state = state;
+    }
+
+    public Long getParticipationChallengeId() { // 참여 챌린지 id 반환
+        return this.participationChallenge.getId();
+    }
 }

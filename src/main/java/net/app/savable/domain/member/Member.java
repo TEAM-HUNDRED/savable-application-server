@@ -3,7 +3,6 @@ package net.app.savable.domain.member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import net.app.savable.domain.challenge.ParticipationChallenge;
-import net.app.savable.domain.challenge.Verification;
 import net.app.savable.domain.history.RewardHistory;
 import net.app.savable.domain.history.SavingsHistory;
 import net.app.savable.domain.shop.GiftcardOrder;
@@ -58,4 +57,11 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N SavingHistory
     private List<SavingsHistory> savingHistoryList;
 
+    public void updateSavings(Long savings) { // 회원의 절약 금액을 증가시킴
+        this.savings += savings;
+    }
+
+    public void updateReward(Long reward) { // 회원의 리워드를 증가시킴
+        this.reward += reward;
+    }
 }

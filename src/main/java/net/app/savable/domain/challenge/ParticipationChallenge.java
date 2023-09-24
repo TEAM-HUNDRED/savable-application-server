@@ -59,5 +59,16 @@ public class ParticipationChallenge extends BaseTimeEntity {
         this.challenge = challenge;
         this.member = member;
         this.verificationList = verificationList;
+
+    public void updateState(ParticipationState state) { // 챌린지 성공 여부 변경
+        this.participationState = ParticipationState.SUCCESS;
+    }
+
+    public Long getMemberId() { // 회원 id 반환
+        return this.member.getId();
+    }
+
+    public Long getChallengeId() { // 챌린지 id 반환
+        return this.challenge.getId();
     }
 }
