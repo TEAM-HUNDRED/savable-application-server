@@ -18,6 +18,7 @@ public enum ErrorCode {
     BAD_REQUEST(400, HttpStatus.BAD_REQUEST, "Bad Request"),
     INVALID_TYPE_VALUE(400, HttpStatus.BAD_REQUEST, "Invalid Type Value"),
     INVALID_INPUT_VALUE(400, HttpStatus.BAD_REQUEST, "Invalid Input Value"),
+    INSUFFICIENT_BALANCE(400, HttpStatus.BAD_REQUEST, "Insifficient Balance"),
 
     UNAUTHORIZED(401, HttpStatus.UNAUTHORIZED, "Unauthorized"),
     FORBIDDEN(403, HttpStatus.FORBIDDEN, "Forbidden"),
