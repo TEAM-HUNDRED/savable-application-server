@@ -1,7 +1,9 @@
 package net.app.savable.domain.member;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.app.savable.domain.challenge.ParticipationChallenge;
 import net.app.savable.domain.history.RewardHistory;
 import net.app.savable.domain.history.SavingsHistory;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -33,7 +36,6 @@ public class Member extends BaseTimeEntity {
     private Long savings;
     private String phoneNumber;
 
-    @Column(nullable = false)
     private String profileImage;
 
     @Enumerated(EnumType.STRING)
@@ -57,11 +59,34 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N SavingHistory
     private List<SavingsHistory> savingHistoryList;
 
+    @Builder
+    public Member(String username, String email, Long reward, Long savings, String phoneNumber, String profileImage, Role role, AccountState accountState) {
+        this.username = username;
+        this.email = email;
+        this.reward = reward;
+        this.savings = savings;
+        this.phoneNumber = phoneNumber;
+        this.profileImage = profileImage;
+        this.role = role;
+        this.accountState = accountState;
+    }
+
     public void updateSavings(Long savings) { // 회원의 절약 금액을 증가시킴
         this.savings += savings;
     }
 
     public void updateReward(Long reward) { // 회원의 리워드를 증가시킴
         this.reward += reward;
+    }
+
+    public Member update(String username, String profileImage){
+        this.username = username;
+        this.profileImage = profileImage;
+
+        return this;
+    }
+
+    public String getRoleKey(){
+        return this.role.getKey();
     }
 }
