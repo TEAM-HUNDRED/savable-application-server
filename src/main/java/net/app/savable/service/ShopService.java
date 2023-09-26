@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.*;
+import net.app.savable.domain.shop.dto.GiftcardHistoryDto;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
+import net.app.savable.domain.shop.dto.request.GiftcardHistoryRequestDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
 import net.app.savable.global.common.GeneralException;
 import org.springframework.stereotype.Service;
@@ -54,5 +56,16 @@ public class ShopService {
 
         // 리워드 차감
         orderedMember.updateReward(-totalPrice);
+    }
+
+    public List<GiftcardHistoryDto> findGiftcardByMember(GiftcardHistoryRequestDto giftcardHistoryRequest){
+        Member orderedMember = memberRepository.findMemberById(giftcardHistoryRequest.getMemberId())
+                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+giftcardHistoryRequest.getMemberId()));
+
+        List<GiftcardHistoryDto> giftcardHistoryList = giftcardOrderRepository.findGiftcardByMemberOrderByCreatedAtDesc(orderedMember)
+                .stream()
+                .map(GiftcardHistoryDto::new)
+                .toList();
+        return giftcardHistoryList;
     }
 }
