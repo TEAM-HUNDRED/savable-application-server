@@ -11,7 +11,7 @@ public class VerificationInfoDto {
     private Long successCount;
     private Long failCount;
     private Long remainingCount;
-    List<VerificationDto> verificationDtoList;
+    List<VerificationResponseDto> verificationResponseDtos;
 
     public VerificationInfoDto(Long successCount, Long failCount, Long remainingCount) {
         this.successCount = successCount;
