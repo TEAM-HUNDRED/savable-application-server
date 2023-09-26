@@ -1,7 +1,9 @@
 package net.app.savable.domain.member.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class MemberSummaryResponseDto {
 
     private String username;
