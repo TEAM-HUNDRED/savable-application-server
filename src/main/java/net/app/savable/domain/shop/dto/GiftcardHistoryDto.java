@@ -19,10 +19,12 @@ public class GiftcardHistoryDto {
     private SendState sendState;
 
     public GiftcardHistoryDto(GiftcardOrder giftcardOrder){
+        // WAITING과 READY를 사용자에게는 WAITING으로 보여주어 2개의 상태만 존재하게 함.
         SendState sendState = giftcardOrder.getSendState();
         if (sendState != SendState.COMPLETE){
             sendState=SendState.WAITING;
         }
+
         this.date = giftcardOrder.getCreatedAt();
         this.image= giftcardOrder.getGiftcardProduct().getImage();
         this.productName=giftcardOrder.getGiftcardProduct().getProductName();
