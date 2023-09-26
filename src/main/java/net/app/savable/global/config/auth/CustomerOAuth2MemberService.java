@@ -48,10 +48,7 @@ public class CustomerOAuth2MemberService implements OAuth2UserService<OAuth2User
     }
 
     private Member saveOrUpdate(OAuthAttributes attributes) {
-        Member member = memberRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture())) // 이미 있는 사용자라면 update
-                .orElse(attributes.toEntity()); // 없는 사용자라면 insert
-
-        return memberRepository.save(member);
+        return memberRepository.findByEmail(attributes.getEmail())
+                .orElseGet(() -> memberRepository.save(attributes.toEntity())); // 없는 사용자라면 insert
     }
 }
