@@ -1,12 +1,16 @@
 package net.app.savable.domain.member.dto;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+@Getter
+@NoArgsConstructor
 public class MyPageResponseDto {
 
-    private final MemberSummaryResponseDto memberSummaryResponseDto;
-    private final ChallengeSummaryResponseDto challengeSummaryResponseDto;
+    private MemberSummaryResponseDto memberSummaryResponseDto;
+    private ChallengeSummaryResponseDto challengeSummaryResponseDto;
 
     @Builder
     public MyPageResponseDto(MemberSummaryResponseDto memberSummaryResponseDto, ChallengeSummaryResponseDto challengeSummaryResponseDto) {
