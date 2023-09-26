@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import net.app.savable.domain.member.BaseTimeEntity;
 import lombok.NoArgsConstructor;
+import net.app.savable.domain.member.Member;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
@@ -27,11 +28,16 @@ public class Verification extends BaseTimeEntity{
     @JoinColumn(name = "participation_challenge_id")
     private ParticipationChallenge participationChallenge;
 
+    @ManyToOne(fetch = FetchType.LAZY) // Verification N : 1 Member (지연로딩)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Builder
-    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge) {
+    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member) {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;
+        this.member = member;
     }
 
     public void updateState(VerificationState state) { // 인증 상태 변경

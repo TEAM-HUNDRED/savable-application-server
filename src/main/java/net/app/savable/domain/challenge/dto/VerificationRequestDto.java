@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.app.savable.domain.challenge.ParticipationChallenge;
 import net.app.savable.domain.challenge.Verification;
 import net.app.savable.domain.challenge.VerificationState;
+import net.app.savable.domain.member.Member;
 
 import java.sql.Timestamp;
 
@@ -13,12 +14,14 @@ public class VerificationRequestDto {
     private String image;
     private VerificationState state;
     private ParticipationChallenge participationChallenge;
+    private Member member;
 
     @Builder
-    public VerificationRequestDto(String image, VerificationState state, ParticipationChallenge participationChallenge) {
+    public VerificationRequestDto(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member) {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;
+        this.member = member;
     }
 
     public Verification toEntity() {
@@ -26,6 +29,7 @@ public class VerificationRequestDto {
             .image(image)
             .state(state)
             .participationChallenge(participationChallenge)
+            .member(member)
             .build();
     }
 }
