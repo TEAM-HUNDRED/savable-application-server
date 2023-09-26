@@ -48,4 +48,9 @@ public class ParticipationChallengeService {
                 .currentParticipationCount(currentParticipationCount)
                 .build();
     }
+
+    public Long findScheduledReward(Long memberId){
+        log.info("ParticipationChallengeService.findScheduledReward() 실행");
+        return participationChallengeRepository.findScheduledReward(memberId);
+    }
 }
