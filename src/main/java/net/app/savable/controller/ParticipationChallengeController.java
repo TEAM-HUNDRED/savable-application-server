@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.dto.MyParticipationChallengeDetailDto;
 import net.app.savable.domain.challenge.dto.MyParticipationChallengeDto;
+import net.app.savable.global.config.auth.LoginMember;
+import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
+import net.app.savable.service.MemberService;
 import net.app.savable.service.ParticipationChallengeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +23,14 @@ import java.util.List;
 public class ParticipationChallengeController {
 
     private final ParticipationChallengeService participationChallengeService;
+    private final MemberService memberService;
 
     @GetMapping()
-    public ApiResponse<List<MyParticipationChallengeDto>> participationList(){
+    public ApiResponse<List<MyParticipationChallengeDto>> participationList(@LoginMember SessionMember member){
         log.info("ParticipationChallengeController.participationList() 실행");
 
-        Long memberId = 1L;
-        List<MyParticipationChallengeDto> myParticipationChallengeDtoList = participationChallengeService.findParticipationChallengeByMemberId(memberId);
+        System.out.printf("memberId : %d\n", member.getId());
+        List<MyParticipationChallengeDto> myParticipationChallengeDtoList = participationChallengeService.findParticipationChallengeByMemberId(member.getId());
 
         return ApiResponse.success(myParticipationChallengeDtoList);
     }
