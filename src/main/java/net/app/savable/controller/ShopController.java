@@ -1,11 +1,9 @@
 package net.app.savable.controller;
 
 import lombok.RequiredArgsConstructor;
-import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
-import net.app.savable.domain.shop.GiftcardProduct;
 import net.app.savable.domain.shop.GiftcardProductRepository;
-import net.app.savable.domain.shop.dto.GiftcardDto;
+import net.app.savable.domain.shop.dto.GiftcardResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
 import net.app.savable.global.common.ApiResponse;
 import net.app.savable.global.common.ErrorCode;
@@ -13,7 +11,6 @@ import net.app.savable.service.ShopService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static net.app.savable.global.common.ErrorCode.INVALID_INPUT_VALUE;
 
@@ -26,11 +23,11 @@ public class ShopController {
     private final GiftcardProductRepository giftcardProductRepository;
 
     @GetMapping("/giftcards/{price}")
-    public ApiResponse<List<GiftcardDto>> giftcardByPrice(@PathVariable Long price){
+    public ApiResponse<List<GiftcardResponseDto>> giftcardByPrice(@PathVariable Long price){
         if (price>5000)
             return ApiResponse.fail(INVALID_INPUT_VALUE, "최대 금액을 넘는 가격대 입니다.");
 
-        List<GiftcardDto> giftcardList = shopService.findGiftcardByInOnSale(true,price);
+        List<GiftcardResponseDto> giftcardList = shopService.findGiftcardByInOnSale(true,price);
         if (giftcardList.size() == 0)
             return ApiResponse.fail(ErrorCode.NOT_FOUND, "해당 가격대에 맞는 상품이 없습니다. : "+price+"원 대");
         return ApiResponse.success(giftcardList);

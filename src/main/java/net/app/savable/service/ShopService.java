@@ -4,15 +4,11 @@ import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.*;
-import net.app.savable.domain.shop.dto.GiftcardDto;
+import net.app.savable.domain.shop.dto.GiftcardResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
-import net.app.savable.global.common.ApiResponse;
-import net.app.savable.global.common.ErrorCode;
 import net.app.savable.global.common.GeneralException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;import java.util.List;
 
 import static net.app.savable.global.common.ErrorCode.*;
 
@@ -23,7 +19,7 @@ public class ShopService {
     private final GiftcardOrderRepository giftcardOrderRepository;
     private final MemberRepository memberRepository;
 
-    public List<GiftcardDto> findGiftcardByInOnSale(Boolean inOnSale, Long price){
+    public List<GiftcardResponseDto> findGiftcardByInOnSale(Boolean inOnSale, Long price){
         Long minPrice;
         Long maxPrice;
         if (price == 0) {
@@ -35,7 +31,7 @@ public class ShopService {
             maxPrice = price + 999;
         }
 
-        List<GiftcardDto> giftcardList = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByBrandNameAsc(inOnSale,minPrice,maxPrice);
+        List<GiftcardResponseDto> giftcardList = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByBrandNameAsc(inOnSale,minPrice,maxPrice);
         return giftcardList;
     }
 
