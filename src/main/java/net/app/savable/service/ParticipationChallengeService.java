@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.ParticipationChallenge;
 import net.app.savable.domain.challenge.ParticipationChallengeRepository;
+import net.app.savable.domain.challenge.ParticipationState;
 import net.app.savable.domain.challenge.dto.MyParticipationChallengeDetailDto;
 import net.app.savable.domain.challenge.dto.MyParticipationChallengeDto;
+import net.app.savable.domain.member.dto.ChallengeSummaryResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,5 +34,18 @@ public class ParticipationChallengeService {
             log.error("Invalid participationChallenge ID: {}", participationChallengeId);
             return new IllegalArgumentException("Invalid participationChallenge ID: " + participationChallengeId);
         });
+    }
+
+    public ChallengeSummaryResponseDto findChallengeSummary(Long memberId){
+        log.info("ParticipationChallengeService.findChallengeSummary() 실행");
+        Long currentParticipationCount = participationChallengeRepository.countByMember_IdAndParticipationState(memberId, ParticipationState.IN_PROGRESS);
+        Long failedParticipationCount = participationChallengeRepository.countByMember_IdAndParticipationState(memberId, ParticipationState.FAIL);
+        Long successParticipationCount = participationChallengeRepository.countByMember_IdAndParticipationState(memberId, ParticipationState.SUCCESS);
+
+        return ChallengeSummaryResponseDto.builder()
+                .successChallengeCount(successParticipationCount)
+                .completeChallengeCount(successParticipationCount + failedParticipationCount)
+                .currentParticipationCount(currentParticipationCount)
+                .build();
     }
 }
