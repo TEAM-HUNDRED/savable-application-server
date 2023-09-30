@@ -28,6 +28,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # application.yml 설정
+      - name: Set application.yml
+        run: echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
+      - name: Set application-oauth.yml
+        run: echo "${{ secrets.APPLICATION_OAUTH_YML }}" > ./src/main/resources/application-oauth.yml
       # # Sentry
       # - name: Set Sentry
       #   run: echo "${{ secrets.APPLICATION_PRODUCTION }}" > ./src/main/resources/application.yml
