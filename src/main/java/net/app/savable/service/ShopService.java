@@ -6,11 +6,11 @@ import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.*;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
-import net.app.savable.global.common.GeneralException;
+import net.app.savable.global.error.exception.GeneralException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;import java.util.List;
 
-import static net.app.savable.global.common.ErrorCode.*;
+import static net.app.savable.global.error.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor

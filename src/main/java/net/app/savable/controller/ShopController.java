@@ -5,14 +5,14 @@ import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.GiftcardProductRepository;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
-import net.app.savable.global.common.ApiResponse;
-import net.app.savable.global.common.ErrorCode;
+import net.app.savable.global.error.ApiResponse;
+import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.ShopService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static net.app.savable.global.common.ErrorCode.INVALID_INPUT_VALUE;
+import static net.app.savable.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
 
 @RestController
 @RequestMapping("/shop")
