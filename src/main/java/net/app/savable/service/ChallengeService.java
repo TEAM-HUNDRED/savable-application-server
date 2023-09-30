@@ -27,24 +27,21 @@ public class ChallengeService {
     private final ParticipationChallengeRepository participationChallengeRepository;
 
     public List<HomeChallengeDto> findChallengeByDate(){
-        List<HomeChallengeDto> challengeList = challengeRepository.findChallengeByDate().stream()
+        return challengeRepository.findChallengeByDate().stream()
                 .map(HomeChallengeDto::new)
                 .toList();
-        return challengeList;
     }
     public ChallengeDto findChallengeDetailById(Long challengeId){
         Challenge challengeDetail = challengeRepository.findChallengeById(challengeId).orElseThrow(
                 () -> new IllegalArgumentException("Invalid Challenge Id: {}"+challengeId)
         );
-        ChallengeDto challengeDto = new ChallengeDto(challengeDetail);
-        return challengeDto;
+        return new ChallengeDto(challengeDetail);
     }
 
     public List<ChallengeGuideDto> findChallengeGuide(Long challengeId){
-        List<ChallengeGuideDto> challengeGuideDtoList = guideRepository.findByChallengeIdOrderByIsPassDesc(challengeId).stream()
+        return guideRepository.findByChallengeIdOrderByIsPassDesc(challengeId).stream()
                 .map(ChallengeGuideDto::new)
                 .toList();
-        return challengeGuideDtoList;
     }
 
     public Challenge findChallengeById(Long challengeId){

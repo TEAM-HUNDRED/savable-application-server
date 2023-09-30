@@ -3,11 +3,13 @@ package net.app.savable.domain.history;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.app.savable.domain.member.BaseTimeEntity;
 import net.app.savable.domain.member.Member;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class RewardHistory extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

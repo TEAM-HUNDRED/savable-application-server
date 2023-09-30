@@ -1,11 +1,17 @@
 package net.app.savable.service;
 
 import lombok.RequiredArgsConstructor;
+import net.app.savable.domain.history.RewardHistoryRepository;
+import net.app.savable.domain.history.RewardType;
+import net.app.savable.domain.history.dto.RewardHistoryResponseDto;
+import net.app.savable.domain.history.dto.RewardHistorySaveDto;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.*;
+import net.app.savable.domain.shop.dto.GiftcardHistoryResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
+import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.exception.GeneralException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;import java.util.List;
@@ -18,6 +24,7 @@ public class ShopService {
     private final GiftcardProductRepository giftcardProductRepository;
     private final GiftcardOrderRepository giftcardOrderRepository;
     private final MemberRepository memberRepository;
+    private final RewardHistoryRepository rewardHistoryRepository;
 
     public List<GiftcardResponseDto> findGiftcardByInOnSale(Boolean inOnSale, Long price){
         Long minPrice;
@@ -54,5 +61,34 @@ public class ShopService {
 
         // 리워드 차감
         orderedMember.updateReward(-totalPrice);
+
+        //reward_history에 기록
+        RewardHistoryResponseDto recentRewardHistory = rewardHistoryRepository.findTopByMemberIdOrderByCreatedAtDesc(orderedMember.getId()); // 가장 최근 리워드 내역 조회
+        if (recentRewardHistory == null) {
+            recentRewardHistory = RewardHistoryResponseDto.builder()
+                    .totalReward(0L)
+                    .build();
+        }
+
+        RewardHistorySaveDto rewardHistorySave = RewardHistorySaveDto.builder()
+                .reward(-totalPrice)
+                .totalReward(recentRewardHistory.getTotalReward() - totalPrice)
+                .rewardType(RewardType.GIFTCARD)
+                .description(orderProduct.getBrandName()+orderProduct.getProductName())
+                .member(orderedMember)
+                .build();
+
+        rewardHistoryRepository.save(rewardHistorySave.toEntity());
+    }
+
+    public List<GiftcardHistoryResponseDto> findGiftcardByMember(SessionMember member){
+        Member orderedMember = memberRepository.findMemberById(member.getId()) // TODO
+                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+member.getId()));
+
+        List<GiftcardHistoryResponseDto> giftcardHistoryList = giftcardOrderRepository.findGiftcardByMemberOrderByCreatedAtDesc(orderedMember)
+                .stream()
+                .map(GiftcardHistoryResponseDto::new)
+                .toList();
+        return giftcardHistoryList;
     }
 }

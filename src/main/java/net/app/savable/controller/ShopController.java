@@ -3,8 +3,11 @@ package net.app.savable.controller;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.GiftcardProductRepository;
+import net.app.savable.domain.shop.dto.GiftcardHistoryResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
+import net.app.savable.global.config.auth.LoginMember;
+import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.ShopService;
@@ -40,4 +43,9 @@ public class ShopController {
         return ApiResponse.success("기프티콘 구매가 완료되었습니다.");
     }
 
+    @GetMapping("/histories")
+    public ApiResponse<List<GiftcardHistoryResponseDto>> getGiftcardHistoryList(@LoginMember SessionMember member){
+        List<GiftcardHistoryResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(member);
+        return ApiResponse.success(giftcardHistoryList);
+    }
 }
