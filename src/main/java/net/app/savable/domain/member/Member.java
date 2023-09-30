@@ -89,6 +89,14 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
+    public Member delete(){
+        this.email = null;
+        this.accountState = AccountState.DELETED;
+        this.deletedAt = LocalDateTime.now();
+
+        return this;
+    }
+
     public String getRoleKey(){
         return this.role.getKey();
     }
