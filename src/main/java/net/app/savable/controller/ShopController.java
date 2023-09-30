@@ -5,8 +5,9 @@ import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.GiftcardProductRepository;
 import net.app.savable.domain.shop.dto.GiftcardHistoryResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
-import net.app.savable.domain.shop.dto.request.GiftcardHistoryRequestDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
+import net.app.savable.global.config.auth.LoginMember;
+import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.ShopService;
@@ -43,8 +44,8 @@ public class ShopController {
     }
 
     @GetMapping("/histories")
-    public ApiResponse<List<GiftcardHistoryResponseDto>> getGiftcardHistoryList(@RequestBody GiftcardHistoryRequestDto giftcardHistoryRequestDto){
-        List<GiftcardHistoryResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(giftcardHistoryRequestDto);
+    public ApiResponse<List<GiftcardHistoryResponseDto>> getGiftcardHistoryList(@LoginMember SessionMember member){
+        List<GiftcardHistoryResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(member);
         return ApiResponse.success(giftcardHistoryList);
     }
 }

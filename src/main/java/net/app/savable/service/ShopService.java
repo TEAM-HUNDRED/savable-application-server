@@ -10,13 +10,13 @@ import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.*;
 import net.app.savable.domain.shop.dto.GiftcardHistoryResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
-import net.app.savable.domain.shop.dto.request.GiftcardHistoryRequestDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
-import net.app.savable.global.common.GeneralException;
+import net.app.savable.global.config.auth.dto.SessionMember;
+import net.app.savable.global.error.exception.GeneralException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;import java.util.List;
 
-import static net.app.savable.global.common.ErrorCode.*;
+import static net.app.savable.global.error.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -81,9 +81,9 @@ public class ShopService {
         rewardHistoryRepository.save(rewardHistorySave.toEntity());
     }
 
-    public List<GiftcardHistoryResponseDto> findGiftcardByMember(GiftcardHistoryRequestDto giftcardHistoryRequest){
-        Member orderedMember = memberRepository.findMemberById(giftcardHistoryRequest.getMemberId()) // TODO
-                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+giftcardHistoryRequest.getMemberId()));
+    public List<GiftcardHistoryResponseDto> findGiftcardByMember(SessionMember member){
+        Member orderedMember = memberRepository.findMemberById(member.getId()) // TODO
+                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+member.getId()));
 
         List<GiftcardHistoryResponseDto> giftcardHistoryList = giftcardOrderRepository.findGiftcardByMemberOrderByCreatedAtDesc(orderedMember)
                 .stream()
