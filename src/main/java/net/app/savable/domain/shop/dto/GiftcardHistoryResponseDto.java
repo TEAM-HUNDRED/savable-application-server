@@ -1,6 +1,5 @@
 package net.app.savable.domain.shop.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import net.app.savable.domain.shop.GiftcardOrder;
 import net.app.savable.domain.shop.SendState;
@@ -8,7 +7,7 @@ import net.app.savable.domain.shop.SendState;
 import java.time.LocalDateTime;
 
 @Getter
-public class GiftcardHistoryDto {
+public class GiftcardHistoryResponseDto {
     private LocalDateTime date;
     private String image;
     private String productName;
@@ -18,7 +17,7 @@ public class GiftcardHistoryDto {
     private String brandName;
     private SendState sendState;
 
-    public GiftcardHistoryDto(GiftcardOrder giftcardOrder){
+    public GiftcardHistoryResponseDto(GiftcardOrder giftcardOrder){
         // WAITING과 READY를 사용자에게는 WAITING으로 보여주어 2개의 상태만 존재하게 함.
         SendState sendState = giftcardOrder.getSendState();
         if (sendState != SendState.COMPLETE){

@@ -3,18 +3,18 @@ package net.app.savable.controller;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.GiftcardProductRepository;
-import net.app.savable.domain.shop.dto.GiftcardHistoryDto;
+import net.app.savable.domain.shop.dto.GiftcardHistoryResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardHistoryRequestDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
-import net.app.savable.global.common.ApiResponse;
-import net.app.savable.global.common.ErrorCode;
+import net.app.savable.global.error.ApiResponse;
+import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.ShopService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static net.app.savable.global.common.ErrorCode.INVALID_INPUT_VALUE;
+import static net.app.savable.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
 
 @RestController
 @RequestMapping("/shop")
@@ -43,8 +43,8 @@ public class ShopController {
     }
 
     @GetMapping("/histories")
-    public ApiResponse<List<GiftcardHistoryDto>> getGiftcardHistoryList(@RequestBody GiftcardHistoryRequestDto giftcardHistoryRequestDto){
-        List<GiftcardHistoryDto> giftcardHistoryList = shopService.findGiftcardByMember(giftcardHistoryRequestDto);
+    public ApiResponse<List<GiftcardHistoryResponseDto>> getGiftcardHistoryList(@RequestBody GiftcardHistoryRequestDto giftcardHistoryRequestDto){
+        List<GiftcardHistoryResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(giftcardHistoryRequestDto);
         return ApiResponse.success(giftcardHistoryList);
     }
 }
