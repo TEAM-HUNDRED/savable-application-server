@@ -8,7 +8,7 @@ import net.app.savable.domain.shop.SendState;
 
 @Getter
 public class GiftcardOrderRequestDto {
-    private Long memberId;
+    private Member member;
     private Long giftcardId;
     private Long quantity;
     private String positivePoint;

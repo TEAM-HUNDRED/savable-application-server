@@ -44,8 +44,8 @@ public class ShopService {
 
     @Transactional(readOnly = false)
     public void addGiftcardOrder(GiftcardOrderRequestDto giftcardOrderRequest){
-        Member orderedMember = memberRepository.findMemberById(giftcardOrderRequest.getMemberId())
-                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+giftcardOrderRequest.getMemberId()));
+        Member orderedMember = memberRepository.findMemberById(giftcardOrderRequest.getMember().getId())
+                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+giftcardOrderRequest.getMember().getId()));
         GiftcardProduct orderProduct = giftcardProductRepository.findGiftcardProductById(giftcardOrderRequest.getGiftcardId())
                 .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_GIFTCARD_PRODUCT : "+giftcardOrderRequest.getGiftcardId()));
 
@@ -75,7 +75,7 @@ public class ShopService {
                 .totalReward(recentRewardHistory.getTotalReward() - totalPrice)
                 .rewardType(RewardType.GIFTCARD)
                 .description(orderProduct.getBrandName()+orderProduct.getProductName())
-                .member(orderedMember)
+                .member(giftcardOrderRequest.getMember())
                 .build();
 
         rewardHistoryRepository.save(rewardHistorySave.toEntity());
