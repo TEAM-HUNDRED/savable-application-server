@@ -3,6 +3,7 @@ package net.app.savable.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.VerificationRepository;
+import net.app.savable.domain.challenge.VerificationState;
 import net.app.savable.domain.challenge.dto.VerificationDetailDto;
 import net.app.savable.domain.challenge.dto.VerificationRequestDto;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class VerificationService {
     }
 
     public VerificationDetailDto findVerificationDetail(Long participationId){
+        log.info("VerificationService.findVerificationDetail() 실행");
         return verificationRepository.findVerificationDetailByParticipationId(participationId);
+    }
+
+    public Long findTotalVerificationCount(Long memberId){
+        log.info("VerificationService.findTotalVerificationCount() 실행");
+        return verificationRepository.countByMember_IdAndState(memberId, VerificationState.SUCCESS);
     }
 }

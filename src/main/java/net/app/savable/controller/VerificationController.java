@@ -6,6 +6,7 @@ import net.app.savable.domain.challenge.ParticipationChallenge;
 import net.app.savable.domain.challenge.VerificationState;
 import net.app.savable.domain.challenge.dto.VerificationDetailDto;
 import net.app.savable.domain.challenge.dto.VerificationRequestDto;
+import net.app.savable.domain.member.Member;
 import net.app.savable.global.common.S3UploadService;
 import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
@@ -32,9 +33,10 @@ public class VerificationController {
     private final S3UploadService s3UploadService;
 
     @PostMapping("/{participationId}/verification")
-    public ApiResponse<String> verificationAdd(@RequestParam("image")MultipartFile file, @PathVariable Long participationId, @LoginMember SessionMember member) {
+    public ApiResponse<String> verificationAdd(@RequestParam("image")MultipartFile file, @PathVariable Long participationId, @LoginMember SessionMember sessionMember) {
 
         log.info("verificationService.verificationAdd");
+        Member member = memberService.findById(sessionMember.getId());
         String saveFileName; // S3에 저장된 파일 이름
         try {
             log.info("S3에 이미지 업로드");
@@ -49,6 +51,7 @@ public class VerificationController {
                 .participationChallenge(participationChallenge)
                 .image(saveFileName)
                 .state(VerificationState.WAITING)
+                .member(member)
                 .build();
 
         verificationService.addVerification(verificationRequestDto);

@@ -54,4 +54,18 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
 
         return myParticipationChallengeDetailDtos;
     }
+
+    @Override
+    public Long findScheduledReward(Long memberId){
+        return em.createQuery("select sum(c.reward) " +
+                        "from ParticipationChallenge p " +
+                        "join p.challenge c " +
+                        "join p.verificationList v " +
+                        "where p.member.id = :memberId " +
+                        "and p.participationState = 'IN_PROGRESS' " +
+                        "and v.state = 'SUCCESS'", Long.class)
+                .setParameter("memberId", memberId)
+                .getSingleResult();
+    }
+
 }
