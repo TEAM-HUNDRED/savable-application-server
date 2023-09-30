@@ -32,7 +32,7 @@
         group by p.id, c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal, c.reward, p.savings
     </entry>
     <entry key="participationDetailsSubSql">
-        select new net.app.savable.domain.challenge.dto.VerificationDto(v.id, v.image, v.state, v.createdAt)
+        select new net.app.savable.domain.challenge.dto.VerificationResponseDto (v.id, v.image, v.state, v.createdAt)
         from Verification v
         where v.participationChallenge.id = :participationChallengeId
     </entry>

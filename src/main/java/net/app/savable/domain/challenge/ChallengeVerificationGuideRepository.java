@@ -1,6 +1,5 @@
 package net.app.savable.domain.challenge;
 
-import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package net.app.savable.global.common;
+package net.app.savable.global.error.exception;
 
 import lombok.Getter;
 
