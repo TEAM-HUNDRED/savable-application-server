@@ -38,14 +38,14 @@ public class ShopController {
     }
 
     @PostMapping("/order")
-    public ApiResponse<String> giftcardOrderAdd(@RequestBody GiftcardOrderRequestDto giftcardOrderRequest){
-        shopService.addGiftcardOrder(giftcardOrderRequest);
+    public ApiResponse<String> giftcardOrderAdd(@RequestBody GiftcardOrderRequestDto giftcardOrderRequest,@LoginMember SessionMember sessionMember){
+        shopService.addGiftcardOrder(giftcardOrderRequest, sessionMember.getId());
         return ApiResponse.success("기프티콘 구매가 완료되었습니다.");
     }
 
     @GetMapping("/histories")
-    public ApiResponse<List<GiftcardHistoryResponseDto>> getGiftcardHistoryList(@LoginMember SessionMember member){
-        List<GiftcardHistoryResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(member);
+    public ApiResponse<List<GiftcardHistoryResponseDto>> getGiftcardHistoryList(@LoginMember SessionMember sessionMember){
+        List<GiftcardHistoryResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(sessionMember.getId());
         return ApiResponse.success(giftcardHistoryList);
     }
 }
