@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.challenge.VerificationState;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter

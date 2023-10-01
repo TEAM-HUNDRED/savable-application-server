@@ -10,6 +10,7 @@ import net.app.savable.domain.history.SavingsHistory;
 import net.app.savable.domain.shop.GiftcardOrder;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -47,6 +48,8 @@ public class Member extends BaseTimeEntity {
     @ColumnDefault("'ACTIVE'")
     private AccountState accountState;
 
+    private LocalDateTime deletedAt;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N ParticipationChallenge
     private List<ParticipationChallenge> participationChallengeList;
 
@@ -82,6 +85,14 @@ public class Member extends BaseTimeEntity {
     public Member update(String username, String profileImage){
         this.username = username;
         this.profileImage = profileImage;
+
+        return this;
+    }
+
+    public Member delete(){
+        this.email = null;
+        this.accountState = AccountState.DELETED;
+        this.deletedAt = LocalDateTime.now();
 
         return this;
     }

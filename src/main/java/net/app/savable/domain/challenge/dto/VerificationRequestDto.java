@@ -7,8 +7,6 @@ import net.app.savable.domain.challenge.Verification;
 import net.app.savable.domain.challenge.VerificationState;
 import net.app.savable.domain.member.Member;
 
-import java.sql.Timestamp;
-
 @Getter
 public class VerificationRequestDto {
     private String image;

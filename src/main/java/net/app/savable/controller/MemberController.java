@@ -1,5 +1,7 @@
 package net.app.savable.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.member.Member;
@@ -12,9 +14,7 @@ import net.app.savable.global.error.ApiResponse;
 import net.app.savable.service.MemberService;
 import net.app.savable.service.ParticipationChallengeService;
 import net.app.savable.service.VerificationService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,5 +50,18 @@ public class MemberController {
                 .build();
 
         return ApiResponse.success(myPageResponseDto);
+    }
+
+    @PatchMapping("/member/{memberId}")
+    public ApiResponse<String> memberRemove(@LoginMember SessionMember sessionMember, HttpServletRequest request) {
+        log.info("MemberController.deleteMember() 실행");
+        memberService.deleteMember(sessionMember.getId());
+
+        HttpSession session = request.getSession();
+        if (session != null) {
+            session.invalidate(); // 세션 무효화
+        }
+
+        return ApiResponse.success("회원 탈퇴가 완료되었습니다.");
     }
 }
