@@ -3,9 +3,11 @@ package net.app.savable.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.dto.ChallengeSummaryResponseDto;
+import net.app.savable.domain.member.dto.MemberProfileChangeRequestDto;
 import net.app.savable.domain.member.dto.MemberSummaryResponseDto;
 import net.app.savable.domain.member.dto.MyPageResponseDto;
 import net.app.savable.global.config.auth.LoginMember;
@@ -63,5 +65,13 @@ public class MemberController {
         }
 
         return ApiResponse.success("회원 탈퇴가 완료되었습니다.");
+    }
+
+    @PatchMapping("/member/settings") // 유저 정보 수정
+    public ApiResponse<String> memberProfileUpdate(@LoginMember SessionMember sessionMember, @RequestBody MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+        log.info("MemberController.memberProfileUpdate() 실행");
+
+
+        return ApiResponse.success("회원 정보 수정이 완료되었습니다.");
     }
 }
