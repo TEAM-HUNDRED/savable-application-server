@@ -24,7 +24,8 @@ public enum ErrorCode {
     FORBIDDEN(403, HttpStatus.FORBIDDEN, "Forbidden"),
     NOT_FOUND(404, HttpStatus.NOT_FOUND, "Not Found"),
     METHOD_NOT_ALLOWED(405, HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed"),
-    INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server Error");
+    INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server Error"),
+    DATA_INTEGRITY_VIOLATION(500, HttpStatus.INTERNAL_SERVER_ERROR, "Data Integrity Violation");
 
     private final int code;
     private final HttpStatus httpStatus;

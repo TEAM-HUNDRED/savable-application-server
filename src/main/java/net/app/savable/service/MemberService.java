@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +20,26 @@ public class MemberService {
                 .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER"+memberId));
     }
 
-    @Transactional(readOnly = false)
-    public Member deleteMember(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER"+memberId));
+    public Member findByUsername(String username){
+        return memberRepository.findByUsername(username)
+                .orElse(null);
+    }
 
-        return member.delete();
+    public Member findByPhoneNumber(String phoneNumber){
+        return memberRepository.findByPhoneNumber(phoneNumber)
+                .orElse(null);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteMember(Member member){
+        member.delete();
+    }
+
+    public void updateMember(Member member, String username, String profileImage, String phoneNumber){
+        try {
+            member.update(username, profileImage, phoneNumber);
+        } catch (RuntimeException ex) {
+            throw new DataIntegrityViolationException("잘못된 데이터가 입력되었습니다");
+        }
     }
 }
