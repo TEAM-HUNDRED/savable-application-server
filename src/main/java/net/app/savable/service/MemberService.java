@@ -35,6 +35,7 @@ public class MemberService {
         member.delete();
     }
 
+    @Transactional(readOnly = false)
     public void updateMember(Member member, String username, String profileImage, String phoneNumber){
         try {
             member.update(username, profileImage, phoneNumber);
