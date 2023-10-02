@@ -52,7 +52,7 @@ public class MemberController {
         return ApiResponse.success(myPageResponseDto);
     }
 
-    @PatchMapping("/member/{memberId}")
+    @PatchMapping("/member/deletion")
     public ApiResponse<String> memberRemove(@LoginMember SessionMember sessionMember, HttpServletRequest request) {
         log.info("MemberController.deleteMember() 실행");
         memberService.deleteMember(sessionMember.getId());
