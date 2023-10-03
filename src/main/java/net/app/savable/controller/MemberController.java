@@ -108,9 +108,9 @@ public class MemberController {
 
         Member memberByUsername = memberService.findByUsername(username);
         Member memberByPhoneNumber = memberService.findByPhoneNumber(phoneNumber);
-        if (memberByUsername != null && memberByUsername.getId() != sessionMember.getId()) { // 이미 존재하는 username
+        if (memberByUsername != null && !(memberByUsername.getId().equals(sessionMember.getId()))) { // 이미 존재하는 username
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 닉네임입니다.");
-        } else if (memberByPhoneNumber != null && memberByPhoneNumber.getId() != sessionMember.getId()) { // 이미 존재하는 phoneNumber
+        } else if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 전화번호입니다.");
         }
 
