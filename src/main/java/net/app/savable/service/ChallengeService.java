@@ -50,11 +50,11 @@ public class ChallengeService {
         );
     }
 
-    public void addParticipation(ParticipationRequestDto participationRequestDto){
+    public void addParticipation(ParticipationRequestDto participationRequestDto,Long memberId){
         Challenge requestedChallenge = challengeRepository.findChallengeById(participationRequestDto.getChallengeId())
-                .orElseThrow(() -> new IllegalArgumentException("INVALID_CHALLENGE" + participationRequestDto.getChallengeId()));
-        Member requestedMember = memberRepository.findMemberById(participationRequestDto.getMemberId())
-                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER"+participationRequestDto.getMemberId()));
+                .orElseThrow(() -> new IllegalArgumentException("INVALID_CHALLENGE : " + participationRequestDto.getChallengeId()));
+        Member requestedMember = memberRepository.findMemberById(memberId)
+                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER : "+memberId));
         LocalDate today = LocalDate.now();
 
         ParticipationChallenge participationChallenge = ParticipationChallenge.builder()

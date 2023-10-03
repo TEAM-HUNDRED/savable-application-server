@@ -7,7 +7,7 @@ import net.app.savable.domain.shop.SendState;
 import java.time.LocalDateTime;
 
 @Getter
-public class GiftcardHistoryResponseDto {
+public class GiftcardOrderResponseDto {
     private LocalDateTime date;
     private String image;
     private String productName;
@@ -17,7 +17,7 @@ public class GiftcardHistoryResponseDto {
     private String brandName;
     private SendState sendState;
 
-    public GiftcardHistoryResponseDto(GiftcardOrder giftcardOrder){
+    public GiftcardOrderResponseDto(GiftcardOrder giftcardOrder){
         // WAITING과 READY를 사용자에게는 WAITING으로 보여주어 2개의 상태만 존재하게 함.
         SendState sendState = giftcardOrder.getSendState();
         if (sendState != SendState.COMPLETE){

@@ -8,10 +8,9 @@ import net.app.savable.domain.history.dto.RewardHistorySaveDto;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.*;
-import net.app.savable.domain.shop.dto.GiftcardHistoryResponseDto;
-import net.app.savable.domain.shop.dto.GiftcardResponseDto;
+import net.app.savable.domain.shop.dto.GiftcardOrderResponseDto;
+import net.app.savable.domain.shop.dto.GiftcardProductResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
-import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.exception.GeneralException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;import java.util.List;
@@ -26,7 +25,7 @@ public class ShopService {
     private final MemberRepository memberRepository;
     private final RewardHistoryRepository rewardHistoryRepository;
 
-    public List<GiftcardResponseDto> findGiftcardByInOnSale(Boolean inOnSale, Long price){
+    public List<GiftcardProductResponseDto> findGiftcardByInOnSale(Boolean inOnSale, Long price){
         Long minPrice;
         Long maxPrice;
         if (price == 0) {
@@ -38,14 +37,14 @@ public class ShopService {
             maxPrice = price + 999;
         }
 
-        List<GiftcardResponseDto> giftcardList = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByBrandNameAsc(inOnSale,minPrice,maxPrice);
+        List<GiftcardProductResponseDto> giftcardList = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByBrandNameAsc(inOnSale,minPrice,maxPrice);
         return giftcardList;
     }
 
     @Transactional(readOnly = false)
-    public void addGiftcardOrder(GiftcardOrderRequestDto giftcardOrderRequest){
-        Member orderedMember = memberRepository.findMemberById(giftcardOrderRequest.getMember().getId())
-                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+giftcardOrderRequest.getMember().getId()));
+    public void addGiftcardOrder(GiftcardOrderRequestDto giftcardOrderRequest, Long memberId){
+        Member orderedMember = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+memberId));
         GiftcardProduct orderProduct = giftcardProductRepository.findGiftcardProductById(giftcardOrderRequest.getGiftcardId())
                 .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_GIFTCARD_PRODUCT : "+giftcardOrderRequest.getGiftcardId()));
 
@@ -57,7 +56,7 @@ public class ShopService {
             throw new GeneralException(INSUFFICIENT_BALANCE,"리워드가 부족합니다");
         }
 
-        giftcardOrderRepository.save(giftcardOrderRequest.toEntity(orderedMember,orderProduct, SendState.WAITING));
+        giftcardOrderRepository.save(giftcardOrderRequest.toEntity(orderProduct, SendState.WAITING));
 
         // 리워드 차감
         orderedMember.updateReward(-totalPrice);
@@ -74,20 +73,20 @@ public class ShopService {
                 .reward(-totalPrice)
                 .totalReward(recentRewardHistory.getTotalReward() - totalPrice)
                 .rewardType(RewardType.GIFTCARD)
-                .description(orderProduct.getBrandName()+orderProduct.getProductName())
-                .member(giftcardOrderRequest.getMember())
+                .description('['+orderProduct.getBrandName()+"] "+orderProduct.getProductName())
+                .member(orderedMember)
                 .build();
 
         rewardHistoryRepository.save(rewardHistorySave.toEntity());
     }
 
-    public List<GiftcardHistoryResponseDto> findGiftcardByMember(SessionMember member){
-        Member orderedMember = memberRepository.findMemberById(member.getId()) // TODO
-                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+member.getId()));
+    public List<GiftcardOrderResponseDto> findGiftcardByMember(Long memberId){
+        Member orderedMember = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+memberId));
 
-        List<GiftcardHistoryResponseDto> giftcardHistoryList = giftcardOrderRepository.findGiftcardByMemberOrderByCreatedAtDesc(orderedMember)
+        List<GiftcardOrderResponseDto> giftcardHistoryList = giftcardOrderRepository.findGiftcardByMemberOrderByCreatedAtDesc(orderedMember)
                 .stream()
-                .map(GiftcardHistoryResponseDto::new)
+                .map(GiftcardOrderResponseDto::new)
                 .toList();
         return giftcardHistoryList;
     }

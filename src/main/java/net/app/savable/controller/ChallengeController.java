@@ -7,6 +7,8 @@ import net.app.savable.domain.challenge.dto.ChallengeDto;
 import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import net.app.savable.domain.challenge.dto.HomeChallengeDto;
 import net.app.savable.domain.challenge.dto.request.ParticipationRequestDto;
+import net.app.savable.global.config.auth.LoginMember;
+import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.ChallengeService;
@@ -40,14 +42,14 @@ public class ChallengeController {
     }
 
     @PostMapping("/participations")
-    public ApiResponse<String> participationAdd(@RequestBody ParticipationRequestDto participationRequestDto){
+    public ApiResponse<String> participationAdd(@RequestBody ParticipationRequestDto participationRequestDto,@LoginMember SessionMember sessionMember){
         log.info("participationRequestDto={}",participationRequestDto);
 
         ApiResponse<String> INVALID_INPUT_VALUE = validateVerificationGoal(participationRequestDto);
         if (INVALID_INPUT_VALUE != null) return INVALID_INPUT_VALUE;
 
 
-        challengeService.addParticipation(participationRequestDto);
+        challengeService.addParticipation(participationRequestDto,sessionMember.getId());
         return ApiResponse.success("챌린지 신청이 완료되었습니다.");
     }
 
@@ -55,7 +57,7 @@ public class ChallengeController {
         Long duration= participationRequestDto.getDuration();
         Long verificationGoal = participationRequestDto.getVerificationGoal();
         Long week = duration/7;
-        if (verificationGoal > week)
+        if (verificationGoal < week)
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "목표 인증 횟수가 너무 낮습니다");
         if (verificationGoal > duration)
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "목표 인증 횟수가 너무 높습니다");
