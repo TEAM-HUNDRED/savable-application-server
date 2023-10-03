@@ -57,7 +57,7 @@ public class ChallengeController {
         Long duration= participationRequestDto.getDuration();
         Long verificationGoal = participationRequestDto.getVerificationGoal();
         Long week = duration/7;
-        if (verificationGoal > week)
+        if (verificationGoal < week)
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "목표 인증 횟수가 너무 낮습니다");
         if (verificationGoal > duration)
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "목표 인증 횟수가 너무 높습니다");
