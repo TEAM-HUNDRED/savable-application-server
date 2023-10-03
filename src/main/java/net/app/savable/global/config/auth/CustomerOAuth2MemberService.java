@@ -37,7 +37,7 @@ public class CustomerOAuth2MemberService implements OAuth2UserService<OAuth2User
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        Member member = saveOrUpdate(attributes);
+        Member member = saveMember(attributes);
         httpSession.setAttribute("member", new SessionMember(member)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
 
         return new DefaultOAuth2User(
@@ -47,7 +47,7 @@ public class CustomerOAuth2MemberService implements OAuth2UserService<OAuth2User
                 attributes.getNameAttributeKey());
     }
 
-    private Member saveOrUpdate(OAuthAttributes attributes) {
+    private Member saveMember(OAuthAttributes attributes) {
         return memberRepository.findByEmail(attributes.getEmail())
                 .orElseGet(() -> memberRepository.save(attributes.toEntity())); // 없는 사용자라면 insert
     }
