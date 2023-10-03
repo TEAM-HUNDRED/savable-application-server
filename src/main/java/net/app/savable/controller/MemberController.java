@@ -87,7 +87,7 @@ public class MemberController {
 
         // 유효성 검사
         String usernamePattern = "^[ 가-힣a-zA-Z0-9]*$"; // 한글, 영문, 숫자만 입력 가능
-        String phoneNumberPattern = "^010-[0-9]{4}-[0-9]{4}$"; // 010-0000-0000 형식
+        String phoneNumberPattern = "^010[0-9]{8}$"; // 01012345678 형식
 
         if(!isValid(username, usernamePattern)) {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 한글, 영문, 숫자만 입력 가능합니다.");
