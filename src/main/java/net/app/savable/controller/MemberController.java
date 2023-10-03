@@ -93,6 +93,8 @@ public class MemberController {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 한글, 영문, 숫자만 입력 가능합니다.");
         } else if(!isValid(phoneNumber, phoneNumberPattern)) {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "전화번호 형식이 올바르지 않습니다.");
+        } else if (username.length() > 10 || username.length() < 2) {
+            return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 2자 이상 10자 이하로 입력해주세요.");
         }
 
         String saveFileName; // S3에 저장된 파일 이름
