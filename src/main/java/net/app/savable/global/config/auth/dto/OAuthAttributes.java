@@ -75,10 +75,11 @@ public class OAuthAttributes {
     }
 
     public Member toEntity() {
+        String defaultImage = "https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/profile/default-profile.png";
         return Member.builder()
                 .username(null)
                 .email(email)
-                .profileImage(null)
+                .profileImage(defaultImage)
                 .role(Role.USER)
                 .accountState(AccountState.ACTIVE)
                 .savings(0L)
