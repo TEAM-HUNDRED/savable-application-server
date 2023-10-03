@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-md-6">
             <div th:if="${email != null}">
-                Logged in as: <span id="users" th:text="${userName}"></span>
+                Logged in as: <span id="users" th:text="${name}"></span>
                 <a href="/logout" class="btn btn-info active" role=""button>Logout</a>
             </div>
             <div th:if="${email == null}">

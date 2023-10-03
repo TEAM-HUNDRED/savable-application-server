@@ -15,6 +15,7 @@ public class IndexController {
 
         if (member != null) {
             model.addAttribute("email", member.getEmail());
+            model.addAttribute("name", member.getName());
         }
         return "index";
     }
