@@ -82,9 +82,10 @@ public class Member extends BaseTimeEntity {
         this.reward += reward;
     }
 
-    public Member update(String username, String profileImage){
+    public Member update(String username, String profileImage, String phoneNumber){
         this.username = username;
         this.profileImage = profileImage;
+        this.phoneNumber = phoneNumber;
 
         return this;
     }

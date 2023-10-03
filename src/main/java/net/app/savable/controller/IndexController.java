@@ -14,7 +14,7 @@ public class IndexController {
         System.out.printf("member: %s\n", member);
 
         if (member != null) {
-            model.addAttribute("userName", member.getName());
+            model.addAttribute("email", member.getEmail());
         }
         return "index";
     }
