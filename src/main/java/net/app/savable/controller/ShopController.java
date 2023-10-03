@@ -3,8 +3,8 @@ package net.app.savable.controller;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.GiftcardProductRepository;
-import net.app.savable.domain.shop.dto.GiftcardHistoryResponseDto;
-import net.app.savable.domain.shop.dto.GiftcardResponseDto;
+import net.app.savable.domain.shop.dto.GiftcardOrderResponseDto;
+import net.app.savable.domain.shop.dto.GiftcardProductResponseDto;
 import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
 import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
@@ -26,11 +26,11 @@ public class ShopController {
     private final GiftcardProductRepository giftcardProductRepository;
 
     @GetMapping("/giftcards/{price}")
-    public ApiResponse<List<GiftcardResponseDto>> giftcardByPrice(@PathVariable Long price){
+    public ApiResponse<List<GiftcardProductResponseDto>> giftcardByPrice(@PathVariable Long price){
         if (price>5000)
             return ApiResponse.fail(INVALID_INPUT_VALUE, "최대 금액을 넘는 가격대 입니다.");
 
-        List<GiftcardResponseDto> giftcardList = shopService.findGiftcardByInOnSale(true,price);
+        List<GiftcardProductResponseDto> giftcardList = shopService.findGiftcardByInOnSale(true,price);
         if (giftcardList.size() == 0)
             return ApiResponse.fail(ErrorCode.NOT_FOUND, "해당 가격대에 맞는 상품이 없습니다. : "+price+"원 대");
         return ApiResponse.success(giftcardList);
@@ -44,8 +44,8 @@ public class ShopController {
     }
 
     @GetMapping("/histories")
-    public ApiResponse<List<GiftcardHistoryResponseDto>> getGiftcardHistoryList(@LoginMember SessionMember sessionMember){
-        List<GiftcardHistoryResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(sessionMember.getId());
+    public ApiResponse<List<GiftcardOrderResponseDto>> getGiftcardHistoryList(@LoginMember SessionMember sessionMember){
+        List<GiftcardOrderResponseDto> giftcardHistoryList = shopService.findGiftcardByMember(sessionMember.getId());
         return ApiResponse.success(giftcardHistoryList);
     }
 }
