@@ -93,6 +93,8 @@ public class MemberController {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 한글, 영문, 숫자만 입력 가능합니다.");
         } else if(!isValid(phoneNumber, phoneNumberPattern)) {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "전화번호 형식이 올바르지 않습니다.");
+        } else if (username.length() > 10 || username.length() < 2) {
+            return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 2자 이상 10자 이하로 입력해주세요.");
         }
 
         String saveFileName; // S3에 저장된 파일 이름
@@ -106,9 +108,9 @@ public class MemberController {
 
         Member memberByUsername = memberService.findByUsername(username);
         Member memberByPhoneNumber = memberService.findByPhoneNumber(phoneNumber);
-        if (memberByUsername != null && memberByUsername.getId() != sessionMember.getId()) { // 이미 존재하는 username
+        if (memberByUsername != null && !(memberByUsername.getId().equals(sessionMember.getId()))) { // 이미 존재하는 username
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 닉네임입니다.");
-        } else if (memberByPhoneNumber != null && memberByPhoneNumber.getId() != sessionMember.getId()) { // 이미 존재하는 phoneNumber
+        } else if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 전화번호입니다.");
         }
 
