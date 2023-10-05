@@ -15,5 +15,5 @@ public interface ParticipationChallengeRepository extends JpaRepository<Particip
     List<ParticipationChallenge> findByParticipationStateAndEndDateBefore(ParticipationState participationState, LocalDate endDate);
     Long countByMember_IdAndParticipationState(Long memberId, ParticipationState participationState);
 //    ParticipationState findMyParticipationChallengeByMemberIdAndChallengeId(Long memberId, Long challengeId);
-    Optional<ParticipationChallenge> findParticipationStateByMemberAndChallenge(Member member, Challenge challenge);
+    List<ParticipationChallenge> findParticipationStateByMemberAndChallenge(Member member, Challenge challenge);
 }
