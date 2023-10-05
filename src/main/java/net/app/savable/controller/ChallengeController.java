@@ -48,8 +48,7 @@ public class ChallengeController {
         ApiResponse<String> INVALID_INPUT_VALUE = validateVerificationGoal(participationRequestDto);
         if (INVALID_INPUT_VALUE != null) return INVALID_INPUT_VALUE;
 
-
-        challengeService.addParticipation(participationRequestDto,sessionMember.getId());
+        challengeService.addParticipation(participationRequestDto,sessionMember);
         return ApiResponse.success("챌린지 신청이 완료되었습니다.");
     }
 
