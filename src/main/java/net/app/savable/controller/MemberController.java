@@ -5,9 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.member.Member;
-import net.app.savable.domain.member.dto.ChallengeSummaryResponseDto;
-import net.app.savable.domain.member.dto.MemberSummaryResponseDto;
-import net.app.savable.domain.member.dto.MyPageResponseDto;
+import net.app.savable.domain.member.dto.ChallengeInfoResponseDto;
+import net.app.savable.domain.member.dto.MemberInfoResponseDto;
 import net.app.savable.global.common.S3UploadService;
 import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
@@ -37,29 +36,30 @@ public class MemberController {
     private final S3UploadService s3UploadService;
 
     @GetMapping("/my-page")
-    public ApiResponse<MyPageResponseDto> myPageDetails(@LoginMember SessionMember sessionMember) {
+    public ApiResponse<MemberInfoResponseDto> myPageDetails(@LoginMember SessionMember sessionMember) {
 
         log.info("MemberController.myPageDetails() 실행");
         Long memberId = sessionMember.getId();
         Member member = memberService.findById(memberId);
         Long verificationCount = verificationService.findTotalVerificationCount(memberId); // 지금까지 총 인증 횟수
         Long scheduledReward = participationChallengeService.findScheduledReward(memberId); // 예정된 리워드
-        MemberSummaryResponseDto memberSummary = MemberSummaryResponseDto.builder()
+
+        if (scheduledReward == null) {
+            scheduledReward = 0L;
+        }
+
+        ChallengeInfoResponseDto challengeInfoResponseDto = participationChallengeService.findChallengeSummary(member.getId());
+        MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.builder()
                 .username(member.getUsername())
-                .totalReward(member.getReward())
+                .profileImage(member.getProfileImage())
                 .totalSavings(member.getSavings())
+                .totalReward(member.getReward())
                 .scheduledReward(scheduledReward)
                 .verificationCount(verificationCount)
+                .challengeInfoResponseDto(challengeInfoResponseDto)
                 .build();
 
-        ChallengeSummaryResponseDto challengeSummary = participationChallengeService.findChallengeSummary(member.getId());
-
-        MyPageResponseDto myPageResponseDto = MyPageResponseDto.builder()
-                .memberSummaryResponseDto(memberSummary)
-                .challengeSummaryResponseDto(challengeSummary)
-                .build();
-
-        return ApiResponse.success(myPageResponseDto);
+        return ApiResponse.success(memberInfoResponseDto);
     }
 
     @PatchMapping("/member/deletion")
