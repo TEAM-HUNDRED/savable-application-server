@@ -1,29 +1,16 @@
 package net.app.savable.controller;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import net.app.savable.domain.member.AccountState;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
-import net.app.savable.domain.member.Role;
 import net.app.savable.global.config.auth.CustomerOAuth2MemberService;
-import net.app.savable.global.config.auth.dto.KakaoTokenDto;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 
