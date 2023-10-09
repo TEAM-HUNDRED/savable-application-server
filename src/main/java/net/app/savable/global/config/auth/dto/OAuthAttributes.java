@@ -6,11 +6,12 @@ import net.app.savable.domain.member.AccountState;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.Role;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 public class OAuthAttributes {
-    private Map<String, Object> attributes; // OAuth2User의 getAttributes() 메소드의 반환값을 담을 클래스
+    private HashMap<String, Object> attributes; // OAuth2User의 getAttributes() 메소드의 반환값을 담을 클래스
     private String socialId;
     private String nameAttributeKey;
     private String name;
@@ -18,7 +19,7 @@ public class OAuthAttributes {
     private String picture;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
+    public OAuthAttributes(HashMap<String, Object> attributes, String nameAttributeKey,
                            String name, String email, String picture, String socialId) {
         this.socialId = socialId;
         this.attributes = attributes;
@@ -29,7 +30,7 @@ public class OAuthAttributes {
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName,
-                                     Map<String, Object> attributes) {
+                                     HashMap<String, Object> attributes) {
         if ("naver".equals(registrationId)) {
             return ofNaver(userNameAttributeName, attributes);
         }
@@ -39,7 +40,7 @@ public class OAuthAttributes {
         return ofGoogle(userNameAttributeName, attributes);
     }
 
-    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofGoogle(String userNameAttributeName, HashMap<String, Object> attributes) {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
@@ -50,7 +51,7 @@ public class OAuthAttributes {
     }
 
     @SuppressWarnings("unchecked")
-    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofNaver(String userNameAttributeName, HashMap<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 
         return OAuthAttributes.builder()
@@ -62,7 +63,7 @@ public class OAuthAttributes {
                 .build();
     }
 
-    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofKakao(String userNameAttributeName, HashMap<String, Object> attributes) {
 
         return OAuthAttributes.builder()
                 .socialId((String) attributes.get("id"))
