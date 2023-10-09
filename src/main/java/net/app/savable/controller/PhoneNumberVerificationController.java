@@ -41,8 +41,8 @@ public class PhoneNumberVerificationController {
         Message message = new Message();
         String randomNum = generateRandomNumber();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom(phoneNumber);
-        message.setTo("01082081162");
+        message.setFrom("01082081162");
+        message.setTo(phoneNumber);
         message.setText("[Savable] 인증번호는 [" + randomNum + "] 입니다.");
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
