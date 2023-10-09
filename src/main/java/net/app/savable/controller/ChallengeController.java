@@ -3,7 +3,7 @@ package net.app.savable.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.dto.ChallengeDetailDto;
-import net.app.savable.domain.challenge.dto.ChallengeDto;
+import net.app.savable.domain.challenge.dto.ChallengeResponseDto;
 import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import net.app.savable.domain.challenge.dto.HomeChallengeDto;
 import net.app.savable.domain.challenge.dto.request.ParticipationRequestDto;
@@ -30,13 +30,15 @@ public class ChallengeController {
     }
 
     @GetMapping("/{challengeId}")
-    public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Long challengeId){
-        ChallengeDto challengeGuideDtoList = challengeService.findChallengeDetailById(challengeId);
-        List<ChallengeGuideDto> challengeDto = challengeService.findChallengeGuide(challengeId);
+    public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Long challengeId, @LoginMember SessionMember sessionMember){
+        ChallengeResponseDto challengeResponseDto = challengeService.findChallengeDetailById(challengeId);
+        Boolean isParticipatable = challengeService.checkParticipatable(challengeId,sessionMember);
+        List<ChallengeGuideDto> challengeGuideDtoList= challengeService.findChallengeGuide(challengeId);
 
         ChallengeDetailDto challengeDetailDto = ChallengeDetailDto.builder()
-                .challenge(challengeGuideDtoList)
-                .verificationGuide(challengeDto)
+                .challenge(challengeResponseDto)
+                .isParticipatable(isParticipatable)
+                .verificationGuide(challengeGuideDtoList)
                 .build();
         return ApiResponse.success(challengeDetailDto);
     }

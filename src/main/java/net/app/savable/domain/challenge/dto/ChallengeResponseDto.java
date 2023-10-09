@@ -7,7 +7,7 @@ import net.app.savable.domain.challenge.Challenge;
 import java.time.LocalDate;
 
 @Getter
-public class ChallengeDto {
+public class ChallengeResponseDto {
     private Long id;
     private String title;
     private String image;
@@ -18,7 +18,7 @@ public class ChallengeDto {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public ChallengeDto(Challenge challenge) {
+    public ChallengeResponseDto(Challenge challenge) {
         this.id = challenge.getId();
         this.title = challenge.getTitle();
         this.image = challenge.getImage();
