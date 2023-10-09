@@ -11,6 +11,7 @@ import java.util.Map;
 @Getter
 public class OAuthAttributes {
     private Map<String, Object> attributes; // OAuth2User의 getAttributes() 메소드의 반환값을 담을 클래스
+    private String socialId;
     private String nameAttributeKey;
     private String name;
     private String email;
@@ -18,7 +19,8 @@ public class OAuthAttributes {
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
-                           String name, String email, String picture) {
+                           String name, String email, String picture, String socialId) {
+        this.socialId = socialId;
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey; // OAuth2 로그인 진행 시 키가 되는 필드값. PK와 같은 의미
         this.name = name;
@@ -61,14 +63,14 @@ public class OAuthAttributes {
     }
 
     private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
-        Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
-        // kakao_account안에 또 profile이라는 JSON객체가 있다. (nickname, profile_image)
-        Map<String, Object> kakaoProfile = (Map<String, Object>)kakaoAccount.get("profile");
 
+        System.out.printf("socialId: %s\n", attributes.get("id"));
+        System.out.printf("attributes: %s\n", attributes.toString());
         return OAuthAttributes.builder()
-                .name((String) kakaoProfile.get("nickname"))
-                .email((String) kakaoAccount.get("email"))
-                .picture((String) kakaoProfile.get("profile_image_url"))
+                .socialId((String) attributes.get("id"))
+                .name((String) attributes.get("nickname"))
+                .email((String) attributes.get("email"))
+                .picture((String) attributes.get("profile_image_url"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -76,12 +78,14 @@ public class OAuthAttributes {
 
     public Member toEntity() {
         String defaultImage = "https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/profile/default-profile.png";
+        System.out.printf("attributes.toString(): %s\n", attributes.toString());
         return Member.builder()
-                .username(null)
+                .socialId(socialId)
                 .email(email)
                 .profileImage(defaultImage)
                 .role(Role.USER)
                 .accountState(AccountState.ACTIVE)
+                .socialData(attributes.toString())
                 .savings(0L)
                 .reward(0L)
                 .build();

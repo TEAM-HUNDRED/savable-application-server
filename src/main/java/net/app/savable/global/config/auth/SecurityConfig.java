@@ -23,14 +23,8 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable()) // 기본 로그인 페이지 사용 안함
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/").permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()
-                )
-                .logout(logout -> logout.logoutSuccessUrl("/"))
-                .oauth2Login(oauth2Login -> oauth2Login
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(customerOAuth2MemberService)
-                        )
                 );
 
         return http.build();
