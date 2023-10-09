@@ -64,8 +64,6 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
 
-        System.out.printf("socialId: %s\n", attributes.get("id"));
-        System.out.printf("attributes: %s\n", attributes.toString());
         return OAuthAttributes.builder()
                 .socialId((String) attributes.get("id"))
                 .name((String) attributes.get("nickname"))
@@ -78,7 +76,6 @@ public class OAuthAttributes {
 
     public Member toEntity() {
         String defaultImage = "https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/profile/default-profile.png";
-        System.out.printf("attributes.toString(): %s\n", attributes.toString());
         return Member.builder()
                 .socialId(socialId)
                 .email(email)

@@ -11,7 +11,6 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(Model model, @LoginMember SessionMember member){
-        System.out.printf("member: %s\n", member);
 
         if (member != null) {
             model.addAttribute("email", member.getEmail());
