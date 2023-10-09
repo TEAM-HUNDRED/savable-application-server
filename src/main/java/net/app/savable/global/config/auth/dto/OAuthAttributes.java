@@ -15,17 +15,15 @@ public class OAuthAttributes {
     private String socialId;
     private String nameAttributeKey;
     private String name;
-    private String email;
     private String picture;
 
     @Builder
     public OAuthAttributes(HashMap<String, Object> attributes, String nameAttributeKey,
-                           String name, String email, String picture, String socialId) {
+                           String name, String picture, String socialId) {
         this.socialId = socialId;
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey; // OAuth2 로그인 진행 시 키가 되는 필드값. PK와 같은 의미
         this.name = name;
-        this.email = email;
         this.picture = picture;
     }
 
@@ -43,7 +41,6 @@ public class OAuthAttributes {
     private static OAuthAttributes ofGoogle(String userNameAttributeName, HashMap<String, Object> attributes) {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
-                .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
                 .attributes(attributes) // OAuth2User의 getAttributes() 메소드의 반환값을 담을 클래스
                 .nameAttributeKey(userNameAttributeName) // OAuth2 로그인 진행 시 키가 되는 필드값. PK와 같은 의미
@@ -56,7 +53,6 @@ public class OAuthAttributes {
 
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
-                .email((String) response.get("email"))
                 .picture((String) response.get("profile_image"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
@@ -66,9 +62,8 @@ public class OAuthAttributes {
     private static OAuthAttributes ofKakao(String userNameAttributeName, HashMap<String, Object> attributes) {
 
         return OAuthAttributes.builder()
-                .socialId((String) attributes.get("id"))
+                .socialId((String) attributes.get(userNameAttributeName))
                 .name((String) attributes.get("nickname"))
-                .email((String) attributes.get("email"))
                 .picture((String) attributes.get("profile_image_url"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
@@ -79,7 +74,6 @@ public class OAuthAttributes {
         String defaultImage = "https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/profile/default-profile.png";
         return Member.builder()
                 .socialId(socialId)
-                .email(email)
                 .profileImage(defaultImage)
                 .role(Role.USER)
                 .accountState(AccountState.ACTIVE)
