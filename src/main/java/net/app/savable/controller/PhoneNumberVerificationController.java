@@ -46,7 +46,6 @@ public class PhoneNumberVerificationController {
         message.setText("[Savable] 인증번호는 [" + randomNum + "] 입니다.");
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-        System.out.println(response);
 
         return randomNum;
     }

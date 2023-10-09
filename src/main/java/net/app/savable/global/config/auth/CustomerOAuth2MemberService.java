@@ -18,10 +18,7 @@ public class CustomerOAuth2MemberService {
     public String processKakaoLogin(HashMap<String, Object> data) {
         OAuthAttributes attributes = OAuthAttributes.of("kakao", "id", data);
 
-        System.out.printf("socialId : %s\n", attributes.getSocialId());
         Member member = saveMember(attributes);
-
-        System.out.printf(member.getEmail());
         return member.getSocialId();
     }
 

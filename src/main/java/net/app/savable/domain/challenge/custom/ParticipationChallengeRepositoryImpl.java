@@ -43,7 +43,6 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
                 .setParameter("participationChallengeId", participationChallengeId)
                 .getSingleResult();
 
-        System.out.printf("myParticipationChallengeDetailDtos: %s\n", myParticipationChallengeDetailDtos.getParticipationChallengeInfoDto().getChallengeId());
         List<VerificationResponseDto> verificationDtoList = em.createQuery(participationDetailsSubSql, VerificationResponseDto.class)
                 .setParameter("participationChallengeId", participationChallengeId)
                 .getResultList();
