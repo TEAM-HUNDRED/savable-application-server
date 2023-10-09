@@ -21,6 +21,7 @@ public enum ErrorCode {
     INSUFFICIENT_BALANCE(400, HttpStatus.BAD_REQUEST, "Insifficient Balance"),
 
     UNAUTHORIZED(401, HttpStatus.UNAUTHORIZED, "Unauthorized"),
+    SESSION_MEMBER_NOT_FOUND(401, HttpStatus.UNAUTHORIZED, "Session Member Not Found"),
     FORBIDDEN(403, HttpStatus.FORBIDDEN, "Forbidden"),
     NOT_FOUND(404, HttpStatus.NOT_FOUND, "Not Found"),
     METHOD_NOT_ALLOWED(405, HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed"),
