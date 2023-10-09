@@ -26,7 +26,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception{
-        Session member = (Session) httpSession.getAttribute("member");
+        SessionMember member = (SessionMember) httpSession.getAttribute("member");
         if (member == null) {
             throw new SessionMemberNotFoundException();
         }
