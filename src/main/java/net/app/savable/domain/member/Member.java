@@ -23,14 +23,11 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String socialId;
 
     @Column(unique = true)
     private String username;
-
-    @Column(unique = true)
-    private String email;
 
     @Column(nullable = false)
     @ColumnDefault("0")
@@ -71,10 +68,9 @@ public class Member extends BaseTimeEntity {
     private List<SavingsHistory> savingHistoryList;
 
     @Builder
-    public Member(String socialId, String username, String email, Long reward, Long savings, String phoneNumber, String profileImage, Role role, AccountState accountState, String socialData) {
+    public Member(String socialId, String username, Long reward, Long savings, String phoneNumber, String profileImage, Role role, AccountState accountState, String socialData) {
         this.socialId = socialId;
         this.username = username;
-        this.email = email;
         this.reward = reward;
         this.savings = savings;
         this.phoneNumber = phoneNumber;
@@ -101,7 +97,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public Member delete(){
-        this.email = null;
+        this.socialId = null;
         this.accountState = AccountState.DELETED;
         this.deletedAt = LocalDateTime.now();
 

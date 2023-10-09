@@ -23,7 +23,7 @@ public class CustomerOAuth2MemberService {
     }
 
     private Member saveMember(OAuthAttributes attributes) {
-        return memberRepository.findByEmail(attributes.getEmail())
+        return memberRepository.findBySocialId(attributes.getSocialId())
                 .orElseGet(() -> memberRepository.save(attributes.toEntity())); // 없는 사용자라면 insert
     }
 }
