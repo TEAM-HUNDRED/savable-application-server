@@ -3,13 +3,16 @@ package net.app.savable.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.*;
-import net.app.savable.domain.challenge.dto.ChallengeDto;
+import net.app.savable.domain.challenge.dto.ChallengeResponseDto;
 import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import net.app.savable.domain.challenge.dto.HomeChallengeDto;
 
 import net.app.savable.domain.challenge.dto.request.ParticipationRequestDto;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
+import net.app.savable.global.config.auth.dto.SessionMember;
+import net.app.savable.global.error.exception.ErrorCode;
+import net.app.savable.global.error.exception.GeneralException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,11 +34,11 @@ public class ChallengeService {
                 .map(HomeChallengeDto::new)
                 .toList();
     }
-    public ChallengeDto findChallengeDetailById(Long challengeId){
-        Challenge challengeDetail = challengeRepository.findChallengeById(challengeId).orElseThrow(
-                () -> new IllegalArgumentException("Invalid Challenge Id: {}"+challengeId)
+    public ChallengeResponseDto findChallengeDetailById(Long challengeId){
+        Challenge challengeDetail = challengeRepository.findChallengeById(challengeId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND, "INVALID_CHALLENGE : " + challengeId)
         );
-        return new ChallengeDto(challengeDetail);
+        return new ChallengeResponseDto(challengeDetail);
     }
 
     public List<ChallengeGuideDto> findChallengeGuide(Long challengeId){
@@ -46,16 +49,25 @@ public class ChallengeService {
 
     public Challenge findChallengeById(Long challengeId){
         return challengeRepository.findChallengeById(challengeId).orElseThrow(() ->
-            new IllegalArgumentException("Invalid challengeId"+challengeId)
+            new GeneralException(ErrorCode.NOT_FOUND, "INVALID_CHALLENGE : " + challengeId)
         );
     }
 
-    public void addParticipation(ParticipationRequestDto participationRequestDto,Long memberId){
+    public void addParticipation(ParticipationRequestDto participationRequestDto, SessionMember sessionMember){
         Challenge requestedChallenge = challengeRepository.findChallengeById(participationRequestDto.getChallengeId())
-                .orElseThrow(() -> new IllegalArgumentException("INVALID_CHALLENGE : " + participationRequestDto.getChallengeId()));
-        Member requestedMember = memberRepository.findMemberById(memberId)
-                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER : "+memberId));
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND, "INVALID_CHALLENGE : " + participationRequestDto.getChallengeId()));
+        Member requestedMember = memberRepository.findMemberById(sessionMember.getId())
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND, "INVALID_MEMBER : " + sessionMember.getId()));
         LocalDate today = LocalDate.now();
+
+        // 이미 참여중인 챌린지인지 확인
+        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationStateByMemberAndChallenge(requestedMember, requestedChallenge);
+
+        for (int i=0; i<duplicateChallenge.size(); i++){
+            if (duplicateChallenge.get(i).getParticipationState() == ParticipationState.IN_PROGRESS){
+                throw new GeneralException(ErrorCode.BAD_REQUEST, "DUPLICATE_CHALLENGE_PARTICIPATION");
+            }
+        }
 
         ParticipationChallenge participationChallenge = ParticipationChallenge.builder()
                 .startDate(today)
@@ -69,5 +81,20 @@ public class ChallengeService {
                 .build();
 
         participationChallengeRepository.save(participationChallenge);
+    }
+    public Boolean checkParticipatable(Long challengeId, SessionMember sessionMember){
+        Boolean isParticipatable= true;
+        Challenge requestedChallenge = challengeRepository.findChallengeById(challengeId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND, "INVALID_CHALLENGE : " + challengeId));
+        Member requestedMember = memberRepository.findMemberById(sessionMember.getId())
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND, "INVALID_MEMBER : " + sessionMember.getId()));
+        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationStateByMemberAndChallenge(requestedMember, requestedChallenge);
+
+        for (int i=0; i<duplicateChallenge.size(); i++){
+            if (duplicateChallenge.get(i).getParticipationState() == ParticipationState.IN_PROGRESS){
+                isParticipatable=false;
+            }
+        }
+        return isParticipatable;
     }
 }

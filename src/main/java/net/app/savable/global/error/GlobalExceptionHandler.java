@@ -1,5 +1,6 @@
 package net.app.savable.global.error;
 
+import lombok.extern.slf4j.Slf4j;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.global.error.exception.GeneralException;
 import net.app.savable.global.error.exception.SessionMemberNotFoundException;
@@ -27,6 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
+        log.error("{}", e.getMessage(), e);
         return handleExceptionInternal(e, ErrorCode.INTERNAL_SERVER_ERROR, request);
     }
 
