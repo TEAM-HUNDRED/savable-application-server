@@ -1,5 +1,6 @@
 package net.app.savable.global.config.auth.dto;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 import lombok.Getter;
 import net.app.savable.domain.member.AccountState;
@@ -71,13 +72,20 @@ public class OAuthAttributes {
     }
 
     public Member toEntity() {
+        ObjectMapper objectMapper = new ObjectMapper();
         String defaultImage = "https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/profile/default-profile.png";
+        String jsonAttributes;
+        try {
+            jsonAttributes = objectMapper.writeValueAsString(attributes);
+        } catch (Exception e) {
+            jsonAttributes = null;
+        }
         return Member.builder()
                 .socialId(socialId)
                 .profileImage(defaultImage)
                 .role(Role.USER)
                 .accountState(AccountState.ACTIVE)
-                .socialData(attributes.toString())
+                .socialData(jsonAttributes) // JSON 형태로 저장
                 .savings(0L)
                 .reward(0L)
                 .build();
