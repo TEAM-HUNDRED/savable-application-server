@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@RestControllerAdvice(annotations = {RestController.class})
+//@RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
