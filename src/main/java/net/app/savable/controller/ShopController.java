@@ -31,8 +31,7 @@ public class ShopController {
             return ApiResponse.fail(INVALID_INPUT_VALUE, "최대 금액을 넘는 가격대 입니다.");
 
         List<GiftcardProductResponseDto> giftcardList = shopService.findGiftcardByInOnSale(true,price);
-        if (giftcardList.size() == 0)
-            return ApiResponse.fail(ErrorCode.NOT_FOUND, "해당 가격대에 맞는 상품이 없습니다. : "+price+"원 대");
+
         return ApiResponse.success(giftcardList);
 
     }
