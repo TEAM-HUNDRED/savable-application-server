@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.dto.ChallengeInfoResponseDto;
 import net.app.savable.domain.member.dto.MemberInfoResponseDto;
+import net.app.savable.domain.member.dto.MemberSignUpRequestDto;
 import net.app.savable.global.common.S3UploadService;
 import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
@@ -19,6 +20,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
@@ -76,7 +82,7 @@ public class MemberController {
         return ApiResponse.success("회원 탈퇴가 완료되었습니다.");
     }
 
-    @PatchMapping("/member/settings") // 유저 정보 수정
+    @PatchMapping("/member/settings") // 유저 정보 수정(프로필이 FormData인 경우)
     public ApiResponse<String> memberProfileUpdate(
             @LoginMember SessionMember sessionMember,
             @RequestParam("image") MultipartFile file,
@@ -97,11 +103,69 @@ public class MemberController {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 2자 이상 10자 이하로 입력해주세요.");
         }
 
+        // 이미지 다운로드
         String saveFileName; // S3에 저장된 파일 이름
         try { // S3에 프로필 이미지 업로드
             log.info("S3에 이미지 업로드");
             String fileName = generateFileName(sessionMember.getId(), Timestamp.valueOf(LocalDateTime.now()));
             saveFileName = s3UploadService.saveFile(file, fileName);
+        } catch (Exception e) {
+            return ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "S3에 이미지 업로드를 실패했습니다.");
+        }
+
+        Member memberByUsername = memberService.findByUsername(username);
+        Member memberByPhoneNumber = memberService.findByPhoneNumber(phoneNumber);
+        if (memberByUsername != null && !(memberByUsername.getId().equals(sessionMember.getId()))) { // 이미 존재하는 username
+            return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 닉네임입니다.");
+        } else if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
+            return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 전화번호입니다.");
+        }
+
+        Member member = memberService.findById(sessionMember.getId());
+        try {
+            memberService.updateMember(member, username, saveFileName, phoneNumber);
+        } catch (DataIntegrityViolationException ex) {
+            return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, ex.getMessage()); // 예외 메시지를 반환
+        }
+
+        return ApiResponse.success("회원 정보 수정이 완료되었습니다.");
+    }
+
+    @PatchMapping("/member/sign-up") // 유저 정보 수정(프로필이 URL인 경우)
+    public ApiResponse<String> memberSignUp(
+            @LoginMember SessionMember sessionMember,
+            @RequestBody MemberSignUpRequestDto memberSignUpRequestDto) {
+
+        log.info("MemberController.memberProfileUpdate() 실행");
+
+        // 유효성 검사
+        String usernamePattern = "^[ 가-힣a-zA-Z0-9]*$"; // 한글, 영문, 숫자만 입력 가능
+        String phoneNumberPattern = "^010[0-9]{8}$"; // 01012345678 형식
+
+        String username = memberSignUpRequestDto.getUsername();
+        String phoneNumber = memberSignUpRequestDto.getPhoneNumber();
+        String imageUrl = memberSignUpRequestDto.getImageUrl();
+
+        if(!isValid(username, usernamePattern)) {
+            return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 한글, 영문, 숫자만 입력 가능합니다.");
+        } else if(!isValid(phoneNumber, phoneNumberPattern)) {
+            return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "전화번호 형식이 올바르지 않습니다.");
+        } else if (username.length() > 10 || username.length() < 2) {
+            return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 2자 이상 10자 이하로 입력해주세요.");
+        }
+
+        // 이미지 다운로드
+        String saveFileName; // S3에 저장된 파일 이름
+        try { // S3에 프로필 이미지 업로드
+            log.info("S3에 이미지 업로드");
+
+            URL url = new URL(imageUrl);
+            String fileName = generateFileName(sessionMember.getId(), Timestamp.valueOf(LocalDateTime.now()));
+
+            Path tempFile = Files.createTempFile("temp", ".jpg");
+            Files.copy(url.openStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
+
+            saveFileName = s3UploadService.saveImageUrl(tempFile, fileName);
         } catch (Exception e) {
             return ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "S3에 이미지 업로드를 실패했습니다.");
         }
