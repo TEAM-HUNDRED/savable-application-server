@@ -44,7 +44,7 @@ public class ChallengeController {
     }
 
     @PostMapping("/participations")
-    public ApiResponse<String> participationAdd(@RequestBody ParticipationRequestDto participationRequestDto,@LoginMember SessionMember sessionMember){
+    public ApiResponse<String> participationAdd(@RequestBody ParticipationRequestDto participationRequestDto, @LoginMember SessionMember sessionMember){
         log.info("participationRequestDto={}",participationRequestDto);
 
         ApiResponse<String> INVALID_INPUT_VALUE = validateVerificationGoal(participationRequestDto);

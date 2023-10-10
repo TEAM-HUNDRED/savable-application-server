@@ -29,7 +29,6 @@ public class ParticipationChallengeController {
     public ApiResponse<List<MyParticipationChallengeDto>> participationList(@LoginMember SessionMember member){
         log.info("ParticipationChallengeController.participationList() 실행");
 
-        System.out.printf("memberId : %d\n", member.getId());
         List<MyParticipationChallengeDto> myParticipationChallengeDtoList = participationChallengeService.findParticipationChallengeByMemberId(member.getId());
 
         return ApiResponse.success(myParticipationChallengeDtoList);

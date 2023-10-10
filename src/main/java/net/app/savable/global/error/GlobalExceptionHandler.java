@@ -3,6 +3,7 @@ package net.app.savable.global.error;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.global.error.exception.GeneralException;
+import net.app.savable.global.error.exception.SessionMemberNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,24 +14,27 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-//@RestControllerAdvice(annotations = {RestController.class})
-@Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
         return handleExceptionInternal(e, ErrorCode.BAD_REQUEST, request);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public ResponseEntity<Object> general(GeneralException e, WebRequest request) {
         return handleExceptionInternal(e, e.getErrorCode(), request);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         log.error("{}", e.getMessage(), e);
         return handleExceptionInternal(e, ErrorCode.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(SessionMemberNotFoundException.class)
+    public ResponseEntity<Object> handleSessionMemberEmptyException(SessionMemberNotFoundException e, WebRequest request) {
+        return handleExceptionInternal(e, ErrorCode.SESSION_MEMBER_NOT_FOUND, request);
     }
 
     protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body,

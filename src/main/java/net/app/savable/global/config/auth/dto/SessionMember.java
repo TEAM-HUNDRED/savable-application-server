@@ -8,14 +8,14 @@ import java.io.Serializable;
 @Getter
 public class SessionMember implements Serializable {
     private Long id;
-    private String name;
-    private String email;
+    private String socialId;
+    private String username;
     private String picture;
 
     public SessionMember(Member member) {
         this.id = member.getId();
-        this.name = member.getUsername();
-        this.email = member.getEmail();
+        this.socialId = member.getSocialId();
+        this.username = member.getUsername();
         this.picture = member.getProfileImage();
     }
 }

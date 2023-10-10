@@ -9,6 +9,7 @@ import net.app.savable.domain.history.RewardHistory;
 import net.app.savable.domain.history.SavingsHistory;
 import net.app.savable.domain.shop.GiftcardOrder;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,10 +24,10 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @Column(unique = true)
-    private String username;
+    private String socialId;
 
     @Column(unique = true)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     @ColumnDefault("0")
@@ -50,6 +51,10 @@ public class Member extends BaseTimeEntity {
 
     private LocalDateTime deletedAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String socialData;
+
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N ParticipationChallenge
     private List<ParticipationChallenge> participationChallengeList;
 
@@ -63,15 +68,16 @@ public class Member extends BaseTimeEntity {
     private List<SavingsHistory> savingHistoryList;
 
     @Builder
-    public Member(String username, String email, Long reward, Long savings, String phoneNumber, String profileImage, Role role, AccountState accountState) {
+    public Member(String socialId, String username, Long reward, Long savings, String phoneNumber, String profileImage, Role role, AccountState accountState, String socialData) {
+        this.socialId = socialId;
         this.username = username;
-        this.email = email;
         this.reward = reward;
         this.savings = savings;
         this.phoneNumber = phoneNumber;
         this.profileImage = profileImage;
         this.role = role;
         this.accountState = accountState;
+        this.socialData = socialData;
     }
 
     public void updateSavings(Long savings) { // 회원의 절약 금액을 증가시킴
@@ -91,7 +97,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public Member delete(){
-        this.email = null;
+        this.socialId = null;
         this.accountState = AccountState.DELETED;
         this.deletedAt = LocalDateTime.now();
 
