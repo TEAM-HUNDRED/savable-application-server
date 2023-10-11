@@ -61,12 +61,9 @@ public class ChallengeService {
         LocalDate today = LocalDate.now();
 
         // 이미 참여중인 챌린지인지 확인
-        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationStateByMemberAndChallenge(requestedMember, requestedChallenge);
-
-        for (int i=0; i<duplicateChallenge.size(); i++){
-            if (duplicateChallenge.get(i).getParticipationState() == ParticipationState.IN_PROGRESS){
-                throw new GeneralException(ErrorCode.BAD_REQUEST, "DUPLICATE_CHALLENGE_PARTICIPATION");
-            }
+        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationChallengeByMember_idAndChallenge_idAndParticipationState(sessionMember.getId(), participationRequestDto.getChallengeId(),ParticipationState.IN_PROGRESS);
+        if (duplicateChallenge.size()>0){
+            throw new GeneralException(ErrorCode.BAD_REQUEST, "DUPLICATE_CHALLENGE_PARTICIPATION");
         }
 
         ParticipationChallenge participationChallenge = ParticipationChallenge.builder()
