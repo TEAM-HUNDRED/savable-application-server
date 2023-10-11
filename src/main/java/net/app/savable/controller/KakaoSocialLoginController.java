@@ -28,13 +28,16 @@ public class KakaoSocialLoginController {
 
     @PostMapping("/kakao")
     public ApiResponse<Member> kakaoLogin(@RequestBody HashMap<String, Object> data,
-                                          HttpSession httpSession,
-                                          HttpServletResponse response,
+                                          HttpSession httpSession, HttpServletResponse response,
                                           HttpServletRequest request) {
         String socialId = customerOAuth2MemberService.processKakaoLogin(data);
 
         Member member = memberRepository.findBySocialId(socialId).orElse(null);
         httpSession.setAttribute("member", new SessionMember(member)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
+
+        // 새션 ID를 클라이언트에 전달하기 위해 응답 바디에 저장.
+        String encodedSessionId = Base64.getEncoder().encodeToString(httpSession.getId().getBytes());
+        response.setHeader("Set-Cookie", "SESSION=" + encodedSessionId);
 
         return ApiResponse.success(member);
     }
