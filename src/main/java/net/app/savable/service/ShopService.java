@@ -9,8 +9,9 @@ import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.*;
 import net.app.savable.domain.shop.dto.GiftcardOrderResponseDto;
+import net.app.savable.domain.shop.dto.GiftcardOrderSaveDto;
 import net.app.savable.domain.shop.dto.GiftcardProductResponseDto;
-import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
+import net.app.savable.domain.shop.dto.GiftcardOrderRequestDto;
 import net.app.savable.global.error.exception.GeneralException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;import java.util.List;
@@ -43,6 +44,7 @@ public class ShopService {
 
     @Transactional(readOnly = false)
     public void addGiftcardOrder(GiftcardOrderRequestDto giftcardOrderRequest, Long memberId){
+        // 기프티콘 구매
         Member orderedMember = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new GeneralException(NOT_FOUND,"INVALID_MEMBER : "+memberId));
         GiftcardProduct orderProduct = giftcardProductRepository.findGiftcardProductById(giftcardOrderRequest.getGiftcardId())
@@ -56,12 +58,21 @@ public class ShopService {
             throw new GeneralException(INSUFFICIENT_BALANCE,"리워드가 부족합니다");
         }
 
-        giftcardOrderRepository.save(giftcardOrderRequest.toEntity(orderProduct, SendState.WAITING));
+        GiftcardOrderSaveDto giftcardOrderSaveDto = GiftcardOrderSaveDto.builder()
+                .positivePoint(giftcardOrderRequest.getPositivePoint())
+                .negativePoint(giftcardOrderRequest.getNegativePoint())
+                .quantity(giftcardOrderRequest.getQuantity())
+                .sendState(SendState.WAITING)
+                .member(orderedMember)
+                .giftcardProduct(orderProduct)
+                .build();
+
+        giftcardOrderRepository.save(giftcardOrderSaveDto.toEntity());
 
         // 리워드 차감
         orderedMember.updateReward(-totalPrice);
 
-        //reward_history에 기록
+        // 기프티콘 구매 후 히스토리 기록
         RewardHistoryResponseDto recentRewardHistory = rewardHistoryRepository.findTopByMemberIdOrderByCreatedAtDesc(orderedMember.getId()); // 가장 최근 리워드 내역 조회
         if (recentRewardHistory == null) {
             recentRewardHistory = RewardHistoryResponseDto.builder()
