@@ -12,4 +12,5 @@ public class GiftcardOrderRequestDto {
     private Long quantity;
     private String positivePoint;
     private String negativePoint;
+    private String wishChallenge;
 }

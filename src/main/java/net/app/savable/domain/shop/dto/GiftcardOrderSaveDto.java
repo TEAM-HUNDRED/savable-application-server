@@ -10,15 +10,17 @@ public class GiftcardOrderSaveDto {
 
     private String positivePoint;
     private String negativePoint;
+    private String wishChallenge;
     private Long quantity;
     private SendState sendState;
     private Member member;
     private GiftcardProduct giftcardProduct;
 
     @Builder
-    public GiftcardOrderSaveDto(String positivePoint, String negativePoint, Long quantity, SendState sendState, Member member, GiftcardProduct giftcardProduct) {
+    public GiftcardOrderSaveDto(String positivePoint, String negativePoint, String wishChallenge, Long quantity, SendState sendState, Member member, GiftcardProduct giftcardProduct) {
         this.positivePoint = positivePoint;
         this.negativePoint = negativePoint;
+        this.wishChallenge = wishChallenge;
         this.quantity = quantity;
         this.sendState = sendState;
         this.member = member;
@@ -29,6 +31,7 @@ public class GiftcardOrderSaveDto {
         return GiftcardOrder.builder()
                 .positivePoint(positivePoint)
                 .negativePoint(negativePoint)
+                .wishChallenge(wishChallenge)
                 .quantity(quantity)
                 .sendState(sendState)
                 .member(member)
