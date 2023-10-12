@@ -9,7 +9,6 @@ import net.app.savable.domain.history.RewardHistory;
 import net.app.savable.domain.history.SavingsHistory;
 import net.app.savable.domain.shop.GiftcardOrder;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,7 +52,6 @@ public class Member extends BaseTimeEntity {
 
     @Column(columnDefinition = "TEXT")
     private String socialData;
-
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // Member 1 : N ParticipationChallenge
     private List<ParticipationChallenge> participationChallengeList;
