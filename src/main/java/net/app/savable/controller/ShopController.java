@@ -3,9 +3,9 @@ package net.app.savable.controller;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.domain.shop.GiftcardProductRepository;
+import net.app.savable.domain.shop.dto.GiftcardOrderRequestDto;
 import net.app.savable.domain.shop.dto.GiftcardOrderResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardProductResponseDto;
-import net.app.savable.domain.shop.dto.request.GiftcardOrderRequestDto;
 import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
@@ -38,7 +38,7 @@ public class ShopController {
     }
 
     @PostMapping("/order")
-    public ApiResponse<String> giftcardOrderAdd(@RequestBody GiftcardOrderRequestDto giftcardOrderRequest,@LoginMember SessionMember sessionMember){
+    public ApiResponse<String> giftcardOrderAdd(@RequestBody GiftcardOrderRequestDto giftcardOrderRequest, @LoginMember SessionMember sessionMember){
         shopService.addGiftcardOrder(giftcardOrderRequest, sessionMember.getId());
         return ApiResponse.success("기프티콘 구매가 완료되었습니다.");
     }
