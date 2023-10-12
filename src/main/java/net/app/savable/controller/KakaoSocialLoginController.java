@@ -37,7 +37,7 @@ public class KakaoSocialLoginController {
 
         // 새션 ID를 클라이언트에 전달하기 위해 응답 바디에 저장.
         String encodedSessionId = Base64.getEncoder().encodeToString(httpSession.getId().getBytes());
-        response.setHeader("Set-Cookie", "SESSION=" + encodedSessionId);
+        response.setHeader("Set-Cookie", "SESSION=" + encodedSessionId + "; SameSite=None; HttpOnly");
 
         return ApiResponse.success("로그인이 완료되었습니다.");
     }

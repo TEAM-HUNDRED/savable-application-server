@@ -18,6 +18,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionFixation()
+                        .changeSessionId()
+                )
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable()) // 기본 로그인 페이지 사용 안함
                 .httpBasic(httpBasic -> httpBasic.disable()) // 기본 로그인 페이지 사용 안함
