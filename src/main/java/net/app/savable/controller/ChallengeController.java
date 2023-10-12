@@ -32,7 +32,7 @@ public class ChallengeController {
     @GetMapping("/{challengeId}")
     public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Long challengeId, @LoginMember SessionMember sessionMember){
         ChallengeResponseDto challengeResponseDto = challengeService.findChallengeDetailById(challengeId);
-        Boolean isParticipatable = challengeService.checkParticipatable(challengeId,sessionMember);
+        Boolean isParticipatable = challengeService.checkParticipatable(challengeId,sessionMember.getId());
         List<ChallengeGuideDto> challengeGuideDtoList= challengeService.findChallengeGuide(challengeId);
 
         ChallengeDetailDto challengeDetailDto = ChallengeDetailDto.builder()
@@ -50,7 +50,7 @@ public class ChallengeController {
         ApiResponse<String> INVALID_INPUT_VALUE = validateVerificationGoal(participationRequestDto);
         if (INVALID_INPUT_VALUE != null) return INVALID_INPUT_VALUE;
 
-        challengeService.addParticipation(participationRequestDto,sessionMember);
+        challengeService.addParticipation(participationRequestDto,sessionMember.getId());
         return ApiResponse.success("챌린지 신청이 완료되었습니다.");
     }
 
