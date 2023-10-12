@@ -27,7 +27,7 @@ public class KakaoSocialLoginController {
     private final MemberRepository memberRepository;
 
     @PostMapping("/kakao")
-    public ApiResponse<Member> kakaoLogin(@RequestBody HashMap<String, Object> data,
+    public ApiResponse<String> kakaoLogin(@RequestBody HashMap<String, Object> data,
                                           HttpSession httpSession, HttpServletResponse response,
                                           HttpServletRequest request) {
         String socialId = customerOAuth2MemberService.processKakaoLogin(data);
@@ -39,6 +39,6 @@ public class KakaoSocialLoginController {
         String encodedSessionId = Base64.getEncoder().encodeToString(httpSession.getId().getBytes());
         response.setHeader("Set-Cookie", "SESSION=" + encodedSessionId);
 
-        return ApiResponse.success(member);
+        return ApiResponse.success("로그인이 완료되었습니다.");
     }
 }
