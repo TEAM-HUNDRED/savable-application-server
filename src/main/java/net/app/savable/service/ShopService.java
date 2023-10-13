@@ -61,6 +61,7 @@ public class ShopService {
         GiftcardOrderSaveDto giftcardOrderSaveDto = GiftcardOrderSaveDto.builder()
                 .positivePoint(giftcardOrderRequest.getPositivePoint())
                 .negativePoint(giftcardOrderRequest.getNegativePoint())
+                .wishChallenge(giftcardOrderRequest.getWishChallenge())
                 .quantity(giftcardOrderRequest.getQuantity())
                 .sendState(SendState.WAITING)
                 .member(orderedMember)

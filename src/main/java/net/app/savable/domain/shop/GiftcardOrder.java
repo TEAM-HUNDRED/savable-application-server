@@ -22,6 +22,9 @@ public class GiftcardOrder extends BaseTimeEntity {
     @Column(nullable = false)
     private String negativePoint;
 
+    @Column
+    private String wishChallenge;
+
     @Column(nullable = false)
     private Long quantity;
 
@@ -39,10 +42,11 @@ public class GiftcardOrder extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public GiftcardOrder(Long id, String positivePoint, String negativePoint, Long quantity, SendState sendState, GiftcardProduct giftcardProduct, Member member) {
+    public GiftcardOrder(Long id, String positivePoint, String negativePoint, String wishChallenge, Long quantity, SendState sendState, GiftcardProduct giftcardProduct, Member member) {
         this.id = id;
         this.positivePoint = positivePoint;
         this.negativePoint = negativePoint;
+        this.wishChallenge = wishChallenge;
         this.quantity = quantity;
         this.sendState = sendState;
         this.giftcardProduct = giftcardProduct;
