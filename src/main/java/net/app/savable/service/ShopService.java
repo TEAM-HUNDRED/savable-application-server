@@ -20,6 +20,7 @@ import static net.app.savable.global.error.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ShopService {
     private final GiftcardProductRepository giftcardProductRepository;
     private final GiftcardOrderRepository giftcardOrderRepository;
