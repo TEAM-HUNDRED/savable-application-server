@@ -10,7 +10,6 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableJdbcHttpSession
 public class SavableApplication {
 
 	public static void main(String[] args) {
