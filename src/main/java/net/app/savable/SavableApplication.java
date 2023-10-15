@@ -10,6 +10,7 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableJdbcHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24 * 30)
 public class SavableApplication {
 
 	public static void main(String[] args) {
