@@ -2,6 +2,7 @@ package net.app.savable.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.app.savable.domain.member.AccountState;
 import net.app.savable.domain.member.Member;
 import net.app.savable.domain.member.MemberRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,13 +21,13 @@ public class MemberService {
                 .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER"+memberId));
     }
 
-    public Member findByUsername(String username){
-        return memberRepository.findByUsername(username)
+    public Member findByUsernameAndAccountStateNot(String username, AccountState accountState){
+        return memberRepository.findByUsernameAndAccountStateNot(username, accountState)
                 .orElse(null);
     }
 
-    public Member findByPhoneNumber(String phoneNumber){
-        return memberRepository.findByPhoneNumber(phoneNumber)
+    public Member findByPhoneNumberAndAccountStateNot(String phoneNumber, AccountState accountState){
+        return memberRepository.findByPhoneNumberAndAccountStateNot(phoneNumber, accountState)
                 .orElse(null);
     }
 

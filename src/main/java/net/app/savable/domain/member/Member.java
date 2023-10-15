@@ -25,7 +25,6 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true)
     private String socialId;
 
-    @Column(unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -35,6 +34,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     @ColumnDefault("0")
     private Long savings;
+
     private String phoneNumber;
 
     private String profileImage;
