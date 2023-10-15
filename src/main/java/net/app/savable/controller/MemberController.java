@@ -198,4 +198,10 @@ public class MemberController {
         Matcher matcher = regex.matcher(input);
         return matcher.matches();
     }
+
+    @GetMapping("/member/logout")
+    public ApiResponse<String> memberLogout(HttpSession session){
+        session.invalidate();
+        return ApiResponse.success("로그아웃이 완료되었습니다.");
+    }
 }
