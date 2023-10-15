@@ -1,8 +1,5 @@
 package net.app.savable.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.Member;
@@ -10,13 +7,11 @@ import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.global.config.auth.CustomerOAuth2MemberService;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
-import org.springframework.session.SessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Base64;
 import java.util.HashMap;
 
 @RestController
