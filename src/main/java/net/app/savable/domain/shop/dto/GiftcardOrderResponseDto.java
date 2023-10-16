@@ -15,13 +15,15 @@ public class GiftcardOrderResponseDto {
     private Long totalPrice;
     private Long quantity;
     private String brandName;
-    private SendState sendState;
+    private String sendState;
 
     public GiftcardOrderResponseDto(GiftcardOrder giftcardOrder){
         // WAITING과 READY를 사용자에게는 WAITING으로 보여주어 2개의 상태만 존재하게 함.
-        SendState sendState = giftcardOrder.getSendState();
-        if (sendState != SendState.COMPLETE){
-            sendState=SendState.WAITING;
+        SendState currentSendState = giftcardOrder.getSendState();
+        if (currentSendState != SendState.COMPLETE){
+            this.sendState=SendState.WAITING.getTitle();
+        } else {
+            this.sendState=SendState.COMPLETE.getTitle();
         }
 
         this.date = giftcardOrder.getCreatedAt();
@@ -31,6 +33,5 @@ public class GiftcardOrderResponseDto {
         this.quantity = giftcardOrder.getQuantity();
         this.totalPrice= this.quantity * this.productPrice;
         this.brandName=giftcardOrder.getGiftcardProduct().getBrandName();
-        this.sendState = sendState;
     }
 }
