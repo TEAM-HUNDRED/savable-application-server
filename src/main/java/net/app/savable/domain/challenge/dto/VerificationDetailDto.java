@@ -10,13 +10,13 @@ public class VerificationDetailDto {
     private String image;
     private final String title;
     private final Integer percentage;
-    private final Long currentCount;
-    private final Long goalCount;
+    private final Integer currentCount; // 현재 인증 횟수
+    private final Long goalCount; // 목표 인증 횟수
     private final Long scheduledReward; // 지급 예정 보상
     private final Long reward; // 1회 인증 시 보상
     private final Long savings; // 절약 금액
 
-    public VerificationDetailDto(String title, Integer percentage, Long currentCount, Long goalCount, Long scheduledReward, Long reward, Long savings) {
+    public VerificationDetailDto(String title, Integer percentage, Integer currentCount, Long goalCount, Long scheduledReward, Long reward, Long savings) {
         this.title = title;
         this.percentage = percentage;
         this.currentCount = currentCount;
