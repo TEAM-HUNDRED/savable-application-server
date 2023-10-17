@@ -1,4 +1,4 @@
-package net.app.savable.domain.challenge.dto.request;
+package net.app.savable.domain.challenge.dto;
 
 import lombok.Getter;
 

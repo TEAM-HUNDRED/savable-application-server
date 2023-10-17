@@ -6,7 +6,7 @@ import net.app.savable.domain.challenge.dto.ChallengeDetailDto;
 import net.app.savable.domain.challenge.dto.ChallengeResponseDto;
 import net.app.savable.domain.challenge.dto.ChallengeGuideDto;
 import net.app.savable.domain.challenge.dto.HomeChallengeDto;
-import net.app.savable.domain.challenge.dto.request.ParticipationRequestDto;
+import net.app.savable.domain.challenge.dto.ParticipationRequestDto;
 import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
