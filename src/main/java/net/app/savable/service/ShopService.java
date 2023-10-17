@@ -39,7 +39,7 @@ public class ShopService {
             maxPrice = price + 999;
         }
 
-        List<GiftcardProductResponseDto> giftcardList = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByBrandNameAsc(inOnSale,minPrice,maxPrice);
+        List<GiftcardProductResponseDto> giftcardList = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByPriceAscBrandNameAsc(inOnSale,minPrice,maxPrice);
         return giftcardList;
     }
 

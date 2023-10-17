@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface GiftcardProductRepository extends JpaRepository<GiftcardProduct, Long> {
-    List<GiftcardProductResponseDto> findGiftcardByInOnSaleAndPriceBetweenOrderByBrandNameAsc(Boolean inOnSale, Long minPrice, Long maxPrice);
+    List<GiftcardProductResponseDto> findGiftcardByInOnSaleAndPriceBetweenOrderByPriceAscBrandNameAsc(Boolean inOnSale, Long minPrice, Long maxPrice);
 
     Optional<GiftcardProduct> findGiftcardProductById(Long id);
 }
