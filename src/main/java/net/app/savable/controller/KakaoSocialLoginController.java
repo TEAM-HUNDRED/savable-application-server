@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,13 +24,19 @@ public class KakaoSocialLoginController {
     private final MemberRepository memberRepository;
 
     @PostMapping("/kakao")
-    public ApiResponse<String> kakaoLogin(@RequestBody HashMap<String, Object> data,
+    public ApiResponse<Map<String, Object>> kakaoLogin(@RequestBody HashMap<String, Object> data,
                                           HttpSession httpSession) {
         String socialId = customerOAuth2MemberService.processKakaoLogin(data);
 
         Member member = memberRepository.findBySocialId(socialId).orElse(null);
         httpSession.setAttribute("member", new SessionMember(member)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
 
-        return ApiResponse.success("로그인이 완료되었습니다.");
+        Map<String, Object> result = new HashMap<>();
+        if (member.getUsername() == null) { // 회원가입이 안되어있는 경우
+            result.put("isRegistered", false);
+        } else { // 회원가입이 되어있는 경우
+            result.put("isRegistered", true);
+        }
+        return ApiResponse.success(result);
     }
 }
