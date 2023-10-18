@@ -1,6 +1,5 @@
 package net.app.savable.global.error;
 
-import lombok.extern.slf4j.Slf4j;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.global.error.exception.GeneralException;
 import net.app.savable.global.error.exception.SessionMemberNotFoundException;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-//@RestControllerAdvice(annotations = {RestController.class})
+@RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
