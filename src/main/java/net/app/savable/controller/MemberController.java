@@ -104,11 +104,8 @@ public class MemberController {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 2자 이상 10자 이하로 입력해주세요.");
         }
 
-        Member memberByUsername = memberService.findByUsernameAndAccountStateNot(username, AccountState.DELETED);
-        Member memberByPhoneNumber = memberService.findByUsernameAndAccountStateNot(phoneNumber, AccountState.DELETED);
-        if (memberByUsername != null && !(memberByUsername.getId().equals(sessionMember.getId()))) { // 이미 존재하는 username
-            return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 닉네임입니다.");
-        } else if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
+        Member memberByPhoneNumber = memberService.findByPhoneNumberAndAccountStateNot(phoneNumber, AccountState.DELETED);
+        if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 전화번호입니다.");
         }
 
@@ -139,13 +136,13 @@ public class MemberController {
 
         log.info("MemberController.memberProfileUpdate() 실행");
 
-        // 유효성 검사
-        String usernamePattern = "^[ 가-힣a-zA-Z0-9]*$"; // 한글, 영문, 숫자만 입력 가능
-        String phoneNumberPattern = "^010[0-9]{8}$"; // 01012345678 형식
-
         String username = memberSignUpRequestDto.getUsername();
         String phoneNumber = memberSignUpRequestDto.getPhoneNumber();
         String imageUrl = memberSignUpRequestDto.getImageUrl();
+
+        // 유효성 검사
+        String usernamePattern = "^[ 가-힣a-zA-Z0-9]*$"; // 한글, 영문, 숫자만 입력 가능
+        String phoneNumberPattern = "^010[0-9]{8}$"; // 01012345678 형식
 
         if(!isValid(username, usernamePattern)) {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 한글, 영문, 숫자만 입력 가능합니다.");
@@ -155,11 +152,8 @@ public class MemberController {
             return ApiResponse.fail(ErrorCode.DATA_INTEGRITY_VIOLATION, "닉네임은 2자 이상 10자 이하로 입력해주세요.");
         }
 
-        Member memberByUsername = memberService.findByUsernameAndAccountStateNot(username, AccountState.DELETED);
         Member memberByPhoneNumber = memberService.findByPhoneNumberAndAccountStateNot(phoneNumber, AccountState.DELETED);
-        if (memberByUsername != null && !(memberByUsername.getId().equals(sessionMember.getId()))) { // 이미 존재하는 username
-            return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 닉네임입니다.");
-        } else if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
+        if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
             return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 전화번호입니다.");
         }
 
