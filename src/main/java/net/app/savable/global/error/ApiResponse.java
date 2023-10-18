@@ -1,5 +1,6 @@
 package net.app.savable.global.error;
 
+import io.sentry.Sentry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.global.error.exception.ErrorCode;
@@ -16,6 +17,7 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> fail(ErrorCode errorCode) {
         log.info("ApiResponse.fail: {}", errorCode.getMessage());
+        Sentry.captureMessage(errorCode.getMessage());
         ApiResponse<T> response = new ApiResponse<>();
         response.success = false;
         response.code = errorCode.getCode();
@@ -26,6 +28,7 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> fail(ErrorCode errorCode, String message) {
         log.info("ApiResponse.fail: {}", message);
+        Sentry.captureMessage(message);
         ApiResponse<T> response = new ApiResponse<>();
         response.success = false;
         response.code = errorCode.getCode();
