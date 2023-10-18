@@ -6,7 +6,6 @@ import net.app.savable.domain.member.Member;
 import net.app.savable.global.config.auth.CustomerOAuth2MemberService;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
-import net.app.savable.service.MemberService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 public class KakaoSocialLoginController {
 
     private final CustomerOAuth2MemberService customerOAuth2MemberService;
-    private final MemberService memberService;
 
     @PostMapping("/kakao")
     public ApiResponse<HashMap<String, Object>> kakaoLogin(@RequestBody HashMap<String, Object> data,
