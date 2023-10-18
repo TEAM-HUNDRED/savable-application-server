@@ -28,7 +28,7 @@ public class KakaoSocialLoginController {
 
         HashMap<String, Object> result = new HashMap<>();
         httpSession.setAttribute("member", new SessionMember(member)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
-        if (member.getUsername() == null && member.getPhoneNumber() == null) {
+        if (member.getUsername() == null || member.getPhoneNumber() == null) {
             result.put("isRegistered", false);
             return ApiResponse.success(result);
         } else {
