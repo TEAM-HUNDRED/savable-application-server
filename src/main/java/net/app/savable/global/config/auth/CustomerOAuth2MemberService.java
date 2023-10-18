@@ -15,11 +15,10 @@ import java.util.HashMap;
 public class CustomerOAuth2MemberService {
     private final MemberRepository memberRepository;
 
-    public String processKakaoLogin(HashMap<String, Object> data) {
+    public Member processKakaoLogin(HashMap<String, Object> data) {
         OAuthAttributes attributes = OAuthAttributes.of("kakao", "id", data);
 
-        Member member = saveMember(attributes);
-        return member.getSocialId();
+        return saveMember(attributes);
     }
 
     private Member saveMember(OAuthAttributes attributes) {
