@@ -154,7 +154,7 @@ public class MemberController {
 
         Member memberByPhoneNumber = memberService.findByPhoneNumberAndAccountStateNot(phoneNumber, AccountState.DELETED);
         if (memberByPhoneNumber != null && !(memberByPhoneNumber.getId().equals(sessionMember.getId()))) { // 이미 존재하는 phoneNumber
-            return ApiResponse.fail(ErrorCode.INVALID_INPUT_VALUE, "이미 존재하는 전화번호입니다.");
+            return ApiResponse.fail(ErrorCode.ALREADY_EXIST_PHONENUMBER, "이미 존재하는 전화번호입니다.");
         }
 
         // 이미지 다운로드
