@@ -1,15 +1,12 @@
 package net.app.savable.controller;
 
 import lombok.RequiredArgsConstructor;
-import net.app.savable.domain.member.MemberRepository;
-import net.app.savable.domain.shop.GiftcardProductRepository;
 import net.app.savable.domain.shop.dto.GiftcardOrderRequestDto;
 import net.app.savable.domain.shop.dto.GiftcardOrderResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardProductResponseDto;
 import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
-import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.ShopService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +19,6 @@ import static net.app.savable.global.error.exception.ErrorCode.INVALID_INPUT_VAL
 @RequiredArgsConstructor
 public class ShopController {
     private final ShopService shopService;
-    private final MemberRepository memberRepository;
-    private final GiftcardProductRepository giftcardProductRepository;
 
     @GetMapping("/giftcards/{price}")
     public ApiResponse<List<GiftcardProductResponseDto>> giftcardByPrice(@PathVariable Long price, @LoginMember SessionMember sessionMember){
