@@ -5,12 +5,16 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 
 @Service
@@ -31,6 +35,17 @@ public class S3UploadService {
         amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
 
         return amazonS3.getUrl(bucket, fileName).toString();
+    }
+
+    private InputStream resizeImage(InputStream originalInputStream, int width, int height) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        Thumbnails.of(originalInputStream)
+                .size(width, height)
+                .outputFormat("jpg")
+                .toOutputStream(outputStream);
+
+        return new ByteArrayInputStream(outputStream.toByteArray());
     }
 
     @Transactional(readOnly = false)
