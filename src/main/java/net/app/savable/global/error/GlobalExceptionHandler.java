@@ -37,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, ErrorCode.SESSION_MEMBER_NOT_FOUND, request);
     }
 
-    @ExceptionHandler(InvalidSocialIdException.class)
+    @ExceptionHandler({InvalidSocialIdException.class, IllegalArgumentException.class})
     public ResponseEntity<Object> handleIllegalArgumentException(InvalidSocialIdException e, WebRequest request) {
         return handleExceptionInternal(e, ErrorCode.INVALID_INPUT_VALUE, request);
     }
