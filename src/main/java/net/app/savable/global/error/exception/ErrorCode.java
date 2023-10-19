@@ -25,7 +25,7 @@ public enum ErrorCode {
     FORBIDDEN(403, HttpStatus.FORBIDDEN, "Forbidden"),
     NOT_FOUND(404, HttpStatus.NOT_FOUND, "Not Found"),
     METHOD_NOT_ALLOWED(405, HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed"),
-    ALREADY_EXIST_PHONE_NUMBER(409, HttpStatus.CONFLICT, "Conflict"),
+    ALREADY_EXIST_PHONENUMBER(409, HttpStatus.CONFLICT, "Conflict"),
     INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server Error"),
     DATA_INTEGRITY_VIOLATION(500, HttpStatus.INTERNAL_SERVER_ERROR, "Data Integrity Violation");
 

@@ -50,7 +50,7 @@ public class PhoneNumberVerificationController {
 
         String number = phoneNumber.get("phoneNumber");
         if (memberService.findByPhoneNumberAndAccountStateNot(number, AccountState.DELETED) != null) { // 이미 가입된 번호라면
-            return ApiResponse.fail(ErrorCode.ALREADY_EXIST_PHONE_NUMBER, "이미 가입된 번호입니다.");
+            return ApiResponse.fail(ErrorCode.ALREADY_EXIST_PHONENUMBER, "이미 가입된 번호입니다.");
         }
 
         Message message = new Message();
