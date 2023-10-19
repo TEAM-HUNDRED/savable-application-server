@@ -26,6 +26,7 @@ public class ParticipationChallengeService {
     }
 
     public MyParticipationChallengeDetailDto findParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId) {
+        findParticipationChallengeById(participationChallengeId); // 참여 챌린지가 존재하는지 확인
         return participationChallengeRepository.findMyParticipationChallengeDetailByParticipationChallengeId(participationChallengeId);
     }
 
