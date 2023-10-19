@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,8 +27,11 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    private final int width = 720;
+    private final int height = 720;
+
     public String saveFile(MultipartFile multipartFile, String fileName) throws IOException {
-        try (InputStream resizedInputStream = resize(multipartFile, 300, 300)) {
+        try (InputStream resizedInputStream = resize(multipartFile, width, height)) {
 
             ObjectMetadata metadata = new ObjectMetadata();
             byte[] resizedImageBytes = ((ByteArrayInputStream) resizedInputStream).readAllBytes();
@@ -60,7 +65,21 @@ public class S3UploadService {
 
     public String saveImageUrl(Path tempFile, String fileName) throws IOException {
 
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, tempFile.toFile());
+        // 이미지 리사이징
+        BufferedImage bufferedImage = Thumbnails.of(tempFile.toFile())
+                .size(width, height)
+                .asBufferedImage();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "jpg", outputStream);
+        InputStream is = new ByteArrayInputStream(outputStream.toByteArray());
+
+        // S3에 업로드
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(outputStream.size());
+        metadata.setContentType("image/jpeg");
+
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, is, metadata);
         amazonS3.putObject(putObjectRequest);
 
         return amazonS3.getUrl(bucket, fileName).toString();
