@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class VerificationService {
 
     private final VerificationRepository verificationRepository;
+    private final ParticipationChallengeService participationChallengeService;
 
     @Transactional(readOnly = false)
     public void addVerification(VerificationRequestDto verificationRequestDto) {
@@ -25,6 +26,7 @@ public class VerificationService {
 
     public VerificationDetailDto findVerificationDetail(Long participationId){
         log.info("VerificationService.findVerificationDetail() 실행");
+        participationChallengeService.findParticipationChallengeById(participationId); // 참여 챌린지가 존재하는지 확인
         return verificationRepository.findVerificationDetailByParticipationId(participationId);
     }
 
