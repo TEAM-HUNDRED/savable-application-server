@@ -25,7 +25,7 @@ public class ChallengeController {
 
     @GetMapping()
     public ApiResponse<List<HomeChallengeDto>> participatableChallengeList(@LoginMember SessionMember sessionMember) {
-        List<HomeChallengeDto> challengeList = challengeService.findChallengeByDate();
+        List<HomeChallengeDto> challengeList = challengeService.findChallengeByDate();  // 챌린지가 많아지면 오늘 날짜 기준 참여하고 있는 챌린지는 제외하고 보여줘야함.
         return ApiResponse.success(challengeList);
     }
 
