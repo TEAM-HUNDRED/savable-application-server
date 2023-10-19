@@ -1,14 +1,13 @@
 package net.app.savable.global.common;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -26,29 +25,39 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Transactional(readOnly = false)
     public String saveFile(MultipartFile multipartFile, String fileName) throws IOException {
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(multipartFile.getSize());
-        metadata.setContentType(multipartFile.getContentType());
+        try (InputStream resizedInputStream = resize(multipartFile, 300, 300)) {
 
-        amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+            ObjectMetadata metadata = new ObjectMetadata();
+            byte[] resizedImageBytes = ((ByteArrayInputStream) resizedInputStream).readAllBytes();
+            metadata.setContentLength(resizedImageBytes.length);
+            metadata.setContentType(multipartFile.getContentType());
 
-        return amazonS3.getUrl(bucket, fileName).toString();
+            try {
+                amazonS3.putObject(bucket, fileName, new ByteArrayInputStream(resizedImageBytes), metadata);
+            } catch (AmazonS3Exception e) {
+                // S3 업로드 중에 예외 처리
+                throw new RuntimeException("Error uploading file to S3", e);
+            }
+
+            return amazonS3.getUrl(bucket, fileName).toString();
+        }
     }
 
-    private InputStream resizeImage(InputStream originalInputStream, int width, int height) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    public InputStream resize(MultipartFile multipartFile, int width, int height) throws IOException {
+        try (InputStream originalInputStream = multipartFile.getInputStream();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-        Thumbnails.of(originalInputStream)
-                .size(width, height)
-                .outputFormat("jpg")
-                .toOutputStream(outputStream);
+            Thumbnails.of(originalInputStream)
+                    .size(width, height)
+                    .outputFormat("jpg")
+                    .toOutputStream(outputStream);
 
-        return new ByteArrayInputStream(outputStream.toByteArray());
+            byte[] resizedImageBytes = outputStream.toByteArray();
+            return new ByteArrayInputStream(resizedImageBytes);
+        }
     }
 
-    @Transactional(readOnly = false)
     public String saveImageUrl(Path tempFile, String fileName) throws IOException {
 
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, tempFile.toFile());
