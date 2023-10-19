@@ -14,6 +14,7 @@ public class ChallengeResponseDto {
     private String explanation;
     private String verificationDescription;
     private Long reward;
+    private Long estimatedSavings;
     private Boolean hasDeadline;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -25,6 +26,7 @@ public class ChallengeResponseDto {
         this.explanation = challenge.getExplanation();
         this.verificationDescription = challenge.getVerificationDescription();
         this.reward = challenge.getReward();
+        this.estimatedSavings = challenge.getEstimatedSavings();
         this.hasDeadline = challenge.getHasDeadline();
         this.startDate = challenge.getStartDate();
         this.endDate = challenge.getEndDate();
