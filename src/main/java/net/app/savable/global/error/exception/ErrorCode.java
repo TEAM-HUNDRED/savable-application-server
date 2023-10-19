@@ -19,6 +19,7 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE(400, HttpStatus.BAD_REQUEST, "Invalid Type Value"),
     INVALID_INPUT_VALUE(400, HttpStatus.BAD_REQUEST, "Invalid Input Value"),
     INSUFFICIENT_BALANCE(400, HttpStatus.BAD_REQUEST, "Insufficient Balance"),
+    DATA_INTEGRITY_VIOLATION(400, HttpStatus.BAD_REQUEST, "Data Integrity Violation"),
 
     UNAUTHORIZED(401, HttpStatus.UNAUTHORIZED, "Unauthorized"),
     SESSION_MEMBER_NOT_FOUND(401, HttpStatus.UNAUTHORIZED, "Session Member Not Found"),
@@ -26,8 +27,7 @@ public enum ErrorCode {
     NOT_FOUND(404, HttpStatus.NOT_FOUND, "Not Found"),
     METHOD_NOT_ALLOWED(405, HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed"),
     ALREADY_EXIST_PHONENUMBER(409, HttpStatus.CONFLICT, "Conflict"),
-    INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server Error"),
-    DATA_INTEGRITY_VIOLATION(500, HttpStatus.INTERNAL_SERVER_ERROR, "Data Integrity Violation");
+    INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server Error");
 
     private final int code;
     private final HttpStatus httpStatus;

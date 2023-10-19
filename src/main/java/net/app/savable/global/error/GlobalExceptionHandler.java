@@ -2,6 +2,7 @@ package net.app.savable.global.error;
 
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.global.error.exception.GeneralException;
+import net.app.savable.global.error.exception.InvalidSocialIdException;
 import net.app.savable.global.error.exception.SessionMemberNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +34,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(SessionMemberNotFoundException.class)
     public ResponseEntity<Object> handleSessionMemberEmptyException(SessionMemberNotFoundException e, WebRequest request) {
         return handleExceptionInternal(e, ErrorCode.SESSION_MEMBER_NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(InvalidSocialIdException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(InvalidSocialIdException e, WebRequest request) {
+        return handleExceptionInternal(e, ErrorCode.INVALID_INPUT_VALUE, request);
     }
 
     protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body,
