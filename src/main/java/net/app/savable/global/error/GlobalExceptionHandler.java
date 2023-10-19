@@ -1,5 +1,6 @@
 package net.app.savable.global.error;
 
+import jakarta.persistence.EntityNotFoundException;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.global.error.exception.GeneralException;
 import net.app.savable.global.error.exception.InvalidSocialIdException;
@@ -39,6 +40,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidSocialIdException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(InvalidSocialIdException e, WebRequest request) {
         return handleExceptionInternal(e, ErrorCode.INVALID_INPUT_VALUE, request);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException e, WebRequest request) {
+        return handleExceptionInternal(e, ErrorCode.NOT_FOUND, request);
     }
 
     protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body,

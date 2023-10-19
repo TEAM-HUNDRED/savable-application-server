@@ -1,5 +1,6 @@
 package net.app.savable.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.ParticipationChallenge;
@@ -33,7 +34,7 @@ public class ParticipationChallengeService {
     public ParticipationChallenge findParticipationChallengeById(Long participationChallengeId) {
         return participationChallengeRepository.findById(participationChallengeId).orElseThrow(() -> {
             log.error("Invalid participationChallenge ID: {}", participationChallengeId);
-            return new IllegalArgumentException("Invalid participationChallenge ID: " + participationChallengeId);
+            return new EntityNotFoundException("Invalid participationChallenge ID: " + participationChallengeId);
         });
     }
 
