@@ -58,7 +58,7 @@ public class VerificationController {
         return ApiResponse.success("인증이 완료되었습니다.");
     }
 
-    public static String generateFileName(Long memberId, Long participationId, Timestamp timestamp) {
+    private static String generateFileName(Long memberId, Long participationId, Timestamp timestamp) {
         return String.format("verification/member_%d/participation_%d_%s.jpg",
                 memberId, participationId, timestamp.toString());
     }
