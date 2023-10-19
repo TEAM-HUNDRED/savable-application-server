@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.member.AccountState;
 import net.app.savable.domain.member.Member;
+import net.app.savable.global.config.auth.LoginMember;
+import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.MemberService;
@@ -45,7 +47,7 @@ public class PhoneNumberVerificationController {
     }
 
     @PostMapping("/send-sms")
-    public ApiResponse<String> smsSend(@RequestBody HashMap<String, String> phoneNumber) {
+    public ApiResponse<String> smsSend(@RequestBody HashMap<String, String> phoneNumber, @LoginMember SessionMember sessionMember) {
         log.info("PhoneNumberVerificationController.sendSms() 실행");
 
         String number = phoneNumber.get("phoneNumber");

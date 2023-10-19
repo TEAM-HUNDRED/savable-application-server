@@ -195,7 +195,7 @@ public class MemberController {
     }
 
     @GetMapping("/member/logout")
-    public ApiResponse<String> memberLogout(HttpSession session){
+    public ApiResponse<String> memberLogout(HttpSession session, @LoginMember SessionMember sessionMember){
         session.invalidate();
         return ApiResponse.success("로그아웃이 완료되었습니다.");
     }

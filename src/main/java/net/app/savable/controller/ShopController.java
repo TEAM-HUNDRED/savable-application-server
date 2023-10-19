@@ -26,7 +26,7 @@ public class ShopController {
     private final GiftcardProductRepository giftcardProductRepository;
 
     @GetMapping("/giftcards/{price}")
-    public ApiResponse<List<GiftcardProductResponseDto>> giftcardByPrice(@PathVariable Long price){
+    public ApiResponse<List<GiftcardProductResponseDto>> giftcardByPrice(@PathVariable Long price, @LoginMember SessionMember sessionMember){
         if (price>5000)
             return ApiResponse.fail(INVALID_INPUT_VALUE, "최대 금액을 넘는 가격대 입니다.");
 

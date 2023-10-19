@@ -24,7 +24,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @GetMapping()
-    public ApiResponse<List<HomeChallengeDto>> participatableChallengeList() {
+    public ApiResponse<List<HomeChallengeDto>> participatableChallengeList(@LoginMember SessionMember sessionMember) {
         List<HomeChallengeDto> challengeList = challengeService.findChallengeByDate();
         return ApiResponse.success(challengeList);
     }

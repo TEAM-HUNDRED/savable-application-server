@@ -64,7 +64,7 @@ public class VerificationController {
     }
 
     @GetMapping("/{participationId}/verification")
-    public ApiResponse<VerificationDetailDto> verificationDetails(@PathVariable Long participationId){
+    public ApiResponse<VerificationDetailDto> verificationDetails(@PathVariable Long participationId, @LoginMember SessionMember sessionMember){
         log.info("verificationDetails participationId : {}", participationId);
         VerificationDetailDto verificationDetail = verificationService.findVerificationDetail(participationId);
         return ApiResponse.success(verificationDetail);

@@ -35,7 +35,7 @@ public class ParticipationChallengeController {
     }
 
     @GetMapping("/{participationChallengeId}")
-    public ApiResponse<MyParticipationChallengeDetailDto> participationDetails(@PathVariable Long participationChallengeId){
+    public ApiResponse<MyParticipationChallengeDetailDto> participationDetails(@PathVariable Long participationChallengeId, @LoginMember SessionMember sessionMember){
         log.info("ParticipationChallengeController.participationDetails() 실행");
 
         MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos = participationChallengeService.findParticipationChallengeDetailByParticipationChallengeId(participationChallengeId);
