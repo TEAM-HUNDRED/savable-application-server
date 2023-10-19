@@ -18,7 +18,7 @@ public class MemberService {
 
     public Member findById(Long memberId){
         return memberRepository.findById(memberId)
-                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER"+memberId));
+                .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER :"+memberId));
     }
 
     public Member findByUsernameAndAccountStateNot(String username, AccountState accountState){
