@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -40,7 +41,7 @@ public class VerificationController {
         String saveFileName; // S3에 저장된 파일 이름
         try {
             log.info("S3에 이미지 업로드");
-            String fileName = generateFileName(member.getId(), participationId, Timestamp.valueOf(LocalDateTime.now()));
+            String fileName = generateFileName(member.getId(), participationId);
             saveFileName = s3UploadService.saveFile(file, fileName);
         } catch (Exception e) {
             return ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "S3에 이미지 업로드를 실패했습니다.");
@@ -58,9 +59,10 @@ public class VerificationController {
         return ApiResponse.success("인증이 완료되었습니다.");
     }
 
-    private static String generateFileName(Long memberId, Long participationId, Timestamp timestamp) {
+    public static String generateFileName(Long memberId, Long participationId) {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
         return String.format("verification/member_%d/participation_%d_%s.jpg",
-                memberId, participationId, timestamp.toString());
+                memberId, participationId, uuid);
     }
 
     @GetMapping("/{participationId}/verification")
