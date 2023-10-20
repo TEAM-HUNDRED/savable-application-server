@@ -11,6 +11,7 @@ public class MemberInfoResponseDto {
 
     private String username;
     private String profileImage;
+    private String phoneNumber;
     private Long totalSavings;
     private Long totalReward;
     private Long scheduledReward;
@@ -18,9 +19,10 @@ public class MemberInfoResponseDto {
     private ChallengeInfoResponseDto challengeInfoResponseDto;
 
     @Builder
-    public MemberInfoResponseDto(String username, String profileImage, Long totalSavings, Long totalReward, Long scheduledReward, Long verificationCount, ChallengeInfoResponseDto challengeInfoResponseDto) {
+    public MemberInfoResponseDto(String username, String profileImage, String phoneNumber ,Long totalSavings, Long totalReward, Long scheduledReward, Long verificationCount, ChallengeInfoResponseDto challengeInfoResponseDto) {
         this.username = username;
         this.profileImage = profileImage;
+        this.phoneNumber = phoneNumber;
         this.totalSavings = totalSavings;
         this.totalReward = totalReward;
         this.scheduledReward = scheduledReward;
