@@ -59,6 +59,7 @@ public class MemberController {
         MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.builder()
                 .username(member.getUsername())
                 .profileImage(member.getProfileImage())
+                .phoneNumber(member.getPhoneNumber())
                 .totalSavings(member.getSavings())
                 .totalReward(member.getReward())
                 .scheduledReward(scheduledReward)
