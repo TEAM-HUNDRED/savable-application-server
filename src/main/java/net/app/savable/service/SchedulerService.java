@@ -51,6 +51,7 @@ public class SchedulerService {
 
     private void processVerification(Verification verification) {
         verification.updateState(VerificationState.SUCCESS);
+    public void processVerification(Verification verification) {
 
         Long participationId = verification.getParticipationChallengeId();
         Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participationId, VerificationState.SUCCESS);
