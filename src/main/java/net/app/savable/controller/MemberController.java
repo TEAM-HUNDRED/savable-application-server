@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -114,7 +115,7 @@ public class MemberController {
         String saveFileName; // S3에 저장된 파일 이름
         try { // S3에 프로필 이미지 업로드
             log.info("S3에 이미지 업로드");
-            String fileName = generateFileName(sessionMember.getId(), Timestamp.valueOf(LocalDateTime.now()));
+            String fileName = generateFileName(sessionMember.getId());
             saveFileName = s3UploadService.saveFile(file, fileName);
         } catch (Exception e) {
             return ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "S3에 이미지 업로드를 실패했습니다.");
@@ -164,7 +165,7 @@ public class MemberController {
             log.info("S3에 이미지 업로드");
 
             URL url = new URL(imageUrl);
-            String fileName = generateFileName(sessionMember.getId(), Timestamp.valueOf(LocalDateTime.now()));
+            String fileName = generateFileName(sessionMember.getId());
 
             Path tempFile = Files.createTempFile("temp", ".jpg");
             Files.copy(url.openStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
@@ -184,9 +185,11 @@ public class MemberController {
         return ApiResponse.success("회원 정보 수정이 완료되었습니다.");
     }
 
-    private static String generateFileName(Long memberId, Timestamp timestamp) {
+    public static String generateFileName(Long memberId) {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+
         return String.format("profile/member_%d_%s.jpg",
-                memberId, timestamp.toString());
+                memberId, uuid);
     }
 
     private boolean isValid(String input, String pattern) {
