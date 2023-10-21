@@ -34,6 +34,7 @@ dependencies {
 	implementation 'net.nurigo:sdk:4.3.0'
 	implementation 'io.sentry:sentry-spring-boot-starter-jakarta:6.30.0'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
+	implementation 'net.coobird:thumbnailator:0.4.14' // 이미지 리사이징
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'

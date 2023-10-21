@@ -184,7 +184,7 @@ public class MemberController {
         return ApiResponse.success("회원 정보 수정이 완료되었습니다.");
     }
 
-    public static String generateFileName(Long memberId, Timestamp timestamp) {
+    private static String generateFileName(Long memberId, Timestamp timestamp) {
         return String.format("profile/member_%d_%s.jpg",
                 memberId, timestamp.toString());
     }
