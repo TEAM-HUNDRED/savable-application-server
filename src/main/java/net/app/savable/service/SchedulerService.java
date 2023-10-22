@@ -49,8 +49,10 @@ public class SchedulerService {
         rewardUnsuccessfulParticipation();
     }
 
-    private void processVerification(Verification verification) {
-        verification.updateState(VerificationState.SUCCESS);
+
+    public void processVerification(Verification verification) {
+
+//        verification.updateState(VerificationState.SUCCESS);
 
         Long participationId = verification.getParticipationChallengeId();
         Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participationId, VerificationState.SUCCESS);
@@ -81,6 +83,11 @@ public class SchedulerService {
         log.info("실패한 챌린지 보상 지급");
         List<ParticipationChallenge> participationChallenges = participationRepository.findByParticipationStateAndEndDateBefore(ParticipationState.IN_PROGRESS, LocalDate.now());
         for (ParticipationChallenge participation :participationChallenges){
+            Long waitingCount = verificationRepository.countByParticipationChallenge_IdAndState(participation.getId(), VerificationState.WAITING);
+            System.out.printf("participationId: %d\n", participation.getId());
+            System.out.printf("waitingCount: %d\n", waitingCount);
+            if (waitingCount > 0) continue; // 인증 대기 중인 인증이 있으면 넘어감
+
             participation.updateState(ParticipationState.FAIL);
 
             Member member = memberRepository.findById(participation.getMemberId())
