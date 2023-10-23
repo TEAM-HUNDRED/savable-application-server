@@ -62,7 +62,7 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
                         "join p.verificationList v " +
                         "where p.member.id = :memberId " +
                         "and p.participationState = 'IN_PROGRESS' " +
-                        "and v.state = 'SUCCESS'", Long.class)
+                        "and v.state != 'FAIL'", Long.class)
                 .setParameter("memberId", memberId)
                 .getSingleResult();
     }
