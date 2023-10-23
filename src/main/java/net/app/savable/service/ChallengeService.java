@@ -64,7 +64,7 @@ public class ChallengeService {
 
         ParticipationChallenge participationChallenge = ParticipationChallenge.builder()
                 .startDate(today)
-                .endDate(today.plusDays(participationRequestDto.getDuration()))
+                .endDate(today.plusDays(participationRequestDto.getDuration()-1))
                 .verificationGoal(participationRequestDto.getVerificationGoal())
                 .participationState(IN_PROGRESS)
                 .savings(requestedChallenge.getEstimatedSavings())
