@@ -29,6 +29,9 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     @Value("${participationDetailsSubSql}")
     String participationDetailsSubSql;
 
+    @Value("${scheduledRewardSql}")
+    String scheduledRewardSql;
+
     @Override
     public List<MyParticipationChallengeDto> findMyParticipationChallengeByMemberId(Long memberId){
         return em.createQuery(participationListSql, MyParticipationChallengeDto.class)
@@ -56,13 +59,7 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
 
     @Override
     public Long findScheduledReward(Long memberId){
-        return em.createQuery("select sum(c.reward) " +
-                        "from ParticipationChallenge p " +
-                        "join p.challenge c " +
-                        "join p.verificationList v " +
-                        "where p.member.id = :memberId " +
-                        "and p.participationState = 'IN_PROGRESS' " +
-                        "and v.state != 'FAIL'", Long.class)
+        return em.createQuery(scheduledRewardSql, Long.class)
                 .setParameter("memberId", memberId)
                 .getSingleResult();
     }
