@@ -64,7 +64,7 @@ public class SchedulerService {
                 });
 
         if (isParticipationSuccessful(participation, successCount)) {
-            rewardSuccessfulParticipation(participation, successCount);
+            rewardSuccessfulParticipation(participation);
         }
     }
 
@@ -72,11 +72,11 @@ public class SchedulerService {
         return successCount >= participation.getVerificationGoal();
     }
 
-    private void rewardSuccessfulParticipation(ParticipationChallenge participation, Long successCount) { // 챌린지 성공 시 보상 지급
+    private void rewardSuccessfulParticipation(ParticipationChallenge participation) { // 챌린지 성공 시 보상 지급
         log.info("챌린지 성공!");
         participation.updateState(ParticipationState.SUCCESS);
 
-        updateRewardAndSavings(participation, successCount, ParticipationState.SUCCESS);
+        updateRewardAndSavings(participation, participation.getVerificationGoal(), ParticipationState.SUCCESS);
     }
 
     private void rewardUnsuccessfulParticipation(){
