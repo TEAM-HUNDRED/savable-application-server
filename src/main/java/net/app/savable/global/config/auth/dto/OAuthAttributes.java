@@ -73,7 +73,7 @@ public class OAuthAttributes {
 
     public Member toEntity() {
         ObjectMapper objectMapper = new ObjectMapper();
-        String defaultImage = "https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/profile/default-profile.png";
+        String defaultImage = "https://savable-app-server.s3.ap-northeast-2.amazonaws.com/app_data/challenge/default-profile.png";
         String jsonAttributes;
         try {
             jsonAttributes = objectMapper.writeValueAsString(attributes);
