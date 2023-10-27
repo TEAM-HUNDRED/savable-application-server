@@ -84,6 +84,8 @@ public class SchedulerService {
 
     }
     private void updateRewardAndSavings(ParticipationChallenge participation, Long count, ParticipationState participationState) { // 보상 및 절약 금액 증가
+        if (count == 0) return; // 인증 수가 0이면 넘어감
+        
         Member member = memberRepository.findById(participation.getMemberId())
                 .orElseThrow(() -> {
                     log.error("Invalid member ID: {}", participation.getMemberId());
