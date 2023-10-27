@@ -11,6 +11,8 @@ import net.app.savable.global.error.exception.GeneralException;
 import net.app.savable.service.ShopService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static net.app.savable.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
@@ -24,11 +26,13 @@ public class ShopController {
 
     @GetMapping("/giftcards/{price}")
     public ApiResponse<List<GiftcardProductResponseDto>> giftcardByPrice(@PathVariable Long price, @LoginMember SessionMember sessionMember){
+        LocalDateTime startTime = LocalDateTime.now();
         if (price>5000)
             return ApiResponse.fail(INVALID_INPUT_VALUE, "최대 금액을 넘는 가격대 입니다.");
 
         List<GiftcardProductResponseDto> giftcardList = shopService.findGiftcardByInOnSale(true,price);
-
+        LocalDateTime endTime = LocalDateTime.now();
+        System.out.println(Duration.between(startTime,endTime));
         return ApiResponse.success(giftcardList);
 
     }
