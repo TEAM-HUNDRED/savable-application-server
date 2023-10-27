@@ -1,0 +1,83 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest #ubuntu-20.04
+    steps:
+      # 기본 체크아웃 = repository code 전체 가지고 옴
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # JDK version 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Gradle Build를 위한 권한 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # application.yml 설정
+      - name: Set application.yml
+        run: echo "${{ secrets.APPLICATION_YML_DEVELOP }}" > ./src/main/resources/application.yml
+      - name: Set application-oauth.yml
+        run: echo "${{ secrets.APPLICATION_OAUTH_YML }}" > ./src/main/resources/application-oauth.yml
+      # # Sentry
+      # - name: Set Sentry
+      #   run: echo "${{ secrets.APPLICATION_PRODUCTION }}" > ./src/main/resources/application.yml
+
+      # Gradle Build (test 제외)
+      - name: Build with Gradle
+        run: ./gradlew clean build --exclude-task test # github cache의 jar를 clean 후 build
+
+      # DockerHub 로그인
+      - name: DockerHub Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME}}
+          password: ${{ secrets.DOCKERHUB_PASSWORD}}
+
+      # Docker 이미지 빌드 # . = 현재 파일
+      - name: Docker Image Build
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME}}/${{ secrets.PROJECT_DEV_NAME }} .
+          docker images
+      # 로그 용도
+
+      # DockerHub Push
+      - name: DockerHub Push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_DEV_NAME }}
+      # secrets.PROJECT_NAME = 도커의 repository
+
+
+      # EC2 인스턴스 접속 및 애플리케이션 실행
+      - name: Application Run
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_DEV_HOST }} # IP
+          username: ${{ secrets.EC2_DEV_USERNAME }} # ubuntu
+          key: ${{ secrets.EC2_DEV_KEY }} # pem key
+
+          script: |
+            sudo docker kill ${{ secrets.PROJECT_DEV_NAME }}
+            sudo docker rm -f ${{ secrets.PROJECT_DEV_NAME }}
+            sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_DEV_NAME }}
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_DEV_NAME }}
+
+            sudo docker run -p 80:${{ secrets.PORT }} \
+            --name ${{ secrets.PROJECT_DEV_NAME }} \
+            -e SPRING_DATASOURCE_URL=${{ secrets.DB_DEV_URL }} \
+            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_DEV_PASSWORD }} \
+            -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_DEV_NAME }}
