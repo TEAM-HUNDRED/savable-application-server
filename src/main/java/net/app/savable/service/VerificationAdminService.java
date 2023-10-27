@@ -38,9 +38,6 @@ public class VerificationAdminService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid verification Id:" + verificationId));
 
             verification.updateState(VerificationState.valueOf(statusValue));
-            if (statusValue.equals(VerificationState.SUCCESS.getKey())) {
-                schedulerService.processVerification(verification);
-            }
         }
     }
 }
