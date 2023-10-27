@@ -13,6 +13,7 @@ import net.app.savable.domain.shop.dto.GiftcardOrderSaveDto;
 import net.app.savable.domain.shop.dto.GiftcardProductResponseDto;
 import net.app.savable.domain.shop.dto.GiftcardOrderRequestDto;
 import net.app.savable.global.error.exception.GeneralException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;import java.util.List;
 
@@ -27,6 +28,7 @@ public class ShopService {
     private final MemberRepository memberRepository;
     private final RewardHistoryRepository rewardHistoryRepository;
 
+    @Cacheable(value="GiftcardList", key="#price", cacheManager="contentCacheManager")
     public List<GiftcardProductResponseDto> findGiftcardByInOnSale(Boolean inOnSale, Long price){
         Long minPrice;
         Long maxPrice;
