@@ -36,40 +36,38 @@ public class SchedulerService {
 
     @Transactional(readOnly = false)
     @Scheduled(cron = "1 0 0 * * *") // 매일 0시 0분 1초에 실행
-    public void checkVerification() {
-        log.info("SchedulerService.checkVerification() 실행");
-        List<Verification> waitingVerifications = verificationRepository.findByStateIs(VerificationState.WAITING);
+    public void scheduledCheckChallengeSuccess() { // 챌린지 성공 유무 판별 스케줄러
+        log.info("SchedulerService.validateChallengeSuccess() 실행");
+        List<ParticipationChallenge> inProgressChallenge = participationRepository.findByParticipationState(ParticipationState.IN_PROGRESS);// 진행 중인 챌린지 조회
 
-        if (!waitingVerifications.isEmpty()) {
-            for (Verification verification : waitingVerifications) {
-                processVerification(verification);
+        for (ParticipationChallenge inProgress : inProgressChallenge) {
+            Long waitingVerification = verificationRepository.countByParticipationChallenge_IdAndState(inProgress.getId(), VerificationState.WAITING); // 인증 대기 중인 인증 수 조회
+            if (waitingVerification > 0) continue; // 인증 대기 중인 인증이 있으면 넘어감
+            else {
+                validateChallengeSuccess(inProgress); // 챌린지 성공 여부 확인
             }
         }
-
-        rewardUnsuccessfulParticipation();
     }
 
+    private void validateChallengeSuccess(ParticipationChallenge participation){ // 챌린지 성공 여부 확인
+        Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participation.getId(), VerificationState.SUCCESS);
+        boolean isSuccess = isParticipationSuccessful(participation.getVerificationGoal(), successCount);
+        if (participation.getEndDate().isBefore(LocalDate.now())) { // 챌린지 종료일이 지난 경우(챌린지 성공 or 실패)
+            if (isSuccess) { // 챌린지 성공
+                rewardSuccessfulParticipation(participation);
 
-    public void processVerification(Verification verification) {
-
-//        verification.updateState(VerificationState.SUCCESS);
-
-        Long participationId = verification.getParticipationChallengeId();
-        Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participationId, VerificationState.SUCCESS);
-
-        ParticipationChallenge participation = participationRepository.findById(participationId)
-                .orElseThrow(() -> {
-                    log.error("Invalid participation ID: {}", participationId);
-                    return new IllegalArgumentException("Invalid participation ID: " + participationId);
-                });
-
-        if (isParticipationSuccessful(participation, successCount)) {
-            rewardSuccessfulParticipation(participation);
+            } else { // 챌린지 실패
+                rewardFailedParticipation(participation, successCount);
+            }
+        } else { // 챌린지 종료일이 지나지 않은 경우
+            if (isSuccess) { // 챌린지 성공
+                rewardSuccessfulParticipation(participation);
+            }
         }
     }
 
-    private boolean isParticipationSuccessful(ParticipationChallenge participation, Long successCount) { // 챌린지 성공 여부 확인
-        return successCount >= participation.getVerificationGoal();
+    private boolean isParticipationSuccessful(Long verificationGoal, Long successCount) { // 챌린지 성공 여부 확인
+        return successCount >= verificationGoal;
     }
 
     private void rewardSuccessfulParticipation(ParticipationChallenge participation) { // 챌린지 성공 시 보상 지급
@@ -79,29 +77,15 @@ public class SchedulerService {
         updateRewardAndSavings(participation, participation.getVerificationGoal(), ParticipationState.SUCCESS);
     }
 
-    private void rewardUnsuccessfulParticipation(){
-        log.info("실패한 챌린지 보상 지급");
-        List<ParticipationChallenge> participationChallenges = participationRepository.findByParticipationStateAndEndDateBefore(ParticipationState.IN_PROGRESS, LocalDate.now());
-        for (ParticipationChallenge participation :participationChallenges){
-            Long waitingCount = verificationRepository.countByParticipationChallenge_IdAndState(participation.getId(), VerificationState.WAITING);
-            System.out.printf("participationId: %d\n", participation.getId());
-            System.out.printf("waitingCount: %d\n", waitingCount);
-            if (waitingCount > 0) continue; // 인증 대기 중인 인증이 있으면 넘어감
+    private void rewardFailedParticipation(ParticipationChallenge participation, Long successCount) { // 챌린지 성공 시 보상 지급
+        log.info("챌린지 성공!");
+        participation.updateState(ParticipationState.FAIL);
+        updateRewardAndSavings(participation, successCount, ParticipationState.FAIL);
 
-            participation.updateState(ParticipationState.FAIL);
-
-            Member member = memberRepository.findById(participation.getMemberId())
-                    .orElseThrow(() -> {
-                        log.error("Invalid member ID: {}", participation.getMemberId());
-                        return new IllegalArgumentException("Invalid member ID: " + participation.getMemberId());
-                    });
-
-            Long successCount = verificationRepository.countByParticipationChallenge_IdAndState(participation.getId(), VerificationState.SUCCESS);
-            updateRewardAndSavings(participation, successCount, ParticipationState.FAIL);
-        }
     }
-
     private void updateRewardAndSavings(ParticipationChallenge participation, Long count, ParticipationState participationState) { // 보상 및 절약 금액 증가
+        if (count == 0) return; // 인증 수가 0이면 넘어감
+        
         Member member = memberRepository.findById(participation.getMemberId())
                 .orElseThrow(() -> {
                     log.error("Invalid member ID: {}", participation.getMemberId());
@@ -133,11 +117,11 @@ public class SchedulerService {
         savingsHistoryRepository.save(savingsHistorySaveDto.toEntity()); // 절약 내역 저장
 
         // 리워드 지급
-        double percentage = (double) count/participation.getVerificationGoal();
         Long additionalReward;
         if (participationState == ParticipationState.SUCCESS) {
             additionalReward = challenge.getReward() * count;
         } else {
+            double percentage = (double) count/participation.getVerificationGoal();
             additionalReward = Math.round(challenge.getReward() * count * percentage);
         }
         member.updateReward(additionalReward); // 보상 지급
