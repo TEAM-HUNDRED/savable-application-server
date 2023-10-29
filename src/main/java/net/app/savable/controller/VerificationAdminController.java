@@ -42,7 +42,7 @@ public class VerificationAdminController {
 
         model.addAttribute("verifications", verifications);
         model.addAttribute("challenges", challenges);
-model.addAttribute("currentChallengeId", challengeId);
+        model.addAttribute("currentChallengeId", challengeId);
         return "verification-admin";
     }
 
