@@ -5,12 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
 import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableScheduling
 @EnableJdbcHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24 * 30)
 @EnableCaching
 public class SavableApplication {
