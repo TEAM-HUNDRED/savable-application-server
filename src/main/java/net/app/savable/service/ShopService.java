@@ -28,7 +28,7 @@ public class ShopService {
     private final MemberRepository memberRepository;
     private final RewardHistoryRepository rewardHistoryRepository;
 
-    @Cacheable(value="GiftcardList", key="#price", cacheManager="contentCacheManager")
+//    @Cacheable(value="GiftcardList", key="#price", cacheManager="contentCacheManager")
     public List<GiftcardProductResponseDto> findGiftcardByInOnSale(Boolean inOnSale, Long price){
         Long minPrice;
         Long maxPrice;
@@ -41,7 +41,11 @@ public class ShopService {
             maxPrice = price + 999;
         }
 
-        List<GiftcardProductResponseDto> giftcardList = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByPriceAscBrandNameAsc(inOnSale,minPrice,maxPrice);
+        List<GiftcardProductResponseDto> giftcardList
+                = giftcardProductRepository.findGiftcardByInOnSaleAndPriceBetweenOrderByPriceAscBrandNameAsc(inOnSale,minPrice,maxPrice)
+                .stream()
+                .map(GiftcardProductResponseDto::valueOf)
+                .toList();
         return giftcardList;
     }
 

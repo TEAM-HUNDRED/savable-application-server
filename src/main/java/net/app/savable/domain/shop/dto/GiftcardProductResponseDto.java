@@ -1,10 +1,15 @@
 package net.app.savable.domain.shop.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.app.savable.domain.shop.GiftcardProduct;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class GiftcardProductResponseDto {
     private Long id;
     private String image;
@@ -12,11 +17,13 @@ public class GiftcardProductResponseDto {
     private String productName;
     private Long price;
 
-    public GiftcardProductResponseDto(Long id, String image, String brandName, String productName, Long price) {
-        this.id = id;
-        this.image = image;
-        this.brandName = brandName;
-        this.productName = productName;
-        this.price = price;
+    public static GiftcardProductResponseDto valueOf(GiftcardProduct giftcardProduct) {
+        return GiftcardProductResponseDto.builder()
+                .id(giftcardProduct.getId())
+                .image(giftcardProduct.getImage())
+                .brandName(giftcardProduct.getBrandName())
+                .productName(giftcardProduct.getProductName())
+                .price(giftcardProduct.getPrice())
+                .build();
     }
 }
