@@ -7,6 +7,6 @@
         (c.hasDeadline = true
         and c.startDate &lt;=current_date
         and current_date &lt;=c.endDate)
-        order by c.hasDeadline, c.endDate asc
+        order by c.hasDeadline, c.endDate, createdAt desc
     </entry>
 </properties>
