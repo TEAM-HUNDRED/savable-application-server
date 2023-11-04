@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.app.savable.domain.shop.GiftcardProduct;
 
+import java.io.Serializable;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GiftcardProductResponseDto {
+public class GiftcardProductResponseDto implements Serializable {
     private Long id;
     private String image;
     private String brandName;
