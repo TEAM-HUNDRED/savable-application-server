@@ -1,6 +1,7 @@
 package net.app.savable.global.error;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.global.error.exception.GeneralException;
 import net.app.savable.global.error.exception.InvalidSocialIdException;
@@ -16,6 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice(annotations = {RestController.class})
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -64,6 +66,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorCode errorCode,
                                                            HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        log.warn("server error occur", e);
         return super.handleExceptionInternal(
                 e,
                 ApiResponse.fail(errorCode, errorCode.getMessage(e)),
