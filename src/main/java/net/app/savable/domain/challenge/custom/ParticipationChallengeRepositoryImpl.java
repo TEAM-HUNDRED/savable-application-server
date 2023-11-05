@@ -45,7 +45,7 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     @Override
     public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId, Long memberId) {
         log.info("ParticipationChallengeRepositoryImpl.findMyParticipationChallengeDetailByParticipationChallengeId() 실행");
-
+        
         MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos;
         try {
             myParticipationChallengeDetailDtos = em.createQuery(participationDetailSql, MyParticipationChallengeDetailDto.class)
