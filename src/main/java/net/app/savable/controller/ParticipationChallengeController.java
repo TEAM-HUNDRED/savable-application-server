@@ -38,7 +38,7 @@ public class ParticipationChallengeController {
     public ApiResponse<MyParticipationChallengeDetailDto> participationDetails(@PathVariable Long participationChallengeId, @LoginMember SessionMember sessionMember){
         log.info("ParticipationChallengeController.participationDetails() 실행");
 
-        MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos = participationChallengeService.findParticipationChallengeDetailByParticipationChallengeId(participationChallengeId);
+        MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos = participationChallengeService.findParticipationChallengeDetailByParticipationChallengeId(participationChallengeId, sessionMember.getId());
 
         return ApiResponse.success(myParticipationChallengeDetailDtos);
     }
