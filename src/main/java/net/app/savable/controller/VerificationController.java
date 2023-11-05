@@ -38,6 +38,13 @@ public class VerificationController {
 
         log.info("verificationService.verificationAdd");
         Member member = memberService.findById(sessionMember.getId());
+        ParticipationChallenge participationChallenge = participationChallengeService.findParticipationChallengeById(participationId);
+
+        // 자신의 챌린지인지 확인
+        if (!participationChallenge.getMemberId().equals(member.getId())) {
+            return ApiResponse.fail(ErrorCode.FORBIDDEN, "사용자 본인의 챌린지가 아닌 경우 인증할 수 없습니다.");
+        }
+
         String saveFileName; // S3에 저장된 파일 이름
         try {
             log.info("S3에 이미지 업로드");
@@ -47,7 +54,6 @@ public class VerificationController {
             return ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "S3에 이미지 업로드를 실패했습니다.");
         }
 
-        ParticipationChallenge participationChallenge = participationChallengeService.findParticipationChallengeById(participationId);
         VerificationRequestDto verificationRequestDto = VerificationRequestDto.builder()
                 .participationChallenge(participationChallenge)
                 .image(saveFileName)
