@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ParticipationChallengeRepositoryCustom {
     List<MyParticipationChallengeDto> findMyParticipationChallengeByMemberId(Long memberId);
-    MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long memberId);
+    MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationId, Long memberId);
     Long findScheduledReward(Long memberId);
 }

@@ -43,7 +43,7 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     }
 
     @Override
-    public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId) {
+    public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId, Long memberId) {
         log.info("ParticipationChallengeRepositoryImpl.findMyParticipationChallengeDetailByParticipationChallengeId() 실행");
 
         MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos;

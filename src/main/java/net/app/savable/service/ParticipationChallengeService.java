@@ -26,9 +26,9 @@ public class ParticipationChallengeService {
         return participationChallengeRepository.findMyParticipationChallengeByMemberId(memberId);
     }
 
-    public MyParticipationChallengeDetailDto findParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId) {
+    public MyParticipationChallengeDetailDto findParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId, Long memberId) {
         findParticipationChallengeById(participationChallengeId); // 참여 챌린지가 존재하는지 확인
-        return participationChallengeRepository.findMyParticipationChallengeDetailByParticipationChallengeId(participationChallengeId);
+        return participationChallengeRepository.findMyParticipationChallengeDetailByParticipationChallengeId(participationChallengeId, memberId);
     }
 
     public ParticipationChallenge findParticipationChallengeById(Long participationChallengeId) {
