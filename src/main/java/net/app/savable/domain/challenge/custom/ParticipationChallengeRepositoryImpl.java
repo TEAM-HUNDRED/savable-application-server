@@ -40,14 +40,16 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     }
 
     @Override
-    public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId) {
+    public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId, Long memberId) {
         log.info("ParticipationChallengeRepositoryImpl.findMyParticipationChallengeDetailByParticipationChallengeId() 실행");
         MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos = em.createQuery(participationDetailSql, MyParticipationChallengeDetailDto.class)
                 .setParameter("participationChallengeId", participationChallengeId)
+                .setParameter("memberId", memberId)
                 .getSingleResult();
 
         List<VerificationResponseDto> verificationDtoList = em.createQuery(participationDetailsSubSql, VerificationResponseDto.class)
                 .setParameter("participationChallengeId", participationChallengeId)
+                .setParameter("memberId", memberId)
                 .getResultList();
 
         if (!verificationDtoList.isEmpty()) {
