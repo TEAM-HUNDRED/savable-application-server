@@ -32,9 +32,6 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     @Value("${scheduledRewardSql}")
     String scheduledRewardSql;
 
-    @Value("${participationDetailsExceptionSql}")
-    String participationDetailsExceptionSql;
-
     @Override
     public List<MyParticipationChallengeDto> findMyParticipationChallengeByMemberId(Long memberId){
         return em.createQuery(participationListSql, MyParticipationChallengeDto.class)
@@ -43,26 +40,19 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     }
 
     @Override
-    public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId) {
+    public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId, Long memberId) {
         log.info("ParticipationChallengeRepositoryImpl.findMyParticipationChallengeDetailByParticipationChallengeId() 실행");
+        MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos = em.createQuery(participationDetailSql, MyParticipationChallengeDetailDto.class)
+                .setParameter("participationChallengeId", participationChallengeId)
+                .getSingleResult();
 
-        MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos;
-        try {
-            myParticipationChallengeDetailDtos = em.createQuery(participationDetailSql, MyParticipationChallengeDetailDto.class)
-                    .setParameter("participationChallengeId", participationChallengeId)
-                    .getSingleResult();
+        List<VerificationResponseDto> verificationDtoList = em.createQuery(participationDetailsSubSql, VerificationResponseDto.class)
+                .setParameter("participationChallengeId", participationChallengeId)
+                .setParameter("memberId", memberId)
+                .getResultList();
 
-            List<VerificationResponseDto> verificationDtoList = em.createQuery(participationDetailsSubSql, VerificationResponseDto.class)
-                    .setParameter("participationChallengeId", participationChallengeId)
-                    .getResultList();
-
-            if (!verificationDtoList.isEmpty()) {
-                myParticipationChallengeDetailDtos.getVerificationInfoDto().setVerificationResponseDtos(verificationDtoList);
-            }
-        } catch (Exception e) {
-            myParticipationChallengeDetailDtos = em.createQuery(participationDetailsExceptionSql, MyParticipationChallengeDetailDto.class)
-                    .setParameter("participationChallengeId", participationChallengeId)
-                    .getSingleResult();
+        if (!verificationDtoList.isEmpty()) {
+            myParticipationChallengeDetailDtos.getVerificationInfoDto().setVerificationResponseDtos(verificationDtoList);
         }
 
         return myParticipationChallengeDetailDtos;

@@ -27,32 +27,16 @@
         cast((p.verificationGoal - sum(case when v.state != 'FAIL' then 1 else 0 end)) as Long)))
         from ParticipationChallenge p
         join p.challenge c
+        on p.challenge.id = c.id
         left join p.verificationList v
+        on v.participationChallenge.id = p.id
         where p.id = :participationChallengeId
         group by p.id, c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal, c.reward, p.savings
     </entry>
-
-<!--    에러 발생 시 사용-->
-    <entry key="participationDetailsExceptionSql">
-        select new net.app.savable.domain.challenge.dto.MyParticipationChallengeDetailDto(
-        new net.app.savable.domain.challenge.dto.ParticipationChallengeInfoDto(
-        c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal,
-        0,
-        0,
-        new net.app.savable.domain.challenge.dto.VerificationInfoDto(
-        0,
-        0,
-        p.verificationGoal))
-        from ParticipationChallenge p
-        join p.challenge c
-        where p.id = :participationChallengeId
-        group by p.id, c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal, c.reward, p.savings
-    </entry>
-
     <entry key="participationDetailsSubSql">
         select new net.app.savable.domain.challenge.dto.VerificationResponseDto (v.id, v.image, v.state, v.createdAt)
         from Verification v
-        where v.participationChallenge.id = :participationChallengeId
+        where v.participationChallenge.id = :participationChallengeId and v.member.id = :memberId
     </entry>
     <entry key="scheduledRewardSql">
         select sum(c.reward)
