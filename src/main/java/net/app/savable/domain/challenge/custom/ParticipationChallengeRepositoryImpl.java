@@ -44,7 +44,6 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
         log.info("ParticipationChallengeRepositoryImpl.findMyParticipationChallengeDetailByParticipationChallengeId() 실행");
         MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos = em.createQuery(participationDetailSql, MyParticipationChallengeDetailDto.class)
                 .setParameter("participationChallengeId", participationChallengeId)
-                .setParameter("memberId", memberId)
                 .getSingleResult();
 
         List<VerificationResponseDto> verificationDtoList = em.createQuery(participationDetailsSubSql, VerificationResponseDto.class)

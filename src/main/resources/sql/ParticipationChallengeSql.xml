@@ -27,8 +27,12 @@
         cast((p.verificationGoal - sum(case when v.state != 'FAIL' then 1 else 0 end)) as Long)))
         from ParticipationChallenge p
         join p.challenge c
+        on p.challenge.id = c.id
         left join p.verificationList v
-        where p.id = :participationChallengeId and v.member.id = :memberId
+        on v.participationChallenge.id = p.id
+        where p.id = :participationChallengeId
+        group by p.id, c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal, c.reward, p.savings
+    </entry>
         group by p.id, c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal, c.reward, p.savings
     </entry>
     <entry key="participationDetailsSubSql">
