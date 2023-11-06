@@ -32,11 +32,8 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     @Value("${scheduledRewardSql}")
     String scheduledRewardSql;
 
-    @Value("${participationDetailsExceptionSql}")
-    String participationDetailsExceptionSql;
-
     @Override
-    public List<MyParticipationChallengeDto> findMyParticipationChallengeByMemberId(Long memberId){
+    public List<MyParticipationChallengeDto> findMyParticipationChallengeByMemberId(Long memberId) {
         return em.createQuery(participationListSql, MyParticipationChallengeDto.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
@@ -45,34 +42,28 @@ public class ParticipationChallengeRepositoryImpl implements ParticipationChalle
     @Override
     public MyParticipationChallengeDetailDto findMyParticipationChallengeDetailByParticipationChallengeId(Long participationChallengeId, Long memberId) {
         log.info("ParticipationChallengeRepositoryImpl.findMyParticipationChallengeDetailByParticipationChallengeId() 실행");
-        
-        MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos;
-        try {
-            myParticipationChallengeDetailDtos = em.createQuery(participationDetailSql, MyParticipationChallengeDetailDto.class)
-                    .setParameter("participationChallengeId", participationChallengeId)
-                    .getSingleResult();
-            
-            List<VerificationResponseDto> verificationDtoList = em.createQuery(participationDetailsSubSql, VerificationResponseDto.class)
-                    .setParameter("participationChallengeId", participationChallengeId)
-                    .getResultList();
 
-            if (!verificationDtoList.isEmpty()) {
-                myParticipationChallengeDetailDtos.getVerificationInfoDto().setVerificationResponseDtos(verificationDtoList);
-            }
-        } catch (Exception e) {
-            myParticipationChallengeDetailDtos = em.createQuery(participationDetailsExceptionSql, MyParticipationChallengeDetailDto.class)
-                    .setParameter("participationChallengeId", participationChallengeId)
-                    .getSingleResult();
+        MyParticipationChallengeDetailDto myParticipationChallengeDetailDtos = em.createQuery(participationDetailSql, MyParticipationChallengeDetailDto.class)
+                .setParameter("participationChallengeId", participationChallengeId)
+                .setParameter("memberId", memberId)
+                .getSingleResult();
+
+        List<VerificationResponseDto> verificationDtoList = em.createQuery(participationDetailsSubSql, VerificationResponseDto.class)
+                .setParameter("participationChallengeId", participationChallengeId)
+                .setParameter("memberId", memberId)
+                .getResultList();
+
+        if (!verificationDtoList.isEmpty()) {
+            myParticipationChallengeDetailDtos.getVerificationInfoDto().setVerificationResponseDtos(verificationDtoList);
         }
 
         return myParticipationChallengeDetailDtos;
     }
 
     @Override
-    public Long findScheduledReward(Long memberId){
+    public Long findScheduledReward(Long memberId) {
         return em.createQuery(scheduledRewardSql, Long.class)
                 .setParameter("memberId", memberId)
                 .getSingleResult();
     }
-
 }

@@ -11,8 +11,11 @@
         case when sum(case when v.state != 'FAIL' and DATE(v.createdAt) = CURRENT_DATE then 1 else 0 end) > 0 then true else false end)
         from ParticipationChallenge p
         join p.challenge c
+        on p.challenge.id = c.id
         left join p.verificationList v
+        on v.participationChallenge.id = p.id
         where p.member.id = :memberId and p.participationState = 'IN_PROGRESS'
+        and ((v.member.id is not null and v.member.id = :memberId) or v.member.id is null)
         group by p.id, c.image, c.title, p.verificationGoal, c.reward, c.estimatedSavings
     </entry>
     <entry key="participationDetailsSql">
@@ -27,25 +30,10 @@
         cast((p.verificationGoal - sum(case when v.state != 'FAIL' then 1 else 0 end)) as Long)))
         from ParticipationChallenge p
         join p.challenge c
+        on p.challenge.id = c.id
         left join p.verificationList v
+        on v.participationChallenge.id = p.id
         where p.id = :participationChallengeId and v.member.id = :memberId
-        group by p.id, c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal, c.reward, p.savings
-    </entry>
-
-<!--    에러 발생 시 사용-->
-    <entry key="participationDetailsExceptionSql">
-        select new net.app.savable.domain.challenge.dto.MyParticipationChallengeDetailDto(
-        new net.app.savable.domain.challenge.dto.ParticipationChallengeInfoDto(
-        c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal,
-        0,
-        0,
-        new net.app.savable.domain.challenge.dto.VerificationInfoDto(
-        0,
-        0,
-        p.verificationGoal))
-        from ParticipationChallenge p
-        join p.challenge c
-        where p.id = :participationChallengeId
         group by p.id, c.id, c.image, c.title, p.startDate, p.endDate, p.verificationGoal, c.reward, p.savings
     </entry>
 
