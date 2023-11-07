@@ -1,9 +1,7 @@
 package net.app.savable.global.error;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.global.error.exception.GeneralException;
 import net.app.savable.global.error.exception.InvalidSocialIdException;
@@ -16,11 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestControllerAdvice(annotations = {RestController.class})
 @Slf4j

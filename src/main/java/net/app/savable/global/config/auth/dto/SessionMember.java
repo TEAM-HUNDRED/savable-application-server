@@ -1,7 +1,6 @@
 package net.app.savable.global.config.auth.dto;
 
 import lombok.Getter;
-import lombok.ToString;
 import net.app.savable.domain.member.Member;
 
 import java.io.Serializable;
