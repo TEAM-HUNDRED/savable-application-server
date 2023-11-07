@@ -25,7 +25,7 @@ public class CustomerOAuth2MemberService {
 
     private Member saveMember(OAuthAttributes attributes) {
         if (attributes.getSocialId() == null) {
-            throw new InvalidSocialIdException("SocaiId cannot be null");
+            throw new InvalidSocialIdException("SocialId cannot be null");
         }
         return memberRepository.findBySocialId(attributes.getSocialId())
                 .orElseGet(() -> memberRepository.save(attributes.toEntity())); // 없는 사용자라면 insert
