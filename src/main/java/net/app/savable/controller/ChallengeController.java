@@ -31,7 +31,6 @@ public class ChallengeController {
 
     @GetMapping("/{challengeId}")
     public ApiResponse<ChallengeDetailDto> getChallengeDetail(@PathVariable Long challengeId, @LoginMember SessionMember sessionMember){
-        System.out.println(challengeId);
         ChallengeResponseDto challengeResponseDto = challengeService.findChallengeDetailById(challengeId);
         Boolean isParticipatable = challengeService.checkParticipatable(challengeId,sessionMember.getId());
         List<ChallengeGuideDto> challengeGuideDtoList= challengeService.findChallengeGuide(challengeId);
