@@ -21,6 +21,11 @@ public class MemberService {
                 .orElseThrow(()-> new IllegalArgumentException("INVALID_MEMBER : "+memberId));
     }
 
+    public Member findBySocialId(String socialId){
+        return memberRepository.findBySocialId(socialId)
+                .orElseThrow(()-> new IllegalArgumentException("INVALID_SOCIAL_ID : "+socialId));
+    }
+
     public Member findByUsernameAndAccountStateNot(String username, AccountState accountState){
         return memberRepository.findByUsernameAndAccountStateNot(username, accountState)
                 .orElse(null);
