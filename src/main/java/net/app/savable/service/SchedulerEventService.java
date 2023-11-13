@@ -18,7 +18,7 @@ public class SchedulerEventService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Scheduled(cron = "1 3 0 * * *") // 매일 0시 3분 1초에 실행
+//    @Scheduled(cron = "1 3 0 * * *") // 매일 0시 3분 1초에 실행
     @Transactional(readOnly = false)
     public void addEventReward(){ // 이벤트 보상 지급 스케줄러
         log.info("SchedulerEventService.addEventReward() 실행");
