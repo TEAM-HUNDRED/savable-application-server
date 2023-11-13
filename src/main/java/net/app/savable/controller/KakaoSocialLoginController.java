@@ -1,12 +1,13 @@
 package net.app.savable.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import net.app.savable.domain.member.Member;
-import net.app.savable.domain.member.MemberRepository;
 import net.app.savable.global.config.auth.CustomerOAuth2MemberService;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
+import net.app.savable.service.MemberService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +22,20 @@ import java.util.Map;
 public class KakaoSocialLoginController {
 
     private final CustomerOAuth2MemberService customerOAuth2MemberService;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @PostMapping("/kakao")
     public ApiResponse<Map<String, Object>> kakaoLogin(@RequestBody HashMap<String, Object> data,
-                                          HttpSession httpSession) {
+                                                       HttpSession httpSession,
+                                                       HttpServletRequest request) {
+
+        httpSession.invalidate(); // 기존 세션을 무효화
+        HttpSession newSession = request.getSession(true); // 새 세션 강제 생성
+
         String socialId = customerOAuth2MemberService.processKakaoLogin(data);
 
-        Member member = memberRepository.findBySocialId(socialId).orElse(null);
-        httpSession.setAttribute("member", new SessionMember(member)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
+        Member member = memberService.findBySocialId(socialId);
+        newSession.setAttribute("member", new SessionMember(member)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
 
         Map<String, Object> result = new HashMap<>();
         if (member.getUsername() == null) { // 회원가입이 안되어있는 경우
