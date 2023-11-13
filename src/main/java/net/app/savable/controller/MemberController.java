@@ -77,7 +77,7 @@ public class MemberController {
 
         memberService.deleteMember(memberService.findById(sessionMember.getId()));
 
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate(); // 세션 무효화
         }
