@@ -5,14 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.dto.ChallengeResponseDto;
 import net.app.savable.domain.challenge.dto.VerificationAdminResponseDto;
-import net.app.savable.domain.challenge.dto.VerificationAdminUpdateDto;
 import net.app.savable.service.ChallengeAdminService;
 import net.app.savable.service.VerificationAdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
