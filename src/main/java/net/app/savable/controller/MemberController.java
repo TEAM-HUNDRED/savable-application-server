@@ -17,17 +17,16 @@ import net.app.savable.global.error.exception.ErrorCode;
 import net.app.savable.service.MemberService;
 import net.app.savable.service.ParticipationChallengeService;
 import net.app.savable.service.VerificationService;
+import org.joda.time.DateTime;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Enumeration;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,9 +43,15 @@ public class MemberController {
     private final S3UploadService s3UploadService;
 
     @GetMapping("/my-page")
-    public ApiResponse<MemberInfoResponseDto> myPageDetails(@LoginMember SessionMember sessionMember) {
+    public ApiResponse<MemberInfoResponseDto> myPageDetails(@LoginMember SessionMember sessionMember,
+                                                            HttpServletRequest request) {
 
         log.info("MemberController.myPageDetails() 실행");
+        System.out.printf("\n\n////////마이페이지 API 호출////////\n");
+        System.out.printf("호출 시간: %s\n", new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        System.out.printf("*** request headers ***\n");
+        printRequestInfo(request);
+
         Long memberId = sessionMember.getId();
         Member member = memberService.findById(memberId);
         Long verificationCount = verificationService.findTotalVerificationCount(memberId); // 지금까지 총 인증 횟수
@@ -134,9 +139,14 @@ public class MemberController {
     @PatchMapping("/member/sign-up") // 유저 정보 수정(프로필이 URL인 경우)
     public ApiResponse<String> memberSignUp(
             @LoginMember SessionMember sessionMember,
-            @RequestBody MemberSignUpRequestDto memberSignUpRequestDto) {
+            @RequestBody MemberSignUpRequestDto memberSignUpRequestDto,
+            HttpServletRequest request) {
 
         log.info("MemberController.memberProfileUpdate() 실행");
+        System.out.printf("\n\n////////회원가입 API 호출////////\n");
+        System.out.printf("호출 시간: %s\n", new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        System.out.printf("*** request headers ***\n");
+        printRequestInfo(request);
 
         String username = memberSignUpRequestDto.getUsername();
         String phoneNumber = memberSignUpRequestDto.getPhoneNumber();
@@ -199,8 +209,31 @@ public class MemberController {
     }
 
     @GetMapping("/member/logout")
-    public ApiResponse<String> memberLogout(HttpSession session, @LoginMember SessionMember sessionMember){
+    public ApiResponse<String> memberLogout(HttpSession session, @LoginMember SessionMember sessionMember
+            , HttpServletRequest request){
+        System.out.printf("\n\n////////로그아 API 호출////////\n");
+        System.out.printf("호출 시간: %s\n", new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        System.out.printf("*** request headers ***\n");
+        printRequestInfo(request);
+
         session.invalidate();
         return ApiResponse.success("로그아웃이 완료되었습니다.");
+    }
+
+    public void printRequestInfo(HttpServletRequest request) {
+        // 요청 헤더 출력
+        Enumeration<String> headerNames = request.getHeaderNames();
+        StringBuilder headers = new StringBuilder();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            headers.append(headerName).append(": ").append(headerValue).append("\n");
+        }
+
+        // 요청 URL 출력
+        String requestURL = request.getRequestURL().toString();
+
+        System.out.printf("[URL]\nURL: %s\n\n[Request Headers]\n%s", requestURL, headers.toString());
+        System.out.printf("*********************\n\n");
     }
 }
