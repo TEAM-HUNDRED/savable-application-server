@@ -48,7 +48,8 @@ public class MemberController {
 
         log.info("MemberController.myPageDetails() 실행");
         System.out.printf("\n\n////////마이페이지 API 호출////////\n");
-        System.out.printf("호출 시간: %s\n", new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        System.out.printf("호출 시간: %s\n", new DateTime().plusHours(9).toString("yyyy-MM-dd HH:mm:ss"));
+
         System.out.printf("*** request headers ***\n");
         printRequestInfo(request);
 
@@ -144,7 +145,8 @@ public class MemberController {
 
         log.info("MemberController.memberProfileUpdate() 실행");
         System.out.printf("\n\n////////회원가입 API 호출////////\n");
-        System.out.printf("호출 시간: %s\n", new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        System.out.printf("호출 시간: %s\n", new DateTime().plusHours(9).toString("yyyy-MM-dd HH:mm:ss"));
+
         System.out.printf("*** request headers ***\n");
         printRequestInfo(request);
 
@@ -212,7 +214,8 @@ public class MemberController {
     public ApiResponse<String> memberLogout(HttpSession session, @LoginMember SessionMember sessionMember
             , HttpServletRequest request){
         System.out.printf("\n\n////////로그아 API 호출////////\n");
-        System.out.printf("호출 시간: %s\n", new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        System.out.printf("호출 시간: %s\n", new DateTime().plusHours(9).toString("yyyy-MM-dd HH:mm:ss"));
+
         System.out.printf("*** request headers ***\n");
         printRequestInfo(request);
 

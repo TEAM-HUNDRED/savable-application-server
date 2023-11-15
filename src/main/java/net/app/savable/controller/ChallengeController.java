@@ -31,7 +31,8 @@ public class ChallengeController {
                                                                            HttpServletRequest request) {
 
         System.out.printf("\n\n////////챌린지 API 호출////////\n");
-        System.out.printf("호출 시간: %s\n", new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        System.out.printf("호출 시간: %s\n", new DateTime().plusHours(9).toString("yyyy-MM-dd HH:mm:ss"));
+
         System.out.printf("*** request headers ***\n");
         printRequestInfo(request);
 
