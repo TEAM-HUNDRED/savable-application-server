@@ -80,4 +80,5 @@ jobs:
             -e SPRING_DATASOURCE_URL=${{ secrets.DB_DEV_URL }} \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_DEV_PASSWORD }} \
+            -e JAVA_TOOL_OPTIONS="-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp" \
             -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_DEV_NAME }}
