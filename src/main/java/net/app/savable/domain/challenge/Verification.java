@@ -32,12 +32,15 @@ public class Verification extends BaseTimeEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private String aiResult;
+
     @Builder
-    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member) {
+    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member, String aiResult) {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;
         this.member = member;
+        this.aiResult=aiResult;
     }
 
     public void updateState(VerificationState state) { // 인증 상태 변경
