@@ -32,16 +32,27 @@ public class Verification extends BaseTimeEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @ColumnDefault("'WAITING'")
+    private VerificationState aiState;
+
+
     @Builder
-    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member) {
+    public Verification(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member, VerificationState aiState) {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;
         this.member = member;
+        this.aiState = aiState;
     }
 
     public void updateState(VerificationState state) { // 인증 상태 변경
         this.state = state;
+    }
+
+    public void updateAiState(VerificationState aiState) { // 인증 상태 변경
+        this.aiState = aiState;
     }
 
     public Long getParticipationChallengeId() { // 참여 챌린지 id 반환
