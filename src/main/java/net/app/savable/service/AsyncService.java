@@ -3,6 +3,7 @@ package net.app.savable.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.app.savable.domain.challenge.dto.AiVerificationFlaskResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,17 @@ import java.util.concurrent.CompletableFuture;
 public class AsyncService {
 
     private final RestTemplate restTemplate;
-    private final String flaskImageCaptioningApiUrl = "http://localhost:5001/image-captioning";
-    private final String flaskOcrApiUrl = "http://localhost:5001/ocr";
 
+    @Value("${flask.api.port}")
+    private Long flaskApiPort;
+
+    private String getFlaskImageCaptioningApiUrl() {
+        return "http://localhost:" + flaskApiPort + "/image-captioning";
+    }
+
+    private String getFlaskOcrApiUrl() {
+        return "http://localhost:" + flaskApiPort + "/ocr";
+    }
 
     @Async
     public CompletableFuture<Boolean> callFlaskImageCaptioningApiAsync(String imageUrl, String prompt) {
@@ -35,7 +44,7 @@ public class AsyncService {
 
         try {
             ResponseEntity<AiVerificationFlaskResponse> response = restTemplate.postForEntity(
-                    flaskImageCaptioningApiUrl, entity, AiVerificationFlaskResponse.class);
+                    getFlaskImageCaptioningApiUrl(), entity, AiVerificationFlaskResponse.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 return CompletableFuture.completedFuture(response.getBody().isData());
@@ -61,7 +70,7 @@ public class AsyncService {
 
         try {
             ResponseEntity<AiVerificationFlaskResponse> response = restTemplate.postForEntity(
-                    flaskOcrApiUrl, entity, AiVerificationFlaskResponse.class);
+                    getFlaskOcrApiUrl(), entity, AiVerificationFlaskResponse.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 return CompletableFuture.completedFuture(response.getBody().isData());

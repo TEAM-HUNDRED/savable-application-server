@@ -74,18 +74,22 @@ public class VerificationController {
         // 비동기 처리
         Challenge challenge = participationChallenge.getChallenge();
         final CompletableFuture<Boolean> certResult;
-        if (challenge.getIsOcrNeeded()){ // OCR이 필요한 경우
-            certResult = asyncService.callFlaskOcrApiAsync(saveFileName, challenge.getVerificationPrompt());
-        } else { // OCR이 필요하지 않은 경우
-            certResult = asyncService.callFlaskImageCaptioningApiAsync(saveFileName, challenge.getVerificationPrompt());
-        }
-        certResult.thenAccept(result -> {
-            if (result) {
-                verificationService.updateVerificationState(savedVerification.getId(), VerificationState.SUCCESS);
-            } else {
-                verificationService.updateVerificationState(savedVerification.getId(), VerificationState.FAIL);
+        try {
+            if (challenge.getIsOcrNeeded()){ // OCR이 필요한 경우
+                certResult = asyncService.callFlaskOcrApiAsync(saveFileName, challenge.getVerificationPrompt());
+            } else { // OCR이 필요하지 않은 경우
+                certResult = asyncService.callFlaskImageCaptioningApiAsync(saveFileName, challenge.getVerificationPrompt());
             }
-        });
+            certResult.thenAccept(result -> {
+                if (result) {
+                    verificationService.updateVerificationState(savedVerification.getId(), VerificationState.SUCCESS);
+                } else {
+                    verificationService.updateVerificationState(savedVerification.getId(), VerificationState.FAIL);
+                }
+            });
+        } catch (Exception e) {
+            log.error("Error calling Flask API", e);
+        }
 
         return ApiResponse.success("인증이 완료되었습니다.");
     }
