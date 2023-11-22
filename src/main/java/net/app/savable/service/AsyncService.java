@@ -18,8 +18,8 @@ import java.util.concurrent.CompletableFuture;
 public class AsyncService {
 
     private final RestTemplate restTemplate;
-    private final String flaskImageCaptioningApiUrl = "http://localhost:5000/image-captioning";
-    private final String flaskOcrApiUrl = "http://localhost:5000/ocr";
+    private final String flaskImageCaptioningApiUrl = "http://localhost:5001/image-captioning";
+    private final String flaskOcrApiUrl = "http://localhost:5001/ocr";
 
 
     @Async

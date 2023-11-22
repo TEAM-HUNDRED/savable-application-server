@@ -46,13 +46,6 @@ public class MemberController {
     public ApiResponse<MemberInfoResponseDto> myPageDetails(@LoginMember SessionMember sessionMember,
                                                             HttpServletRequest request) {
 
-        log.info("MemberController.myPageDetails() 실행");
-        System.out.printf("\n\n////////마이페이지 API 호출////////\n");
-        System.out.printf("호출 시간: %s\n", new DateTime().plusHours(9).toString("yyyy-MM-dd HH:mm:ss"));
-
-        System.out.printf("*** request headers ***\n");
-        printRequestInfo(request);
-
         Long memberId = sessionMember.getId();
         Member member = memberService.findById(memberId);
         Long verificationCount = verificationService.findTotalVerificationCount(memberId); // 지금까지 총 인증 횟수
@@ -143,13 +136,6 @@ public class MemberController {
             @RequestBody MemberSignUpRequestDto memberSignUpRequestDto,
             HttpServletRequest request) {
 
-        log.info("MemberController.memberProfileUpdate() 실행");
-        System.out.printf("\n\n////////회원가입 API 호출////////\n");
-        System.out.printf("호출 시간: %s\n", new DateTime().plusHours(9).toString("yyyy-MM-dd HH:mm:ss"));
-
-        System.out.printf("*** request headers ***\n");
-        printRequestInfo(request);
-
         String username = memberSignUpRequestDto.getUsername();
         String phoneNumber = memberSignUpRequestDto.getPhoneNumber();
         String imageUrl = memberSignUpRequestDto.getImageUrl();
@@ -213,30 +199,8 @@ public class MemberController {
     @GetMapping("/member/logout")
     public ApiResponse<String> memberLogout(HttpSession session, @LoginMember SessionMember sessionMember
             , HttpServletRequest request){
-        System.out.printf("\n\n////////로그아 API 호출////////\n");
-        System.out.printf("호출 시간: %s\n", new DateTime().plusHours(9).toString("yyyy-MM-dd HH:mm:ss"));
-
-        System.out.printf("*** request headers ***\n");
-        printRequestInfo(request);
 
         session.invalidate();
         return ApiResponse.success("로그아웃이 완료되었습니다.");
-    }
-
-    public void printRequestInfo(HttpServletRequest request) {
-        // 요청 헤더 출력
-        Enumeration<String> headerNames = request.getHeaderNames();
-        StringBuilder headers = new StringBuilder();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            String headerValue = request.getHeader(headerName);
-            headers.append(headerName).append(": ").append(headerValue).append("\n");
-        }
-
-        // 요청 URL 출력
-        String requestURL = request.getRequestURL().toString();
-
-        System.out.printf("[URL]\nURL: %s\n\n[Request Headers]\n%s", requestURL, headers.toString());
-        System.out.printf("*********************\n\n");
     }
 }

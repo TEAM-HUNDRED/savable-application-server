@@ -2,8 +2,6 @@ package net.app.savable.global.config.auth;
 
 import lombok.RequiredArgsConstructor;
 import net.app.savable.global.config.interceptor.SessionMemberInterceptor;
-import net.app.savable.global.wrapper.CustomInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
