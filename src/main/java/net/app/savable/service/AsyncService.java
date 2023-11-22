@@ -20,15 +20,18 @@ public class AsyncService {
 
     private final RestTemplate restTemplate;
 
+    @Value("${flask.api.url}")
+    private String flaskApiUrl;
+
     @Value("${flask.api.port}")
     private Long flaskApiPort;
 
     private String getFlaskImageCaptioningApiUrl() {
-        return "http://localhost:" + flaskApiPort + "/image-captioning";
+        return flaskApiUrl + ":" + flaskApiPort + "/image-captioning";
     }
 
     private String getFlaskOcrApiUrl() {
-        return "http://localhost:" + flaskApiPort + "/ocr";
+        return flaskApiUrl + ":" + flaskApiPort + "/ocr";
     }
 
     @Async
