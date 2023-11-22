@@ -1,7 +1,9 @@
 package net.app.savable.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.app.savable.domain.challenge.Verification;
 import net.app.savable.domain.challenge.VerificationRepository;
 import net.app.savable.domain.challenge.VerificationState;
 import net.app.savable.domain.challenge.dto.VerificationDetailDto;
@@ -19,9 +21,17 @@ public class VerificationService {
     private final ParticipationChallengeService participationChallengeService;
 
     @Transactional(readOnly = false)
-    public void addVerification(VerificationRequestDto verificationRequestDto) {
+    public Verification addVerification(VerificationRequestDto verificationRequestDto) {
         log.info("addVerification: {}", verificationRequestDto);
-        verificationRepository.save(verificationRequestDto.toEntity());
+        return verificationRepository.save(verificationRequestDto.toEntity());
+    }
+
+    @Transactional
+    public void updateVerificationState(Long verificationId, VerificationState state) {
+        Verification verification = verificationRepository.findById(verificationId).orElseThrow(
+                () -> new EntityNotFoundException("Verification not found")
+        );
+        verification.updateAiState(state);
     }
 
     public VerificationDetailDto findVerificationDetail(Long participationId){

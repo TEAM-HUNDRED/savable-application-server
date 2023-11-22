@@ -13,13 +13,15 @@ public class VerificationRequestDto {
     private VerificationState state;
     private ParticipationChallenge participationChallenge;
     private Member member;
+    private VerificationState aiState;
 
     @Builder
-    public VerificationRequestDto(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member) {
+    public VerificationRequestDto(String image, VerificationState state, ParticipationChallenge participationChallenge, Member member, VerificationState aiState) {
         this.image = image;
         this.state = state;
         this.participationChallenge = participationChallenge;
         this.member = member;
+        this.aiState = aiState;
     }
 
     public Verification toEntity() {
@@ -28,6 +30,7 @@ public class VerificationRequestDto {
             .state(state)
             .participationChallenge(participationChallenge)
             .member(member)
+            .aiState(aiState)
             .build();
     }
 }

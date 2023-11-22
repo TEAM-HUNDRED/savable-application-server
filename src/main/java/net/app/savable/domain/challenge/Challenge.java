@@ -38,6 +38,9 @@ public class Challenge extends BaseTimeEntity {
     private LocalDate startDate; // 챌린지 모집 시작일
     private LocalDate endDate; // 챌린지 모집 마감일
 
+    private String verificationPrompt; // ai 인증 프롬프트
+    private Boolean isOcrNeeded; // OCR 필요 여부
+
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL) // Challenge 1 : N ChallengeVerificationGuide
     private List<ChallengeVerificationGuide> challengeVerificationGuideList;
 

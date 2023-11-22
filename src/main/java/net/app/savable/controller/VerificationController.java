@@ -1,8 +1,12 @@
 package net.app.savable.controller;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.app.savable.domain.challenge.Challenge;
 import net.app.savable.domain.challenge.ParticipationChallenge;
+import net.app.savable.domain.challenge.Verification;
 import net.app.savable.domain.challenge.VerificationState;
 import net.app.savable.domain.challenge.dto.VerificationDetailDto;
 import net.app.savable.domain.challenge.dto.VerificationRequestDto;
@@ -12,6 +16,7 @@ import net.app.savable.global.config.auth.LoginMember;
 import net.app.savable.global.config.auth.dto.SessionMember;
 import net.app.savable.global.error.ApiResponse;
 import net.app.savable.global.error.exception.ErrorCode;
+import net.app.savable.service.AsyncService;
 import net.app.savable.service.MemberService;
 import net.app.savable.service.ParticipationChallengeService;
 import net.app.savable.service.VerificationService;
@@ -21,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @RestController
@@ -32,6 +38,7 @@ public class VerificationController {
     private final VerificationService verificationService;
     private final ParticipationChallengeService participationChallengeService;
     private final S3UploadService s3UploadService;
+    private final AsyncService asyncService;
 
     @PostMapping("/{participationId}/verification")
     public ApiResponse<String> verificationAdd(@RequestParam("image")MultipartFile file, @PathVariable Long participationId, @LoginMember SessionMember sessionMember) {
@@ -59,9 +66,27 @@ public class VerificationController {
                 .image(saveFileName)
                 .state(VerificationState.WAITING)
                 .member(member)
+                .aiState(VerificationState.WAITING)
                 .build();
 
-        verificationService.addVerification(verificationRequestDto);
+        Verification savedVerification = verificationService.addVerification(verificationRequestDto);
+
+        // 비동기 처리
+        Challenge challenge = participationChallenge.getChallenge();
+        final CompletableFuture<Boolean> certResult;
+        if (challenge.getIsOcrNeeded()){ // OCR이 필요한 경우
+            certResult = asyncService.callFlaskOcrApiAsync(saveFileName, challenge.getVerificationPrompt());
+        } else { // OCR이 필요하지 않은 경우
+            certResult = asyncService.callFlaskImageCaptioningApiAsync(saveFileName, challenge.getVerificationPrompt());
+        }
+        certResult.thenAccept(result -> {
+            if (result) {
+                verificationService.updateVerificationState(savedVerification.getId(), VerificationState.SUCCESS);
+            } else {
+                verificationService.updateVerificationState(savedVerification.getId(), VerificationState.FAIL);
+            }
+        });
+
         return ApiResponse.success("인증이 완료되었습니다.");
     }
 
