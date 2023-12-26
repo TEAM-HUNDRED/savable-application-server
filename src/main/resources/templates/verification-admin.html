@@ -116,14 +116,14 @@
                                 </div>
                             </td>
                             <td>
-    <span th:classappend="${verification.aiState == 'SUCCESS' ? 'badge badge-success' :
-                         verification.aiState == 'WAITING' ? 'badge badge-warning' :
-                         'badge badge-danger'}"
-          th:text="${verification.aiState == 'SUCCESS' ? '성공' :
-                   verification.aiState == 'WAITING' ? '대기' :
-                   '실패'}"
-    style="font-size: 1.2em;">
-    </span>
+                                <span th:classappend="${verification.aiState == 'SUCCESS' ? 'badge badge-success' :
+                                                     verification.aiState == 'WAITING' ? 'badge badge-warning' :
+                                                     'badge badge-danger'}"
+                                      th:text="${verification.aiState == 'SUCCESS' ? '성공' :
+                                               verification.aiState == 'WAITING' ? '대기' :
+                                               '실패'}"
+                                style="font-size: 1.2em;">
+                                </span>
                             </td>
                         </tr>
                         </tbody>

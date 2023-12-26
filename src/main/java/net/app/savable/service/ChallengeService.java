@@ -57,7 +57,7 @@ public class ChallengeService {
         LocalDate today = LocalDate.now();
 
         // 이미 참여중인 챌린지인지 확인
-        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationChallengeByMember_idAndChallenge_idAndParticipationState(memberId, participationRequestDto.getChallengeId(),ParticipationState.IN_PROGRESS);
+        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationChallengeByMember_idAndChallenge_idAndParticipationState(memberId, participationRequestDto.getChallengeId(), ParticipationState.IN_PROGRESS);
         if (duplicateChallenge.size()>0){
             throw new GeneralException(ErrorCode.BAD_REQUEST, "DUPLICATE_CHALLENGE_PARTICIPATION");
         }
@@ -79,8 +79,10 @@ public class ChallengeService {
     public Boolean checkParticipatable(Long challengeId, Long memberId){
         Boolean isParticipatable= true;
 
-        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationChallengeByMember_idAndChallenge_idAndParticipationState(memberId, challengeId,ParticipationState.IN_PROGRESS);
+        List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationChallengeByMember_idAndChallenge_idAndParticipationState(memberId, challengeId, ParticipationState.IN_PROGRESS);
         if (duplicateChallenge.size()>0){
+            isParticipatable=false;
+        } else if (challengeId == 5) {
             isParticipatable=false;
         }
         return isParticipatable;
