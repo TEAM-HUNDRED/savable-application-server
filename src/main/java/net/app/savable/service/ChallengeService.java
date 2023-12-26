@@ -82,6 +82,8 @@ public class ChallengeService {
         List<ParticipationChallenge> duplicateChallenge = participationChallengeRepository.findParticipationChallengeByMember_idAndChallenge_idAndParticipationState(memberId, challengeId,ParticipationState.IN_PROGRESS);
         if (duplicateChallenge.size()>0){
             isParticipatable=false;
+        } else if (challengeId == 5) {
+            isParticipatable=false;
         }
         return isParticipatable;
     }
