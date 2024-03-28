@@ -62,7 +62,7 @@ public class MemberController {
                 .profileImage(member.getProfileImage())
                 .phoneNumber(member.getPhoneNumber())
                 .totalSavings(member.getSavings())
-                .totalReward(member.getReward())
+                .totalReward(0L)
                 .scheduledReward(scheduledReward)
                 .verificationCount(verificationCount)
                 .challengeInfoResponseDto(challengeInfoResponseDto)
