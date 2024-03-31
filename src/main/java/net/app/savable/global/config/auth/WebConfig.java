@@ -1,6 +1,7 @@
 package net.app.savable.global.config.auth;
 
 import lombok.RequiredArgsConstructor;
+import net.app.savable.global.config.interceptor.RequestTimeInterceptor;
 import net.app.savable.global.config.interceptor.SessionMemberInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -13,6 +14,7 @@ import java.util.List;
 @Configuration // bean 등록
 public class WebConfig implements WebMvcConfigurer {
     private final LoginMemberArgumentResolver loginMemberArgumentResolver;
+    private final RequestTimeInterceptor requestTimeInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -22,5 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SessionMemberInterceptor());
+        registry.addInterceptor(requestTimeInterceptor);
     }
 }
