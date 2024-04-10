@@ -57,7 +57,7 @@ public class VerificationController {
         VerificationRequestDto verificationRequestDto = VerificationRequestDto.builder()
                 .participationChallenge(participationChallenge)
                 .image(saveFileName)
-                .state(VerificationState.WAITING)
+                .state(VerificationState.SUCCESS)
                 .member(member)
                 .build();
 
